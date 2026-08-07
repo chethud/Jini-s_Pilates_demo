@@ -139,7 +139,7 @@
   }
 
   /* ---------- mobile menu ---------- */
-  const menuBtn = qs('button[aria-label="Open menu"], button[aria-label="Close menu"]');
+  const menuBtn = qs('#menu-toggle, button[aria-label="Open menu"], button[aria-label="Close menu"]');
   const mobileNav = qs("#mobile-nav");
   const setMenu = (open) => {
     if (!menuBtn || !mobileNav) return;
@@ -235,40 +235,7 @@
     });
   });
 
-  /* ---------- cafe carousel ---------- */
-  const cafeSection = qs("#cafe");
-  if (cafeSection) {
-    const slides = qsa("img", cafeSection).filter((img) => /food_|cafe_/.test(img.src));
-    let idx = 0;
-    const showSlide = (i) => {
-      if (!slides.length) return;
-      idx = (i + slides.length) % slides.length;
-      slides.forEach((img, n) => {
-        const wrap = img.closest("div") || img;
-        wrap.style.display = n === idx ? "" : "none";
-      });
-    };
-    // Only hide extras if multiple in a carousel-like group
-    const prev = qs('button[aria-label="Previous cafe photo"]', cafeSection);
-    const next = qs('button[aria-label="Next cafe photo"]', cafeSection);
-    if (prev && next && slides.length > 1) {
-      // keep first visible structure; cycle src on main visible image instead
-      const main = slides[0];
-      const sources = slides.map((s) => s.src);
-      let c = 0;
-      const paint = () => {
-        main.src = sources[c];
-      };
-      prev.addEventListener("click", () => {
-        c = (c - 1 + sources.length) % sources.length;
-        paint();
-      });
-      next.addEventListener("click", () => {
-        c = (c + 1) % sources.length;
-        paint();
-      });
-    }
-  }
+  /* cafe carousel moved to js/cafe.js */
 
   /* ---------- review dots ---------- */
   const reviewBtns = qsa('button[aria-label^="Show review by"]');

@@ -84,8 +84,9 @@ html {
 .mobile-nav a {
   display: block;
   text-decoration: none;
-  color: var(--foreground, #1c2422);
+  color: #1a2421;
   font-weight: 500;
+  font-size: 1.05rem;
   border-radius: 999px;
   padding: 12px 16px;
   background: rgba(255, 255, 255, 0.55);
@@ -140,4 +141,205 @@ body.menu-open { overflow: hidden; }
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
+}
+
+/* Cafe overlapping showcase carousel */
+#cafe.surface-warm {
+  background:
+    radial-gradient(900px 420px at 85% 30%, rgba(47, 157, 138, 0.12), transparent 60%),
+    linear-gradient(180deg, #eef7f4 0%, #f7fbf9 55%, #eef6f3 100%);
+}
+
+.cafe-showcase {
+  width: 100%;
+}
+
+.cafe-showcase-stage {
+  position: relative;
+  height: clamp(320px, 52vw, 460px);
+  max-width: 560px;
+  margin-left: auto;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cafe-card {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(28, 36, 34, 0.12);
+  transition:
+    left 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    z-index 0s;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  z-index: 1;
+}
+
+.cafe-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cafe-card.is-prev {
+  left: 0;
+  width: 18%;
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.cafe-card.is-active {
+  left: 14%;
+  width: 58%;
+  opacity: 1;
+  transform: scale(1);
+  z-index: 4;
+  pointer-events: auto;
+}
+
+.cafe-card.is-next {
+  left: 58%;
+  width: 42%;
+  opacity: 1;
+  transform: scale(1);
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.cafe-showcase-controls {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 560px;
+  margin: 22px 0 0 auto;
+  pointer-events: auto;
+}
+
+.cafe-nav {
+  display: none !important;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: #1c2422;
+  box-shadow: 0 8px 20px rgba(28, 36, 34, 0.1);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.cafe-nav:hover {
+  transform: scale(1.05);
+  background: #f8fffc;
+}
+
+.cafe-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-left: 0;
+  pointer-events: auto;
+}
+
+.cafe-dots button {
+  border: 0;
+  padding: 0;
+  height: 10px;
+  width: 10px;
+  border-radius: 999px;
+  background: rgba(28, 36, 34, 0.18);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: width 0.35s ease, background 0.35s ease;
+}
+
+.cafe-dots button.is-active {
+  width: 28px;
+  background: var(--primary, #2f9d8a);
+}
+
+@media (max-width: 720px) {
+  .cafe-showcase-stage {
+    max-width: none;
+    height: 340px;
+  }
+
+  .cafe-showcase-controls {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .cafe-card.is-prev {
+    width: 14%;
+  }
+
+  .cafe-card.is-active {
+    left: 10%;
+    width: 62%;
+  }
+
+  .cafe-card.is-next {
+    left: 56%;
+    width: 44%;
+  }
+}
+
+
+/* Responsive main nav — show links on desktop/tablet, hamburger on small screens */
+.site-nav-desktop {
+  display: block !important;
+}
+
+.site-nav-desktop ul {
+  display: flex !important;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+#site-header .site-nav-desktop a {
+  white-space: nowrap;
+  padding-left: 0.65rem !important;
+  padding-right: 0.65rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 500 !important;
+  color: #1a2421 !important;
+}
+
+#site-header .site-nav-desktop a:hover {
+  color: #0f1715 !important;
+  background: rgba(26, 36, 33, 0.06) !important;
+}
+
+.site-menu-toggle {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .site-nav-desktop {
+    display: none !important;
+  }
+
+  .site-menu-toggle {
+    display: grid !important;
+  }
 }
