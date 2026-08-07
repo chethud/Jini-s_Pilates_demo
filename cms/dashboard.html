@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dashboard · Jini's CMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cms.css">
+  <script src="auth.js"></script>
+  <script>
+    if (!window.JinisCMS || !window.JinisCMS.isAuthed()) {
+      location.replace("index.html");
+    }
+  </script>
+</head>
+<body>
+  <div class="dashboard">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="../assets/logo.png" alt="" width="36" height="36">
+        <div>
+          <strong>Jini's CMS</strong>
+          <small>Content desk</small>
+        </div>
+      </div>
+      <nav>
+        <button type="button" class="nav-item is-active" data-panel="overview">Overview</button>
+        <button type="button" class="nav-item" data-panel="hero">Hero</button>
+        <button type="button" class="nav-item" data-panel="about">About</button>
+        <button type="button" class="nav-item" data-panel="classes">Classes</button>
+        <button type="button" class="nav-item" data-panel="trainers">Trainers</button>
+        <button type="button" class="nav-item" data-panel="cafe">Cafe</button>
+        <button type="button" class="nav-item" data-panel="faq">FAQ</button>
+        <button type="button" class="nav-item" data-panel="contact">Contact</button>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="../index.html" target="_blank" rel="noopener">View site</a>
+        <button type="button" id="logout-btn">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Signed in as <strong>JINIS</strong></p>
+          <h2 id="panel-title">Overview</h2>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" id="save-btn" class="btn-primary">Save changes</button>
+          <span class="pill" id="save-status">Ready</span>
+        </div>
+      </header>
+
+      <section id="panel-overview" class="panel is-active">
+        <div class="stat-grid">
+          <article class="stat"><span>Editable sections</span><strong>7</strong></article>
+          <article class="stat"><span>FAQs</span><strong id="stat-faqs">6</strong></article>
+          <article class="stat"><span>Classes</span><strong id="stat-classes">3</strong></article>
+          <article class="stat"><span>Storage</span><strong>Browser</strong></article>
+        </div>
+        <div class="card">
+          <h3>How this CMS works</h3>
+          <p>Edit any section, click <strong>Save changes</strong>, then open the homepage. Updates apply instantly in this browser via local storage.</p>
+          <div class="action-row">
+            <a class="btn-primary" href="../index.html" target="_blank" rel="noopener">Open homepage</a>
+            <button type="button" id="reset-btn" class="btn-ghost">Reset to defaults</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-hero" class="panel">
+        <form class="card" data-form="hero">
+          <h3>Hero section</h3>
+          <label>Brand name<input name="brandName" type="text"></label>
+          <label>Eyebrow<input name="heroEyebrow" type="text"></label>
+          <label>Title (before accent)<input name="heroTitleBefore" type="text"></label>
+          <label>Title accent word<input name="heroTitleAccent" type="text"></label>
+          <label>Subtitle<input name="heroSubtitle" type="text"></label>
+          <label>Body<textarea name="heroBody" rows="4"></textarea></label>
+          <div class="upload-block">
+            <span class="upload-label">Hero image</span>
+            <div class="upload-row">
+              <input id="hero-image-file" type="file" accept="image/*">
+              <button type="button" id="hero-image-clear" class="btn-ghost">Use default image</button>
+            </div>
+            <img id="hero-image-preview" class="upload-preview" alt="Hero preview">
+            <input name="heroImage" type="hidden">
+            <p class="hint">Upload a JPG/PNG. It is saved in this browser and shown on the homepage after you click Save changes.</p>
+          </div>
+        </form>
+      </section>
+
+      <section id="panel-about" class="panel">
+        <form class="card" data-form="about">
+          <h3>About</h3>
+          <label>Title<input name="aboutTitle" type="text"></label>
+          <label>Body<textarea name="aboutBody" rows="5"></textarea></label>
+        </form>
+      </section>
+
+      <section id="panel-classes" class="panel">
+        <div class="card">
+          <h3>Classes</h3>
+          <div id="classes-fields" class="stack"></div>
+        </div>
+      </section>
+
+      <section id="panel-trainers" class="panel">
+        <div class="card">
+          <h3>Trainers</h3>
+          <div id="trainers-fields" class="stack"></div>
+        </div>
+      </section>
+
+      <section id="panel-cafe" class="panel">
+        <form class="card" data-form="cafe">
+          <h3>Wellness Cafe</h3>
+          <label>Cafe blurb<textarea name="cafeBlurb" rows="4"></textarea></label>
+        </form>
+      </section>
+
+      <section id="panel-faq" class="panel">
+        <div class="card">
+          <h3>FAQ</h3>
+          <div id="faq-fields" class="stack"></div>
+        </div>
+      </section>
+
+      <section id="panel-contact" class="panel">
+        <form class="card" data-form="contact">
+          <h3>Contact</h3>
+          <label>Phone<input name="phone" type="text"></label>
+          <label>Email<input name="email" type="email"></label>
+          <label>Address<input name="address" type="text"></label>
+          <label>Hours<input name="hours" type="text"></label>
+          <label>WhatsApp number (digits only)<input name="whatsapp" type="text"></label>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/content.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
