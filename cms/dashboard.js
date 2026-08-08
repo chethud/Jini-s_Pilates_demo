@@ -134,8 +134,6 @@
       })
       .join("");
     document.getElementById("stat-classes").textContent = String(items.length);
-    const addBtn = document.getElementById("class-add-btn");
-    if (addBtn) addBtn.disabled = items.length >= MAX_CLASSES;
   };
 
   const renderTrainers = () => {
@@ -218,8 +216,6 @@
     }
     document.getElementById("gallery-list-count").textContent = String(items.length);
     document.getElementById("stat-gallery").textContent = String(items.length);
-    const addBtn = document.getElementById("gallery-add-btn");
-    if (addBtn) addBtn.disabled = items.length >= MAX_GALLERY;
     root.innerHTML = items
       .map((item, i) => {
         const src = resolveSrc(item.src);
