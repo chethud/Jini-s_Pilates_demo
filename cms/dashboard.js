@@ -346,8 +346,10 @@
     collectDraft();
     draft.classes = draft.classes || [];
     if (draft.classes.length >= MAX_CLASSES) {
-      alert(`${MAX_CLASSES} classes are fully done. You can’t add more than ${MAX_CLASSES} classes.`);
-      setStatus(`Maximum ${MAX_CLASSES} classes reached`);
+      alert(
+        `${MAX_CLASSES} classes are already full. Delete one class, then add a new one.`
+      );
+      setStatus(`Maximum ${MAX_CLASSES} classes reached — delete one to add another`);
       return;
     }
     draft.classes.push({
@@ -506,9 +508,9 @@
       collectDraft();
       if ((draft.gallery || []).length >= MAX_GALLERY) {
         alert(
-          `${MAX_GALLERY} photos are fully done. You can’t add more than ${MAX_GALLERY} gallery photos.`
+          `${MAX_GALLERY} gallery photos are already full. Delete one photo, then add a new one.`
         );
-        setStatus(`Gallery limit is ${MAX_GALLERY} photos`);
+        setStatus(`Gallery full — delete one to add another`);
         return;
       }
       try {
@@ -541,8 +543,10 @@
       return;
     }
     if ((data.classes || []).length > MAX_CLASSES) {
-      alert(`${MAX_CLASSES} classes are fully done. You can’t add more than ${MAX_CLASSES} classes.`);
-      setStatus(`Maximum ${MAX_CLASSES} classes allowed`);
+      alert(
+        `${MAX_CLASSES} classes are already full. Delete one class, then add a new one.`
+      );
+      setStatus(`Maximum ${MAX_CLASSES} classes allowed — delete one to add another`);
       return;
     }
     if ((data.cafeImages || []).length !== CAFE_PHOTO_COUNT) {
