@@ -244,25 +244,62 @@
     renderPlansGrid(data.plans);
     renderCafeStage(data.cafeImages);
     renderHomeGallery(data.gallery);
+    renderFaqs(data.faqs);
+  };
 
-    // FAQ answers if empty / sync from content
-    if (Array.isArray(data.faqs)) {
-      const items = qsa("#faq [data-faq-item]");
-      data.faqs.forEach((faq, i) => {
-        const item = items[i];
-        if (!item) return;
-        const qBtn = qs("[data-faq-q]", item);
-        const aEl = qs("[data-faq-a]", item);
-        if (qBtn) setText(qBtn.childNodes[0].nodeType === 3 ? null : qBtn, null);
-        // set question text preserving chevron svg
-        if (qBtn) {
-          const svg = qBtn.querySelector("svg");
-          qBtn.textContent = faq.q;
-          if (svg) qBtn.appendChild(svg);
+  const chevronSvg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
+
+  const bindFaqAccordion = () => {
+    qsa("#faq [data-faq-item]").forEach((item) => {
+      const btn = qs("button", item);
+      const panel = qs("[data-faq-a]", item);
+      if (!btn || !panel || btn.dataset.faqBound === "1") return;
+      btn.dataset.faqBound = "1";
+      btn.addEventListener("click", () => {
+        const open = item.getAttribute("data-state") === "open";
+        qsa("#faq [data-faq-item]").forEach((other) => {
+          other.setAttribute("data-state", "closed");
+          const ob = qs("button", other);
+          const op = qs("[data-faq-a]", other);
+          if (ob) {
+            ob.setAttribute("aria-expanded", "false");
+            ob.setAttribute("data-state", "closed");
+          }
+          if (op) {
+            op.hidden = true;
+            op.setAttribute("data-state", "closed");
+          }
+        });
+        if (!open) {
+          item.setAttribute("data-state", "open");
+          btn.setAttribute("aria-expanded", "true");
+          btn.setAttribute("data-state", "open");
+          panel.hidden = false;
+          panel.setAttribute("data-state", "open");
         }
-        if (aEl) aEl.innerHTML = `<p class="pb-5 text-muted-foreground leading-relaxed">${faq.a}</p>`;
       });
-    }
+    });
+  };
+
+  const renderFaqs = (faqs) => {
+    const list = qs("[data-cms-faq-list]");
+    if (!list || !Array.isArray(faqs)) return;
+    list.innerHTML = faqs
+      .map(
+        (faq) => `<div data-faq-item data-state="closed" data-orientation="vertical" class="border-b glass rounded-3xl border-none px-6">
+<h3 data-orientation="vertical" data-state="closed" class="flex">
+<button type="button" aria-expanded="false" data-state="closed" data-faq-q class="flex flex-1 items-center justify-between font-medium cursor-pointer transition-all py-5 text-left font-display text-base text-foreground hover:no-underline sm:text-lg">${escapeHtml(
+          faq.q || ""
+        )}${chevronSvg}</button>
+</h3>
+<div data-faq-a data-state="closed" hidden role="region" class="overflow-hidden text-sm"><p class="pb-5 text-muted-foreground leading-relaxed">${escapeHtml(
+          faq.a || ""
+        )}</p></div>
+</div>`
+      )
+      .join("");
+    bindFaqAccordion();
   };
 
   /* ---------- scroll header + progress + reveals ---------- */
@@ -342,35 +379,7 @@
     qsa("a", mobileNav).forEach((a) => a.addEventListener("click", () => setMenu(false)));
   }
 
-  /* ---------- FAQ accordion ---------- */
-  qsa("#faq [data-faq-item]").forEach((item) => {
-    const btn = qs("button", item);
-    const panel = qs("[data-faq-a]", item);
-    if (!btn || !panel) return;
-    btn.addEventListener("click", () => {
-      const open = item.getAttribute("data-state") === "open";
-      qsa("#faq [data-faq-item]").forEach((other) => {
-        other.setAttribute("data-state", "closed");
-        const ob = qs("button", other);
-        const op = qs("[data-faq-a]", other);
-        if (ob) {
-          ob.setAttribute("aria-expanded", "false");
-          ob.setAttribute("data-state", "closed");
-        }
-        if (op) {
-          op.hidden = true;
-          op.setAttribute("data-state", "closed");
-        }
-      });
-      if (!open) {
-        item.setAttribute("data-state", "open");
-        btn.setAttribute("aria-expanded", "true");
-        btn.setAttribute("data-state", "open");
-        panel.hidden = false;
-        panel.setAttribute("data-state", "open");
-      }
-    });
-  });
+  /* FAQ accordion bound in renderFaqs / bindFaqAccordion */
 
   /* gallery preview is rendered from CMS in applyContent (7 photos); full set on gallery pages */
 

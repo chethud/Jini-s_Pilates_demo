@@ -178,6 +178,10 @@
     root.innerHTML = (draft.faqs || [])
       .map(
         (item, i) => `<div class="subcard" data-faq-index="${i}">
+        <div class="subcard-head">
+          <strong>FAQ ${i + 1}</strong>
+          <button type="button" class="btn-ghost danger" data-faq-remove="${i}">Delete</button>
+        </div>
         <label>Question<input data-faq="q" type="text" value="${escapeAttr(item.q)}"></label>
         <label>Answer<textarea data-faq="a" rows="3">${escapeHtml(item.a)}</textarea></label>
       </div>`
@@ -301,6 +305,7 @@
   const trainersRoot = document.getElementById("trainers-fields");
   const cafeImagesRoot = document.getElementById("cafe-images-fields");
   const plansRoot = document.getElementById("plans-fields");
+  const faqsRoot = document.getElementById("faq-fields");
 
   document.getElementById("class-add-btn")?.addEventListener("click", () => {
     collectDraft();
@@ -354,6 +359,17 @@
     setStatus("Plan added — edit details, then Save changes");
   });
 
+  document.getElementById("faq-add-btn")?.addEventListener("click", () => {
+    collectDraft();
+    draft.faqs = draft.faqs || [];
+    draft.faqs.push({
+      q: "New question?",
+      a: "Write the answer here.",
+    });
+    renderFaqs();
+    setStatus("FAQ added — edit details, then Save changes");
+  });
+
   classesRoot?.addEventListener("click", (event) => {
     const btn = event.target.closest("[data-class-remove]");
     if (!btn) return;
@@ -396,6 +412,17 @@
     draft.plans.splice(i, 1);
     renderPlans();
     setStatus("Plan deleted — click Save changes");
+  });
+
+  faqsRoot?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-faq-remove]");
+    if (!btn) return;
+    const i = Number(btn.getAttribute("data-faq-remove"));
+    collectDraft();
+    if (!confirm("Delete this FAQ?")) return;
+    draft.faqs.splice(i, 1);
+    renderFaqs();
+    setStatus("FAQ deleted — click Save changes");
   });
 
   classesRoot?.addEventListener("change", async (event) => {
