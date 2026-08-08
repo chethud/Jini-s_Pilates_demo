@@ -28,7 +28,6 @@
       </div>
       <nav>
         <button type="button" class="nav-item is-active" data-panel="overview">Overview</button>
-        <button type="button" class="nav-item" data-panel="hero">Hero</button>
         <button type="button" class="nav-item" data-panel="about">About & Stats</button>
         <button type="button" class="nav-item" data-panel="classes">Classes</button>
         <button type="button" class="nav-item" data-panel="trainers">Trainers</button>
@@ -73,27 +72,6 @@
             <button type="button" id="reset-btn" class="btn-ghost">Reset defaults</button>
           </div>
         </div>
-      </section>
-
-      <section id="panel-hero" class="panel">
-        <form class="card" data-form="hero">
-          <h3>Hero</h3>
-          <label>Brand name<input name="brandName" type="text"></label>
-          <label>Eyebrow<input name="heroEyebrow" type="text"></label>
-          <label>Title (before accent)<input name="heroTitleBefore" type="text"></label>
-          <label>Title accent<input name="heroTitleAccent" type="text"></label>
-          <label>Subtitle<input name="heroSubtitle" type="text"></label>
-          <label>Body<textarea name="heroBody" rows="4"></textarea></label>
-          <div class="upload-block">
-            <span class="upload-label">Hero image</span>
-            <div class="upload-row">
-              <input id="hero-image-file" type="file" accept="image/*">
-              <button type="button" id="hero-image-clear" class="btn-ghost">Use default</button>
-            </div>
-            <img id="hero-image-preview" class="upload-preview" alt="Hero preview">
-            <input name="heroImage" type="hidden">
-          </div>
-        </form>
       </section>
 
       <section id="panel-about" class="panel">
