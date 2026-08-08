@@ -14,8 +14,8 @@ Open http://localhost:8080
 
 Open http://localhost:8080/cms/ (login) → `/cms/dashboard.html`
 
-- ID: `JINIS`
-- Password: `Jinni@7654`
+- ID: `Jinis`
+- Password: `Jinis@26`
 
 Manage Hero, About & Stats, Classes, Trainers, Cafe, Plans, Gallery (upload photos), FAQ, Contact.
 
