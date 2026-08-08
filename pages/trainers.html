@@ -3,39 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Sign in · Jini's CMS</title>
+  <title>Trainers · Jini's Pilates Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="cms.css">
+  <link rel="stylesheet" href="pages.css">
 </head>
-<body>
-  <div class="login-view">
-    <div class="login-card">
-      <a class="brand" href="../index.html">
-        <img src="../assets/logo.png" alt="Jini's Pilates Studio" width="40" height="40">
-        <span>Jini's Pilates Studio</span>
-      </a>
-      <h1>CMS Sign in</h1>
-      <p class="lede">Enter your credentials to open the dashboard.</p>
-      <form id="login-form" autocomplete="on">
-        <label>
-          ID
-          <input id="login-id" name="username" type="text" required autocomplete="username" placeholder="Enter ID">
-        </label>
-        <label>
-          Password
-          <input id="login-password" name="password" type="password" required autocomplete="current-password" placeholder="Enter password">
-        </label>
-        <p id="login-error" class="error" hidden>Invalid ID or password.</p>
-        <button type="submit">Sign in</button>
-      </form>
-      <a class="back-link" href="../index.html">← Back to website</a>
+<body data-page="trainers">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="../index.html"><img src="../assets/logo.png" alt=""><span>Jini's Pilates Studio</span></a>
+      <div class="header-actions">
+        <a class="btn" href="../index.html">Home</a>
+        <a class="btn" href="classes.html">Classes</a>
+        <a class="btn" href="trainers.html">Trainers</a>
+        <a class="btn" href="cafe.html">Cafe</a>
+        <a class="btn" href="plans.html">Plans</a>
+        <a class="btn" href="../gallery/index.html">Gallery</a>
+        <a class="btn btn-primary" href="../index.html#contact">Book a Trial</a>
+      </div>
     </div>
-  </div>
-  <script src="auth.js"></script>
-  <script src="login.js"></script>
+  </header>
+  <main class="page">
+    <div class="page-hero">
+      <p class="eyebrow">Trainers</p>
+      <h1>Guided by certified specialists</h1>
+      <p>Small classes mean real attention. Meet the people who will know your body as well as you do.</p>
+    </div>
+    <div id="page-root"></div>
+  </main>
+  <script src="../js/content.js"></script>
+  <script src="pages.js"></script>
 
 <footer class="site-footer">
   <div class="site-footer-inner">

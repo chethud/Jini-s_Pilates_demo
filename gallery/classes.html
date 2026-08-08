@@ -3,39 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Sign in · Jini's CMS</title>
+  <title>Classes Gallery · Jini's Pilates Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="cms.css">
+  <link rel="stylesheet" href="gallery.css">
 </head>
-<body>
-  <div class="login-view">
-    <div class="login-card">
+<body data-gallery-page="classes">
+  <header class="site-header">
+    <div class="site-header-inner">
       <a class="brand" href="../index.html">
-        <img src="../assets/logo.png" alt="Jini's Pilates Studio" width="40" height="40">
+        <img src="../assets/logo.png" alt="">
         <span>Jini's Pilates Studio</span>
       </a>
-      <h1>CMS Sign in</h1>
-      <p class="lede">Enter your credentials to open the dashboard.</p>
-      <form id="login-form" autocomplete="on">
-        <label>
-          ID
-          <input id="login-id" name="username" type="text" required autocomplete="username" placeholder="Enter ID">
-        </label>
-        <label>
-          Password
-          <input id="login-password" name="password" type="password" required autocomplete="current-password" placeholder="Enter password">
-        </label>
-        <p id="login-error" class="error" hidden>Invalid ID or password.</p>
-        <button type="submit">Sign in</button>
-      </form>
-      <a class="back-link" href="../index.html">← Back to website</a>
+      <div class="header-actions">
+        <a class="btn" href="../index.html">Home</a>
+        <a class="btn" href="../pages/classes.html">Classes</a>
+        <a class="btn" href="../pages/trainers.html">Trainers</a>
+        <a class="btn" href="../pages/plans.html">Plans</a>
+        <a class="btn btn-primary" href="../index.html#contact">Book a Trial</a>
+      </div>
     </div>
-  </div>
-  <script src="auth.js"></script>
-  <script src="login.js"></script>
+  </header>
+  <main class="page">
+    <div class="page-hero">
+      <p class="eyebrow">Gallery · Classes</p>
+      <h1>Class moments</h1>
+      <p>Mat, reformer, and group sessions captured in motion.</p>
+      <p style="margin-top:10px;color:#5d6b67"><span id="gallery-count">0</span> photos</p>
+    </div>
+    <nav class="filters" aria-label="Gallery categories">
+      <a href="index.html" class="">All</a>
+<a href="studio.html" class="">Studio</a>
+<a href="classes.html" class="is-active">Classes</a>
+<a href="equipment.html" class="">Equipment</a>
+<a href="cafe.html" class="">Cafe</a>
+<a href="members.html" class="">Members</a>
+<a href="events.html" class="">Events</a>
+    </nav>
+    <div id="gallery-grid" class="gallery-grid"></div>
+    <p id="gallery-empty" class="empty" hidden>No photos in this category yet. Add some from the CMS.</p>
+  </main>
+  <script src="../js/content.js"></script>
+  <script src="gallery.js"></script>
 
 <footer class="site-footer">
   <div class="site-footer-inner">

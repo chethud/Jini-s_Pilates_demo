@@ -17,7 +17,13 @@ Open http://localhost:8080/cms/ (login) → `/cms/dashboard.html`
 - ID: `JINIS`
 - Password: `Jinni@7654`
 
-Edit Hero, About, Classes, Trainers, Cafe, FAQ, Contact → **Save changes** → refresh homepage. Content is stored in the browser (`localStorage`).
+Manage Hero, About & Stats, Classes, Trainers, Cafe, Plans, Gallery (upload photos), FAQ, Contact.
+
+## Separate pages
+
+- Gallery (all): `/gallery/`
+- Gallery categories: `/gallery/studio.html`, `classes.html`, `equipment.html`, `cafe.html`, `members.html`, `events.html`
+- Classes / Trainers / Cafe / Plans / About: `/pages/`
 
 ## Deploy
 
