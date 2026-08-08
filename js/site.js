@@ -418,20 +418,41 @@
   }
 
   /* ---------- forms ---------- */
+  const phoneInput = qs("#contact #phone, #phone");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+    });
+  }
+
   qsa("form").forEach((form) => {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
 
       const data = new FormData(form);
       const name = String(data.get("name") || "").trim();
       const email = String(data.get("email") || "").trim();
-      const phone = String(data.get("phone") || "").trim();
+      const phone = String(data.get("phone") || "").replace(/\D/g, "");
       const preferredClass = String(data.get("preferred_class") || "").trim();
       const message = String(data.get("message") || "").trim();
+
+      if (phoneInput) phoneInput.value = phone;
+
+      if (!name || !email || !phone || !preferredClass || !message) {
+        alert("Please fill all fields before submitting.");
+        form.reportValidity();
+        return;
+      }
+      if (!/^\d{10}$/.test(phone)) {
+        alert("Phone number must be exactly 10 digits.");
+        phoneInput?.focus();
+        phoneInput?.reportValidity();
+        return;
+      }
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
 
       const contentData = window.JinisContent ? window.JinisContent.getContent() : null;
       const whatsapp = String(contentData?.whatsapp || "919686868697").replace(/\D/g, "");
