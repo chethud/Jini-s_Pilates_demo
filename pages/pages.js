@@ -30,17 +30,21 @@
   }
 
   if (type === 'plans') {
-    const allFeatures = ['Unlimited Classes','Personal Trainer','Diet Consultation','Progress Tracking','Priority Booking'];
-    root.innerHTML = `<div class="card-grid cols-3">${c.plans.map(plan => `
+    const baseFeatures = ['Unlimited Classes','Personal Trainer','Diet Consultation','Progress Tracking','Priority Booking'];
+    root.innerHTML = `<div class="card-grid cols-3">${(c.plans || []).map(plan => {
+      const features = plan.features || [];
+      const allFeatures = [...baseFeatures, ...features.filter(f => !baseFeatures.includes(f))];
+      return `
       <article class="card plan ${plan.popular ? 'popular' : ''}">
         ${plan.popular ? '<span class="pill">Popular</span>' : ''}
         <p class="eyebrow">${plan.period}</p>
         <h3>${plan.name}</h3>
         <p class="price">${plan.price} <span>/ ${plan.cadence}</span></p>
-        <ul>${allFeatures.map(f => `<li class="${(plan.features||[]).includes(f) ? 'on' : 'off'}">${f}</li>`).join('')}</ul>
+        <ul>${allFeatures.map(f => `<li class="${features.includes(f) ? 'on' : 'off'}">${f}</li>`).join('')}</ul>
         <p class="note">${plan.note || ''}</p>
         <a class="btn ${plan.popular ? 'btn-primary' : 'outline'}" href="../index.html#contact">Choose ${plan.name}</a>
-      </article>`).join('')}</div>`;
+      </article>`;
+    }).join('')}</div>`;
   }
 
   if (type === 'cafe') {

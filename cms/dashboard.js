@@ -156,6 +156,10 @@
     root.innerHTML = (draft.plans || [])
       .map(
         (item, i) => `<div class="subcard" data-plan-index="${i}">
+        <div class="subcard-head">
+          <strong>Plan ${i + 1}</strong>
+          <button type="button" class="btn-ghost danger" data-plan-remove="${i}">Delete</button>
+        </div>
         <label>Name<input data-plan="name" type="text" value="${escapeAttr(item.name)}"></label>
         <label>Period<input data-plan="period" type="text" value="${escapeAttr(item.period)}"></label>
         <label>Price<input data-plan="price" type="text" value="${escapeAttr(item.price)}"></label>
@@ -250,8 +254,7 @@
       alt: row.querySelector('[data-cafe-image="alt"]')?.value.trim() || "",
     }));
 
-    next.plans = [...document.querySelectorAll("[data-plan-index]")].map((row, i) => ({
-      ...(draft.plans[i] || {}),
+    next.plans = [...document.querySelectorAll("[data-plan-index]")].map((row) => ({
       name: row.querySelector('[data-plan="name"]').value.trim(),
       period: row.querySelector('[data-plan="period"]').value.trim(),
       price: row.querySelector('[data-plan="price"]').value.trim(),
@@ -297,6 +300,7 @@
   const classesRoot = document.getElementById("classes-fields");
   const trainersRoot = document.getElementById("trainers-fields");
   const cafeImagesRoot = document.getElementById("cafe-images-fields");
+  const plansRoot = document.getElementById("plans-fields");
 
   document.getElementById("class-add-btn")?.addEventListener("click", () => {
     collectDraft();
@@ -334,6 +338,22 @@
     setStatus("Cafe photo slot added — upload an image, then Save");
   });
 
+  document.getElementById("plan-add-btn")?.addEventListener("click", () => {
+    collectDraft();
+    draft.plans = draft.plans || [];
+    draft.plans.push({
+      name: "New Plan",
+      period: "Monthly",
+      price: "₹ 0",
+      cadence: "monthly",
+      note: "Describe what’s included",
+      popular: false,
+      features: ["Progress Tracking"],
+    });
+    renderPlans();
+    setStatus("Plan added — edit details, then Save changes");
+  });
+
   classesRoot?.addEventListener("click", (event) => {
     const btn = event.target.closest("[data-class-remove]");
     if (!btn) return;
@@ -365,6 +385,17 @@
     draft.cafeImages.splice(i, 1);
     renderCafeImages();
     setStatus("Cafe photo deleted — click Save changes");
+  });
+
+  plansRoot?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-plan-remove]");
+    if (!btn) return;
+    const i = Number(btn.getAttribute("data-plan-remove"));
+    collectDraft();
+    if (!confirm("Delete this plan?")) return;
+    draft.plans.splice(i, 1);
+    renderPlans();
+    setStatus("Plan deleted — click Save changes");
   });
 
   classesRoot?.addEventListener("change", async (event) => {
