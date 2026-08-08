@@ -349,9 +349,35 @@ body.menu-open { overflow: hidden; }
 }
 
 
+/* Tighten section spacing — less empty white space between containers */
+main > section:not(#hero) {
+  padding-top: 3.25rem !important;
+  padding-bottom: 3.25rem !important;
+}
+
+@media (min-width: 640px) {
+  main > section:not(#hero) {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+}
+
+main > section .mt-16 {
+  margin-top: 2.25rem !important;
+}
+
+main > section .mt-14,
+main > section .mt-12 {
+  margin-top: 1.75rem !important;
+}
+
+main > section .gap-12 {
+  gap: 1.75rem !important;
+}
+
 /* Shared site footer */
 .site-footer {
-  margin-top: 64px;
+  margin-top: 2rem;
   background: linear-gradient(180deg, rgba(238, 247, 244, 0.5), #e7f1ee);
   border-top: 1px solid rgba(26, 36, 33, 0.1);
   color: #1a2421;
