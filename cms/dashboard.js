@@ -505,6 +505,9 @@
       }
       collectDraft();
       if ((draft.gallery || []).length >= MAX_GALLERY) {
+        alert(
+          `${MAX_GALLERY} photos are fully done. You can’t add more than ${MAX_GALLERY} gallery photos.`
+        );
         setStatus(`Gallery limit is ${MAX_GALLERY} photos`);
         return;
       }
