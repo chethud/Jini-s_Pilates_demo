@@ -153,6 +153,54 @@
     }
   };
 
+  const HOME_GALLERY_LIMIT = 7;
+
+  const bindHomeGalleryLightbox = () => {
+    let lightbox = qs("#cms-lightbox");
+    if (!lightbox) {
+      lightbox = document.createElement("div");
+      lightbox.id = "cms-lightbox";
+      lightbox.className = "cms-lightbox";
+      lightbox.innerHTML =
+        '<button type="button" class="cms-lightbox-close" aria-label="Close">×</button><img alt="">';
+      document.body.appendChild(lightbox);
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox || e.target.classList.contains("cms-lightbox-close")) {
+          lightbox.classList.remove("is-open");
+        }
+      });
+    }
+    qsa('#gallery button[aria-label^="Open larger view"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const img = qs("img", btn);
+        if (!img) return;
+        const big = qs("img", lightbox);
+        big.src = img.src;
+        big.alt = img.alt || "";
+        lightbox.classList.add("is-open");
+      });
+    });
+  };
+
+  const renderHomeGallery = (gallery) => {
+    const grid = qs("[data-cms-gallery-grid]");
+    if (!grid || !Array.isArray(gallery)) return;
+    const items = gallery.slice(0, HOME_GALLERY_LIMIT);
+    grid.innerHTML = items
+      .map((item) => {
+        const src = asset(item.src);
+        const alt = item.alt || "Gallery photo";
+        const cat = String(item.category || "").toLowerCase();
+        return `<div><button type="button" class="group block w-full overflow-hidden rounded-3xl shadow-soft" aria-label="Open larger view: ${escapeHtml(
+          alt
+        )}" data-category="${escapeHtml(cat)}"><img src="${src}" alt="${escapeHtml(
+          alt
+        )}" loading="lazy" class="w-full object-cover transition-transform duration-700 group-hover:scale-110"></button></div>`;
+      })
+      .join("");
+    bindHomeGalleryLightbox();
+  };
+
   /* ---------- apply CMS content ---------- */
   const applyContent = (data) => {
     if (!data) return;
@@ -195,6 +243,7 @@
     renderTrainersGrid(data.trainers);
     renderPlansGrid(data.plans);
     renderCafeStage(data.cafeImages);
+    renderHomeGallery(data.gallery);
 
     // FAQ answers if empty / sync from content
     if (Array.isArray(data.faqs)) {
@@ -323,53 +372,7 @@
     });
   });
 
-  /* ---------- gallery filters ---------- */
-  const filterBtns = qsa("#gallery button[aria-pressed]");
-  const galleryItems = qsa("#gallery [data-category]");
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const label = btn.textContent.trim().toLowerCase();
-      filterBtns.forEach((b) => {
-        const on = b === btn;
-        b.setAttribute("aria-pressed", on ? "true" : "false");
-        b.classList.toggle("bg-primary", on);
-        b.classList.toggle("text-primary-foreground", on);
-        b.classList.toggle("shadow-gold", on);
-        b.classList.toggle("glass", !on);
-        b.classList.toggle("text-muted-foreground", !on);
-      });
-      galleryItems.forEach((item) => {
-        const cat = (item.getAttribute("data-category") || "").toLowerCase();
-        const show = label === "all" || cat === label;
-        item.style.display = show ? "" : "none";
-      });
-    });
-  });
-
-  /* ---------- gallery lightbox ---------- */
-  let lightbox = qs("#cms-lightbox");
-  if (!lightbox) {
-    lightbox = document.createElement("div");
-    lightbox.id = "cms-lightbox";
-    lightbox.className = "cms-lightbox";
-    lightbox.innerHTML = '<button type="button" class="cms-lightbox-close" aria-label="Close">×</button><img alt="">';
-    document.body.appendChild(lightbox);
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox || e.target.classList.contains("cms-lightbox-close")) {
-        lightbox.classList.remove("is-open");
-      }
-    });
-  }
-  qsa('#gallery button[aria-label^="Open larger view"]').forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const img = qs("img", btn);
-      if (!img) return;
-      const big = qs("img", lightbox);
-      big.src = img.src;
-      big.alt = img.alt || "";
-      lightbox.classList.add("is-open");
-    });
-  });
+  /* gallery preview is rendered from CMS in applyContent (7 photos); full set on gallery pages */
 
   /* cafe carousel moved to js/cafe.js */
 
