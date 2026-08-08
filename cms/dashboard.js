@@ -81,6 +81,7 @@
   };
 
   const MIN_CLASSES = 6;
+  const MAX_CLASSES = 6;
   const MAX_GALLERY = 10;
   const CAFE_PHOTO_COUNT = 4;
   const DEFAULT_CAFE_IMAGES = (window.JinisContent?.DEFAULT_CONTENT?.cafeImages || []).slice(
@@ -133,6 +134,8 @@
       })
       .join("");
     document.getElementById("stat-classes").textContent = String(items.length);
+    const addBtn = document.getElementById("class-add-btn");
+    if (addBtn) addBtn.disabled = items.length >= MAX_CLASSES;
   };
 
   const renderTrainers = () => {
@@ -342,6 +345,11 @@
   document.getElementById("class-add-btn")?.addEventListener("click", () => {
     collectDraft();
     draft.classes = draft.classes || [];
+    if (draft.classes.length >= MAX_CLASSES) {
+      alert(`${MAX_CLASSES} classes are fully done. You can’t add more than ${MAX_CLASSES} classes.`);
+      setStatus(`Maximum ${MAX_CLASSES} classes reached`);
+      return;
+    }
     draft.classes.push({
       name: "New Class",
       blurb: "50 min · All levels — Describe this class.",
@@ -527,6 +535,11 @@
     const data = collectDraft();
     if ((data.classes || []).length < MIN_CLASSES) {
       setStatus(`Keep at least ${MIN_CLASSES} classes`);
+      return;
+    }
+    if ((data.classes || []).length > MAX_CLASSES) {
+      alert(`${MAX_CLASSES} classes are fully done. You can’t add more than ${MAX_CLASSES} classes.`);
+      setStatus(`Maximum ${MAX_CLASSES} classes allowed`);
       return;
     }
     if ((data.cafeImages || []).length !== CAFE_PHOTO_COUNT) {
