@@ -425,11 +425,48 @@
         form.reportValidity();
         return;
       }
+
+      const data = new FormData(form);
+      const name = String(data.get("name") || "").trim();
+      const email = String(data.get("email") || "").trim();
+      const phone = String(data.get("phone") || "").trim();
+      const preferredClass = String(data.get("preferred_class") || "").trim();
+      const message = String(data.get("message") || "").trim();
+
+      const contentData = window.JinisContent ? window.JinisContent.getContent() : null;
+      const whatsapp = String(contentData?.whatsapp || "919686868697").replace(/\D/g, "");
+      const studioEmail = String(contentData?.email || "info@jinispilatesstudio.com").trim();
+
+      const lines = [
+        "New enquiry from Jini's Pilates website",
+        "",
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Phone: ${phone}`,
+        preferredClass ? `Preferred class: ${preferredClass}` : "",
+        message ? `Message: ${message}` : "",
+      ].filter(Boolean);
+      const body = lines.join("\n");
+
+      // Primary: WhatsApp to studio number. Fallback: email compose.
+      let opened = false;
+      if (whatsapp) {
+        const waUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(body)}`;
+        const win = window.open(waUrl, "_blank", "noopener,noreferrer");
+        opened = !!win;
+      }
+      if (!opened && studioEmail) {
+        const mailUrl = `mailto:${encodeURIComponent(studioEmail)}?subject=${encodeURIComponent(
+          "Website enquiry — " + (name || "New lead")
+        )}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailUrl;
+      }
+
       const btn = qs('button[type="submit"]', form);
       const original = btn ? btn.textContent : "";
       if (btn) {
         btn.disabled = true;
-        btn.textContent = "Sent ✓";
+        btn.textContent = "Opening…";
       }
       setTimeout(() => {
         form.reset();
@@ -437,7 +474,7 @@
           btn.disabled = false;
           btn.textContent = original;
         }
-        alert("Thanks! We’ll get back to you soon.");
+        alert("Thanks! Your details will open in WhatsApp to send to the studio.");
       }, 400);
     });
   });
