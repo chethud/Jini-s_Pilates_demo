@@ -83,12 +83,24 @@
   const renderClasses = () => {
     const root = document.getElementById("classes-fields");
     root.innerHTML = (draft.classes || [])
-      .map(
-        (item, i) => `<div class="subcard" data-class-index="${i}">
+      .map((item, i) => {
+        const src = resolveSrc(item.image || "assets/class_mat_dkcnn3u_.jpg");
+        return `<div class="subcard" data-class-index="${i}">
+        <div class="subcard-head">
+          <strong>Class ${i + 1}</strong>
+          <button type="button" class="btn-ghost danger" data-class-remove="${i}">Delete</button>
+        </div>
+        <div class="upload-block">
+          <img class="upload-preview is-visible" src="${src}" alt="">
+          <input type="hidden" data-class="image" value="${escapeAttr(item.image || "assets/class_mat_dkcnn3u_.jpg")}">
+          <div class="upload-row">
+            <input data-class-file="${i}" type="file" accept="image/*">
+          </div>
+        </div>
         <label>Class name<input data-class="name" type="text" value="${escapeAttr(item.name)}"></label>
         <label>Blurb<textarea data-class="blurb" rows="2">${escapeHtml(item.blurb)}</textarea></label>
-      </div>`
-      )
+      </div>`;
+      })
       .join("");
     document.getElementById("stat-classes").textContent = String((draft.classes || []).length);
   };
@@ -96,15 +108,47 @@
   const renderTrainers = () => {
     const root = document.getElementById("trainers-fields");
     root.innerHTML = (draft.trainers || [])
-      .map(
-        (item, i) => `<div class="subcard" data-trainer-index="${i}">
+      .map((item, i) => {
+        const src = resolveSrc(item.image || "assets/trainer_1_cex1xk_w.jpg");
+        return `<div class="subcard" data-trainer-index="${i}">
+        <div class="subcard-head">
+          <strong>Trainer ${i + 1}</strong>
+          <button type="button" class="btn-ghost danger" data-trainer-remove="${i}">Delete</button>
+        </div>
+        <div class="upload-block">
+          <img class="upload-preview is-visible" src="${src}" alt="">
+          <input type="hidden" data-trainer="image" value="${escapeAttr(item.image || "assets/trainer_1_cex1xk_w.jpg")}">
+          <div class="upload-row">
+            <input data-trainer-file="${i}" type="file" accept="image/*">
+          </div>
+        </div>
         <label>Name<input data-trainer="name" type="text" value="${escapeAttr(item.name)}"></label>
         <label>Role<input data-trainer="role" type="text" value="${escapeAttr(item.role)}"></label>
         <label>Detail<input data-trainer="detail" type="text" value="${escapeAttr(item.detail || "")}"></label>
-      </div>`
-      )
+      </div>`;
+      })
       .join("");
     document.getElementById("stat-trainers").textContent = String((draft.trainers || []).length);
+  };
+
+  const renderCafeImages = () => {
+    const root = document.getElementById("cafe-images-fields");
+    if (!root) return;
+    const items = draft.cafeImages || [];
+    root.innerHTML = items
+      .map((item, i) => {
+        const src = resolveSrc(item.src);
+        return `<div class="gallery-admin-card" data-cafe-image-index="${i}">
+          <img src="${src}" alt="">
+          <input type="hidden" data-cafe-image="src" value="${escapeAttr(item.src || "")}">
+          <label>Caption / alt<input data-cafe-image="alt" type="text" value="${escapeAttr(item.alt || "")}"></label>
+          <div class="upload-row">
+            <input data-cafe-image-file="${i}" type="file" accept="image/*">
+          </div>
+          <button type="button" class="btn-ghost danger" data-cafe-image-remove="${i}">Delete photo</button>
+        </div>`;
+      })
+      .join("");
   };
 
   const renderPlans = () => {
@@ -184,17 +228,26 @@
       label: row.querySelector('[data-stat="label"]').value.trim(),
     }));
 
-    next.classes = [...document.querySelectorAll("[data-class-index]")].map((row, i) => ({
-      ...(draft.classes[i] || {}),
+    next.classes = [...document.querySelectorAll("[data-class-index]")].map((row) => ({
       name: row.querySelector('[data-class="name"]').value.trim(),
       blurb: row.querySelector('[data-class="blurb"]').value.trim(),
+      image:
+        row.querySelector('[data-class="image"]')?.value.trim() ||
+        "assets/class_mat_dkcnn3u_.jpg",
     }));
 
-    next.trainers = [...document.querySelectorAll("[data-trainer-index]")].map((row, i) => ({
-      ...(draft.trainers[i] || {}),
+    next.trainers = [...document.querySelectorAll("[data-trainer-index]")].map((row) => ({
       name: row.querySelector('[data-trainer="name"]').value.trim(),
       role: row.querySelector('[data-trainer="role"]').value.trim(),
       detail: row.querySelector('[data-trainer="detail"]').value.trim(),
+      image:
+        row.querySelector('[data-trainer="image"]')?.value.trim() ||
+        "assets/trainer_1_cex1xk_w.jpg",
+    }));
+
+    next.cafeImages = [...document.querySelectorAll("[data-cafe-image-index]")].map((row) => ({
+      src: row.querySelector('[data-cafe-image="src"]')?.value.trim() || "",
+      alt: row.querySelector('[data-cafe-image="alt"]')?.value.trim() || "",
     }));
 
     next.plans = [...document.querySelectorAll("[data-plan-index]")].map((row, i) => ({
@@ -233,12 +286,132 @@
     renderStats();
     renderClasses();
     renderTrainers();
+    renderCafeImages();
     renderPlans();
     renderFaqs();
     renderGallery();
   };
 
   refresh();
+
+  const classesRoot = document.getElementById("classes-fields");
+  const trainersRoot = document.getElementById("trainers-fields");
+  const cafeImagesRoot = document.getElementById("cafe-images-fields");
+
+  document.getElementById("class-add-btn")?.addEventListener("click", () => {
+    collectDraft();
+    draft.classes = draft.classes || [];
+    draft.classes.push({
+      name: "New Class",
+      blurb: "50 min · All levels — Describe this class.",
+      image: "assets/class_mat_dkcnn3u_.jpg",
+    });
+    renderClasses();
+    setStatus("Class added — edit details, then Save changes");
+  });
+
+  document.getElementById("trainer-add-btn")?.addEventListener("click", () => {
+    collectDraft();
+    draft.trainers = draft.trainers || [];
+    draft.trainers.push({
+      name: "New Trainer",
+      role: "Certified Instructor",
+      detail: "Experience · Specialty",
+      image: "assets/trainer_1_cex1xk_w.jpg",
+    });
+    renderTrainers();
+    setStatus("Trainer added — edit details, then Save changes");
+  });
+
+  document.getElementById("cafe-image-add-btn")?.addEventListener("click", () => {
+    collectDraft();
+    draft.cafeImages = draft.cafeImages || [];
+    draft.cafeImages.push({
+      src: "assets/food_1_bce_p0_t.jpg",
+      alt: "Cafe photo",
+    });
+    renderCafeImages();
+    setStatus("Cafe photo slot added — upload an image, then Save");
+  });
+
+  classesRoot?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-class-remove]");
+    if (!btn) return;
+    const i = Number(btn.getAttribute("data-class-remove"));
+    collectDraft();
+    if (!confirm("Delete this class?")) return;
+    draft.classes.splice(i, 1);
+    renderClasses();
+    setStatus("Class deleted — click Save changes");
+  });
+
+  trainersRoot?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-trainer-remove]");
+    if (!btn) return;
+    const i = Number(btn.getAttribute("data-trainer-remove"));
+    collectDraft();
+    if (!confirm("Delete this trainer?")) return;
+    draft.trainers.splice(i, 1);
+    renderTrainers();
+    setStatus("Trainer deleted — click Save changes");
+  });
+
+  cafeImagesRoot?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-cafe-image-remove]");
+    if (!btn) return;
+    const i = Number(btn.getAttribute("data-cafe-image-remove"));
+    collectDraft();
+    if (!confirm("Delete this cafe photo?")) return;
+    draft.cafeImages.splice(i, 1);
+    renderCafeImages();
+    setStatus("Cafe photo deleted — click Save changes");
+  });
+
+  classesRoot?.addEventListener("change", async (event) => {
+    const input = event.target.closest("[data-class-file]");
+    if (!input || !input.files?.[0]) return;
+    const i = Number(input.getAttribute("data-class-file"));
+    try {
+      setStatus("Processing class photo…");
+      collectDraft();
+      draft.classes[i].image = await compressImage(input.files[0], 1400, 0.8);
+      renderClasses();
+      setStatus("Class photo ready — Save changes");
+    } catch {
+      setStatus("Class photo upload failed");
+    }
+  });
+
+  trainersRoot?.addEventListener("change", async (event) => {
+    const input = event.target.closest("[data-trainer-file]");
+    if (!input || !input.files?.[0]) return;
+    const i = Number(input.getAttribute("data-trainer-file"));
+    try {
+      setStatus("Processing trainer photo…");
+      collectDraft();
+      draft.trainers[i].image = await compressImage(input.files[0], 1200, 0.8);
+      renderTrainers();
+      setStatus("Trainer photo ready — Save changes");
+    } catch {
+      setStatus("Trainer photo upload failed");
+    }
+  });
+
+  cafeImagesRoot?.addEventListener("change", async (event) => {
+    const input = event.target.closest("[data-cafe-image-file]");
+    if (!input || !input.files?.[0]) return;
+    const i = Number(input.getAttribute("data-cafe-image-file"));
+    try {
+      setStatus("Processing cafe photo…");
+      collectDraft();
+      draft.cafeImages[i].src = await compressImage(input.files[0], 1400, 0.8);
+      if (!draft.cafeImages[i].alt) draft.cafeImages[i].alt = input.files[0].name;
+      renderCafeImages();
+      setStatus("Cafe photo ready — Save changes");
+    } catch {
+      setStatus("Cafe photo upload failed");
+    }
+  });
 
   if (heroFileInput) {
     heroFileInput.addEventListener("change", async () => {

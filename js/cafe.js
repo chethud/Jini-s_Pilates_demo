@@ -1,7 +1,10 @@
 (() => {
-  const initCafeCarousel = () => {
+  const initCafeCarousel = (force = false) => {
     const root = document.querySelector("[data-cafe-carousel]");
-    if (!root || root.dataset.ready === "1") return;
+    if (!root) return;
+
+    // Allow re-init after CMS rebuilds slides
+    if (!force && root.dataset.ready === "1" && root.querySelector("[data-cafe-slide]")) return;
     root.dataset.ready = "1";
 
     const section = root.closest("section");
@@ -49,7 +52,11 @@
       paint();
     };
 
-    root.addEventListener("click", (event) => {
+    // Avoid stacking duplicate listeners on re-init
+    if (root._cafeClick) root.removeEventListener("click", root._cafeClick);
+    if (root._cafeKey) root.removeEventListener("keydown", root._cafeKey);
+
+    root._cafeClick = (event) => {
       const target = event.target.closest("button, [data-cafe-slide]");
       if (!target || !root.contains(target)) return;
 
@@ -76,11 +83,12 @@
       if (target.matches("[data-cafe-slide].is-next")) {
         go(1);
       }
-    });
+    };
 
-    // Keyboard support when focused inside carousel
+    root.addEventListener("click", root._cafeClick);
+
     root.setAttribute("tabindex", "0");
-    root.addEventListener("keydown", (event) => {
+    root._cafeKey = (event) => {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         go(-1);
@@ -88,10 +96,13 @@
         event.preventDefault();
         go(1);
       }
-    });
+    };
+    root.addEventListener("keydown", root._cafeKey);
 
     paint();
   };
+
+  window.JinisInitCafeCarousel = initCafeCarousel;
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initCafeCarousel);

@@ -7,6 +7,90 @@
   const setText = (el, value) => {
     if (el && value != null) el.textContent = value;
   };
+  const escapeHtml = (s) =>
+    String(s ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  const asset = (src) =>
+    window.JinisContent ? window.JinisContent.assetUrl(src || "", "") : src || "";
+
+  const parseClassBlurb = (blurb) => {
+    const text = String(blurb || "").trim();
+    const m = text.match(/^(.+?)\s*[·•]\s*(.+?)\s*[—–-]\s*(.+)$/);
+    if (m) return { duration: m[1].trim(), level: m[2].trim(), desc: m[3].trim() };
+    return { duration: "", level: "", desc: text };
+  };
+
+  const renderClassesGrid = (classes) => {
+    const grid = qs("[data-cms-classes-grid]");
+    if (!grid || !Array.isArray(classes)) return;
+    grid.innerHTML = classes
+      .map((item) => {
+        const { duration, level, desc } = parseClassBlurb(item.blurb);
+        const img = asset(item.image || "assets/class_mat_dkcnn3u_.jpg");
+        const badges =
+          duration || level
+            ? `<div class="mt-3 flex flex-wrap items-center gap-2">
+            ${duration ? `<span class="inline-flex items-center gap-1.5 rounded-full bg-primary/12 px-3 py-1 text-[11px] font-medium text-primary">${escapeHtml(duration)}</span>` : ""}
+            ${level ? `<span class="inline-flex items-center gap-1.5 rounded-full bg-sage/12 px-3 py-1 text-[11px] font-medium text-sage">${escapeHtml(level)}</span>` : ""}
+          </div>`
+            : "";
+        return `<div><article class="group glass h-full overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-lift">
+          <div class="overflow-hidden"><img src="${img}" alt="${escapeHtml(item.name)}" width="900" height="700" loading="lazy" class="h-52 w-full object-cover transition-transform duration-700 group-hover:scale-110"></div>
+          <div class="p-6">
+            <h3 class="text-xl text-foreground">${escapeHtml(item.name)}</h3>
+            ${badges}
+            <p class="mt-4 text-sm leading-relaxed text-muted-foreground">${escapeHtml(desc)}</p>
+            <a href="#contact" class="mt-6 inline-flex w-full items-center justify-center rounded-full border border-primary/40 px-5 py-3 text-xs font-medium text-foreground transition-colors hover:bg-primary hover:text-primary-foreground">Book Now</a>
+          </div>
+        </article></div>`;
+      })
+      .join("");
+  };
+
+  const renderTrainersGrid = (trainers) => {
+    const grid = qs("[data-cms-trainers-grid]");
+    if (!grid || !Array.isArray(trainers)) return;
+    grid.innerHTML = trainers
+      .map((item) => {
+        const img = asset(item.image || "assets/trainer_1_cex1xk_w.jpg");
+        const parts = String(item.detail || "")
+          .split("·")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const detailHtml = parts.length
+          ? parts.map((p) => `<p class="mt-3 text-sm text-muted-foreground">${escapeHtml(p)}</p>`).join("")
+          : "";
+        return `<div><article class="group glass h-full overflow-hidden rounded-3xl">
+          <div class="overflow-hidden"><img src="${img}" alt="${escapeHtml(item.name)}" width="700" height="900" loading="lazy" class="h-80 w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="p-6">
+            <h3 class="text-xl text-foreground">${escapeHtml(item.name)}</h3>
+            <p class="mt-1 text-xs tracking-[0.16em] uppercase text-primary">${escapeHtml(item.role || "")}</p>
+            ${detailHtml}
+          </div>
+        </article></div>`;
+      })
+      .join("");
+  };
+
+  const renderCafeStage = (images) => {
+    const stage = qs("[data-cms-cafe-stage]");
+    const carousel = qs("[data-cafe-carousel]");
+    if (!stage || !Array.isArray(images) || !images.length) return;
+    stage.innerHTML = images
+      .map((item, i) => {
+        const src = asset(item.src);
+        return `<article class="cafe-card" data-cafe-slide="${i}">
+          <img src="${src}" alt="${escapeHtml(item.alt || "Cafe")}" width="800" height="1000" loading="lazy">
+        </article>`;
+      })
+      .join("");
+    if (carousel && typeof window.JinisInitCafeCarousel === "function") {
+      window.JinisInitCafeCarousel(true);
+    }
+  };
 
   /* ---------- apply CMS content ---------- */
   const applyContent = (data) => {
@@ -46,19 +130,9 @@
     const wa = qs('a[aria-label*="WhatsApp"]');
     if (wa && data.whatsapp) wa.href = "https://wa.me/" + data.whatsapp;
 
-    if (Array.isArray(data.classes)) {
-      data.classes.forEach((item, i) => {
-        setText(qs(`[data-cms-class-name="${i}"]`), item.name);
-        setText(qs(`[data-cms-class-blurb="${i}"]`), item.blurb);
-      });
-    }
-
-    if (Array.isArray(data.trainers)) {
-      data.trainers.forEach((item, i) => {
-        setText(qs(`[data-cms-trainer-name="${i}"]`), item.name);
-        setText(qs(`[data-cms-trainer-role="${i}"]`), item.role);
-      });
-    }
+    renderClassesGrid(data.classes);
+    renderTrainersGrid(data.trainers);
+    renderCafeStage(data.cafeImages);
 
     // FAQ answers if empty / sync from content
     if (Array.isArray(data.faqs)) {

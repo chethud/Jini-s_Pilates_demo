@@ -48,6 +48,12 @@
       { name: "Rohan Verma", role: "Clinical Pilates, MSc Physio", detail: "10 years experience · Rehabilitation & mobility", image: "assets/trainer_3_dj_srliy.jpg" },
     ],
     cafeBlurb: "Nourish after class with fresh bowls, smoothies, and wellness drinks.",
+    cafeImages: [
+      { src: "assets/food_1_bce_p0_t.jpg", alt: "Green smoothie and berry protein bowl" },
+      { src: "assets/food_2_bb_dr2jh.jpg", alt: "Fresh cold pressed juices with fruit" },
+      { src: "assets/food_3_cmezi_2r.jpg", alt: "Salad bowl and coffee" },
+      { src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter" },
+    ],
     plans: [
       {
         name: "Starter",
@@ -148,6 +154,9 @@
       stats: Array.isArray(saved.stats) ? saved.stats : DEFAULT_CONTENT.stats.slice(),
       classes: Array.isArray(saved.classes) ? saved.classes : DEFAULT_CONTENT.classes.slice(),
       trainers: Array.isArray(saved.trainers) ? saved.trainers : DEFAULT_CONTENT.trainers.slice(),
+      cafeImages: Array.isArray(saved.cafeImages)
+        ? saved.cafeImages
+        : DEFAULT_CONTENT.cafeImages.slice(),
       plans: Array.isArray(saved.plans) ? saved.plans : DEFAULT_CONTENT.plans.slice(),
       gallery: Array.isArray(saved.gallery) ? saved.gallery : DEFAULT_CONTENT.gallery.slice(),
       faqs: Array.isArray(saved.faqs) ? saved.faqs : DEFAULT_CONTENT.faqs.slice(),

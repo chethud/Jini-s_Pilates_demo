@@ -44,6 +44,14 @@
   }
 
   if (type === 'cafe') {
+    const photos = Array.isArray(c.cafeImages) && c.cafeImages.length
+      ? c.cafeImages
+      : [
+          { src: 'assets/food_1_bce_p0_t.jpg', alt: 'Cafe' },
+          { src: 'assets/food_2_bb_dr2jh.jpg', alt: 'Cafe' },
+          { src: 'assets/food_3_cmezi_2r.jpg', alt: 'Cafe' },
+          { src: 'assets/cafe_b_nzqt9u.jpg', alt: 'Cafe' },
+        ];
     root.innerHTML = `<div class="cafe-layout">
       <div>
         <p class="eyebrow">Wellness Cafe</p>
@@ -56,8 +64,8 @@
         <p class="note">${c.hours || 'Open 9 AM – 10 PM'} · Delivery on Swiggy & Zomato</p>
       </div>
       <div class="cafe-photos">
-        ${['assets/food_1_bce_p0_t.jpg','assets/food_2_bb_dr2jh.jpg','assets/food_3_cmezi_2r.jpg','assets/cafe_b_nzqt9u.jpg'].map(src =>
-          `<img src="${window.JinisContent.assetUrl(src, prefix)}" alt="Cafe">`).join('')}
+        ${photos.map(item =>
+          `<img src="${window.JinisContent.assetUrl(item.src, prefix)}" alt="${item.alt || 'Cafe'}">`).join('')}
       </div>
     </div>`;
   }

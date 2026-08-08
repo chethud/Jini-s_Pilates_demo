@@ -114,14 +114,22 @@
 
       <section id="panel-classes" class="panel">
         <div class="card">
-          <h3>Classes</h3>
+          <div class="card-head">
+            <h3>Classes</h3>
+            <button type="button" id="class-add-btn" class="btn-primary">Add class</button>
+          </div>
+          <p class="hint">Add, edit, change photos, or delete classes. Click Save changes when done.</p>
           <div id="classes-fields" class="stack"></div>
         </div>
       </section>
 
       <section id="panel-trainers" class="panel">
         <div class="card">
-          <h3>Trainers</h3>
+          <div class="card-head">
+            <h3>Trainers</h3>
+            <button type="button" id="trainer-add-btn" class="btn-primary">Add trainer</button>
+          </div>
+          <p class="hint">Add trainers, upload or change photos, or remove a trainer. Click Save changes when done.</p>
           <div id="trainers-fields" class="stack"></div>
         </div>
       </section>
@@ -131,6 +139,14 @@
           <h3>Cafe</h3>
           <label>Cafe blurb<textarea name="cafeBlurb" rows="4"></textarea></label>
         </form>
+        <div class="card">
+          <div class="card-head">
+            <h3>Cafe photos</h3>
+            <button type="button" id="cafe-image-add-btn" class="btn-primary">Add photo</button>
+          </div>
+          <p class="hint">These photos appear in the homepage cafe carousel and the Cafe page.</p>
+          <div id="cafe-images-fields" class="gallery-admin-grid"></div>
+        </div>
       </section>
 
       <section id="panel-plans" class="panel">
