@@ -8,24 +8,50 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/pages/pages.css">
+  <link rel="stylesheet" href="/css/site-nav.css">
 </head>
-<body data-page="trainers">
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="brand" href="/"><img src="/assets/logo.png" alt=""><span>Jini's Pilates Studio</span></a>
-            <div class="header-actions">
-        <a class="btn" href="/">Home</a>
-        <a class="btn" href="/pages/about">About</a>
-        <a class="btn" href="/pages/classes">Classes</a>
-        <a class="btn" href="/pages/trainers">Trainers</a>
-        <a class="btn" href="/pages/cafe">Cafe</a>
-        <a class="btn" href="/pages/plans">Plans</a>
-        <a class="btn" href="/gallery">Gallery</a>
-        <a class="btn" href="/#contact">Contact</a>
-        <a class="btn btn-primary" href="/#contact">Book a Trial</a>
+<body data-page="trainers" class="has-fixed-nav">
+  <header id="site-header" class="py-4">
+  <div class="nav-wrap">
+    <div class="nav-shell">
+      <a class="nav-brand" href="/">
+        <img src="/assets/logo.png" alt="Jini's Pilates Studio logo" width="40" height="40">
+        <span>Jini's Pilates Studio</span>
+      </a>
+      <div class="nav-right">
+        <nav aria-label="Main" class="site-nav-desktop">
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/#why-pilates">Why Pilates</a></li>
+            <li><a href="/pages/classes">Classes</a></li>
+            <li><a href="/pages/trainers">Trainers</a></li>
+            <li><a href="/pages/cafe">Cafe</a></li>
+            <li><a href="/pages/plans">Plans</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="nav-cta" href="/#contact">Book a Trial</a>
+        <button type="button" class="site-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+        </button>
       </div>
+    </div>
+  </div>
+</header>
+<div id="mobile-nav" class="mobile-nav" hidden>
+  <nav aria-label="Mobile">
+    <a href="/pages/about">About</a>
+    <a href="/#why-pilates">Why Pilates</a>
+    <a href="/pages/classes">Classes</a>
+    <a href="/pages/trainers">Trainers</a>
+    <a href="/pages/cafe">Cafe</a>
+    <a href="/pages/plans">Plans</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/#contact">Contact</a>
+    <a class="mobile-nav-cta" href="/#contact">Book a Trial</a>
+  </nav>
 </div>
-  </header>
   <main class="page">
     <div class="page-hero">
       <p class="eyebrow">Trainers</p>
@@ -34,6 +60,7 @@
     </div>
     <div id="page-root"></div>
   </main>
+  <script src="/js/site-nav.js"></script>
   <script src="/js/content.js"></script>
   <script src="/pages/pages.js"></script>
 

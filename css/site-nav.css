@@ -1,0 +1,210 @@
+/* Shared floating pill navbar (homepage + all subpages) */
+:root {
+  --nav-bg: #f4f8f6;
+  --nav-ink: #1a2421;
+  --nav-muted: #5d6b67;
+  --nav-primary: #2f9d8a;
+  --nav-font: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --nav-display: "Playfair Display", Georgia, serif;
+}
+
+#site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  padding: 1rem 0;
+  transition: padding 0.35s ease;
+  pointer-events: none;
+  font-family: var(--nav-font);
+}
+
+#site-header > * {
+  pointer-events: auto;
+}
+
+#site-header .nav-wrap {
+  width: min(1200px, 94vw);
+  margin: 0 auto;
+}
+
+#site-header .nav-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  padding: 0.65rem 1rem;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    backdrop-filter 0.35s ease;
+}
+
+@media (min-width: 640px) {
+  #site-header .nav-shell {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+#site-header.is-scrolled {
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+
+#site-header.is-scrolled .nav-shell {
+  background-color: rgba(244, 248, 246, 0.92);
+  border-color: rgba(26, 36, 33, 0.1);
+  box-shadow: 0 10px 30px rgba(28, 25, 23, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+#site-header .nav-brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--nav-ink);
+}
+
+#site-header .nav-brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+#site-header .nav-brand span {
+  font-family: var(--nav-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#site-header .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+#site-header .site-nav-desktop ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+#site-header .site-nav-desktop a {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--nav-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#site-header .site-nav-desktop a:hover {
+  background: rgba(26, 36, 33, 0.06);
+}
+
+#site-header .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--nav-primary);
+  color: #fff;
+  white-space: nowrap;
+}
+
+#site-header .site-menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nav-ink);
+  cursor: pointer;
+}
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(244, 248, 246, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 96px 28px 40px;
+  font-family: var(--nav-font);
+}
+
+.mobile-nav.is-open,
+.mobile-nav.is-open[hidden] {
+  display: block !important;
+}
+
+.mobile-nav nav {
+  display: grid;
+  gap: 8px;
+}
+
+.mobile-nav a {
+  display: block;
+  text-decoration: none;
+  color: var(--nav-ink);
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding: 12px 4px;
+  border-bottom: 1px solid rgba(26, 36, 33, 0.08);
+}
+
+.mobile-nav .mobile-nav-cta {
+  margin-top: 18px;
+  border: 0;
+  border-radius: 999px;
+  text-align: center;
+  background: var(--nav-primary);
+  color: #fff;
+  padding: 14px 18px;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Space for fixed header on subpages */
+body.has-fixed-nav .page {
+  padding-top: 110px;
+}
+
+@media (max-width: 900px) {
+  #site-header .site-nav-desktop,
+  #site-header .nav-cta {
+    display: none;
+  }
+
+  #site-header .site-menu-toggle {
+    display: grid;
+  }
+}
