@@ -1,7 +1,7 @@
 (() => {
   const page = document.body.dataset.galleryPage || "all";
   const content = window.JinisContent.getContent();
-  const prefix = "../";
+  const prefix = "/";
   const grid = document.getElementById("gallery-grid");
   const empty = document.getElementById("gallery-empty");
   const countEl = document.getElementById("gallery-count");

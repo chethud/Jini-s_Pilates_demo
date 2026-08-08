@@ -1,7 +1,7 @@
 (() => {
   const type = document.body.dataset.page;
   const c = window.JinisContent.getContent();
-  const prefix = '../';
+  const prefix = '/';
   const root = document.getElementById('page-root');
   if (!root) return;
 

@@ -4,7 +4,19 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/cms", "destination": "/cms/index.html" },
-    { "source": "/cms/dashboard", "destination": "/cms/dashboard.html" }
+    { "source": "/cms/dashboard", "destination": "/cms/dashboard.html" },
+    { "source": "/gallery", "destination": "/gallery/index.html" },
+    { "source": "/gallery/studio", "destination": "/gallery/studio.html" },
+    { "source": "/gallery/classes", "destination": "/gallery/classes.html" },
+    { "source": "/gallery/equipment", "destination": "/gallery/equipment.html" },
+    { "source": "/gallery/cafe", "destination": "/gallery/cafe.html" },
+    { "source": "/gallery/members", "destination": "/gallery/members.html" },
+    { "source": "/gallery/events", "destination": "/gallery/events.html" },
+    { "source": "/pages/about", "destination": "/pages/about.html" },
+    { "source": "/pages/classes", "destination": "/pages/classes.html" },
+    { "source": "/pages/trainers", "destination": "/pages/trainers.html" },
+    { "source": "/pages/cafe", "destination": "/pages/cafe.html" },
+    { "source": "/pages/plans", "destination": "/pages/plans.html" }
   ],
   "headers": [
     {
