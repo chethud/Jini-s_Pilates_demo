@@ -2,6 +2,10 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/cms", "destination": "/cms/index.html" },
+    { "source": "/cms/dashboard", "destination": "/cms/dashboard.html" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

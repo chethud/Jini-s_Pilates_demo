@@ -4,7 +4,7 @@
 
   // Already signed in → go straight to dashboard
   if (window.JinisCMS.isAuthed()) {
-    location.replace("dashboard.html");
+    location.replace("/cms/dashboard.html");
     return;
   }
 
@@ -17,12 +17,11 @@
 
     if (!window.JinisCMS.checkCredentials(id, password)) {
       error.hidden = false;
-      error.textContent = "Invalid ID or password. Use ID JINIS and password Jinni@7654";
+      error.textContent = "Invalid ID or password.";
       return;
     }
 
     window.JinisCMS.setAuthed(true);
-    // Full page navigation — login screen is left behind
-    window.location.href = "dashboard.html";
+    location.replace("/cms/dashboard.html");
   });
 })();

@@ -1,6 +1,6 @@
 (() => {
   if (!window.JinisCMS.isAuthed()) {
-    location.replace("index.html");
+    location.replace("/cms/");
     return;
   }
 
@@ -314,7 +314,7 @@
 
   logoutBtn.addEventListener("click", () => {
     window.JinisCMS.setAuthed(false);
-    location.replace("index.html");
+    location.replace("/cms/");
   });
 
   document.querySelectorAll(".nav-item").forEach((btn) => {

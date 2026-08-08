@@ -99,11 +99,6 @@ html {
   color: #fff;
   text-align: center;
 }
-.mobile-nav .mobile-nav-cms {
-  text-align: center;
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
 body.menu-open { overflow: hidden; }
 
 /* FAQ open chevron */
