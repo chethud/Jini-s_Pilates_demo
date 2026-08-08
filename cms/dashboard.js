@@ -80,15 +80,45 @@
       .join("");
   };
 
+  const MIN_CLASSES = 6;
+  const MAX_GALLERY = 10;
+  const CAFE_PHOTO_COUNT = 4;
+  const DEFAULT_CAFE_IMAGES = (window.JinisContent?.DEFAULT_CONTENT?.cafeImages || []).slice(
+    0,
+    CAFE_PHOTO_COUNT
+  );
+
+  const ensureCafeImages = () => {
+    draft.cafeImages = Array.isArray(draft.cafeImages) ? draft.cafeImages.slice() : [];
+    while (draft.cafeImages.length < CAFE_PHOTO_COUNT) {
+      const fallback =
+        DEFAULT_CAFE_IMAGES[draft.cafeImages.length] ||
+        DEFAULT_CAFE_IMAGES[0] || {
+          src: "assets/food_1_bce_p0_t.jpg",
+          alt: "Cafe photo",
+        };
+      draft.cafeImages.push({ ...fallback });
+    }
+    if (draft.cafeImages.length > CAFE_PHOTO_COUNT) {
+      draft.cafeImages = draft.cafeImages.slice(0, CAFE_PHOTO_COUNT);
+    }
+  };
+
   const renderClasses = () => {
     const root = document.getElementById("classes-fields");
-    root.innerHTML = (draft.classes || [])
+    const items = draft.classes || [];
+    const canDelete = items.length > MIN_CLASSES;
+    root.innerHTML = items
       .map((item, i) => {
         const src = resolveSrc(item.image || "assets/class_mat_dkcnn3u_.jpg");
         return `<div class="subcard" data-class-index="${i}">
         <div class="subcard-head">
           <strong>Class ${i + 1}</strong>
-          <button type="button" class="btn-ghost danger" data-class-remove="${i}">Delete</button>
+          ${
+            canDelete
+              ? `<button type="button" class="btn-ghost danger" data-class-remove="${i}">Delete</button>`
+              : `<span class="hint">Min ${MIN_CLASSES}</span>`
+          }
         </div>
         <div class="upload-block">
           <img class="upload-preview is-visible" src="${src}" alt="">
@@ -102,7 +132,7 @@
       </div>`;
       })
       .join("");
-    document.getElementById("stat-classes").textContent = String((draft.classes || []).length);
+    document.getElementById("stat-classes").textContent = String(items.length);
   };
 
   const renderTrainers = () => {
@@ -134,7 +164,10 @@
   const renderCafeImages = () => {
     const root = document.getElementById("cafe-images-fields");
     if (!root) return;
-    const items = draft.cafeImages || [];
+    ensureCafeImages();
+    const items = draft.cafeImages;
+    const countEl = document.getElementById("cafe-image-count");
+    if (countEl) countEl.textContent = `(${items.length}/${CAFE_PHOTO_COUNT})`;
     root.innerHTML = items
       .map((item, i) => {
         const src = resolveSrc(item.src);
@@ -145,7 +178,7 @@
           <div class="upload-row">
             <input data-cafe-image-file="${i}" type="file" accept="image/*">
           </div>
-          <button type="button" class="btn-ghost danger" data-cafe-image-remove="${i}">Delete photo</button>
+          <p class="hint">Replace photo ${i + 1} of ${CAFE_PHOTO_COUNT}</p>
         </div>`;
       })
       .join("");
@@ -173,27 +206,17 @@
     document.getElementById("stat-plans").textContent = String((draft.plans || []).length);
   };
 
-  const renderFaqs = () => {
-    const root = document.getElementById("faq-fields");
-    root.innerHTML = (draft.faqs || [])
-      .map(
-        (item, i) => `<div class="subcard" data-faq-index="${i}">
-        <div class="subcard-head">
-          <strong>FAQ ${i + 1}</strong>
-          <button type="button" class="btn-ghost danger" data-faq-remove="${i}">Delete</button>
-        </div>
-        <label>Question<input data-faq="q" type="text" value="${escapeAttr(item.q)}"></label>
-        <label>Answer<textarea data-faq="a" rows="3">${escapeHtml(item.a)}</textarea></label>
-      </div>`
-      )
-      .join("");
-  };
-
   const renderGallery = () => {
     const root = document.getElementById("gallery-fields");
-    const items = draft.gallery || [];
+    let items = draft.gallery || [];
+    if (items.length > MAX_GALLERY) {
+      draft.gallery = items.slice(0, MAX_GALLERY);
+      items = draft.gallery;
+    }
     document.getElementById("gallery-list-count").textContent = String(items.length);
     document.getElementById("stat-gallery").textContent = String(items.length);
+    const addBtn = document.getElementById("gallery-add-btn");
+    if (addBtn) addBtn.disabled = items.length >= MAX_GALLERY;
     root.innerHTML = items
       .map((item, i) => {
         const src = resolveSrc(item.src);
@@ -253,10 +276,21 @@
         "assets/trainer_1_cex1xk_w.jpg",
     }));
 
-    next.cafeImages = [...document.querySelectorAll("[data-cafe-image-index]")].map((row) => ({
-      src: row.querySelector('[data-cafe-image="src"]')?.value.trim() || "",
-      alt: row.querySelector('[data-cafe-image="alt"]')?.value.trim() || "",
-    }));
+    next.cafeImages = [...document.querySelectorAll("[data-cafe-image-index]")]
+      .map((row) => ({
+        src: row.querySelector('[data-cafe-image="src"]')?.value.trim() || "",
+        alt: row.querySelector('[data-cafe-image="alt"]')?.value.trim() || "",
+      }))
+      .slice(0, CAFE_PHOTO_COUNT);
+    while (next.cafeImages.length < CAFE_PHOTO_COUNT) {
+      const fallback =
+        DEFAULT_CAFE_IMAGES[next.cafeImages.length] ||
+        DEFAULT_CAFE_IMAGES[0] || {
+          src: "assets/food_1_bce_p0_t.jpg",
+          alt: "Cafe photo",
+        };
+      next.cafeImages.push({ ...fallback });
+    }
 
     next.plans = [...document.querySelectorAll("[data-plan-index]")].map((row) => ({
       name: row.querySelector('[data-plan="name"]').value.trim(),
@@ -272,16 +306,16 @@
         .filter(Boolean),
     }));
 
-    next.faqs = [...document.querySelectorAll("[data-faq-index]")].map((row) => ({
-      q: row.querySelector('[data-faq="q"]').value.trim(),
-      a: row.querySelector('[data-faq="a"]').value.trim(),
-    }));
+    // Keep existing FAQs in storage (FAQ panel removed from CMS UI)
+    next.faqs = Array.isArray(draft.faqs) ? draft.faqs : [];
 
-    next.gallery = [...document.querySelectorAll("[data-gallery-index]")].map((row, i) => ({
-      ...(draft.gallery[i] || {}),
-      alt: row.querySelector('[data-gallery="alt"]').value.trim(),
-      category: row.querySelector('[data-gallery="category"]').value,
-    }));
+    next.gallery = [...document.querySelectorAll("[data-gallery-index]")]
+      .map((row, i) => ({
+        ...(draft.gallery[i] || {}),
+        alt: row.querySelector('[data-gallery="alt"]').value.trim(),
+        category: row.querySelector('[data-gallery="category"]').value,
+      }))
+      .slice(0, MAX_GALLERY);
 
     if (draft.heroImage) next.heroImage = draft.heroImage;
     draft = next;
@@ -295,7 +329,6 @@
     renderTrainers();
     renderCafeImages();
     renderPlans();
-    renderFaqs();
     renderGallery();
   };
 
@@ -305,7 +338,6 @@
   const trainersRoot = document.getElementById("trainers-fields");
   const cafeImagesRoot = document.getElementById("cafe-images-fields");
   const plansRoot = document.getElementById("plans-fields");
-  const faqsRoot = document.getElementById("faq-fields");
 
   document.getElementById("class-add-btn")?.addEventListener("click", () => {
     collectDraft();
@@ -332,17 +364,6 @@
     setStatus("Trainer added — edit details, then Save changes");
   });
 
-  document.getElementById("cafe-image-add-btn")?.addEventListener("click", () => {
-    collectDraft();
-    draft.cafeImages = draft.cafeImages || [];
-    draft.cafeImages.push({
-      src: "assets/food_1_bce_p0_t.jpg",
-      alt: "Cafe photo",
-    });
-    renderCafeImages();
-    setStatus("Cafe photo slot added — upload an image, then Save");
-  });
-
   document.getElementById("plan-add-btn")?.addEventListener("click", () => {
     collectDraft();
     draft.plans = draft.plans || [];
@@ -359,22 +380,15 @@
     setStatus("Plan added — edit details, then Save changes");
   });
 
-  document.getElementById("faq-add-btn")?.addEventListener("click", () => {
-    collectDraft();
-    draft.faqs = draft.faqs || [];
-    draft.faqs.push({
-      q: "New question?",
-      a: "Write the answer here.",
-    });
-    renderFaqs();
-    setStatus("FAQ added — edit details, then Save changes");
-  });
-
   classesRoot?.addEventListener("click", (event) => {
     const btn = event.target.closest("[data-class-remove]");
     if (!btn) return;
     const i = Number(btn.getAttribute("data-class-remove"));
     collectDraft();
+    if ((draft.classes || []).length <= MIN_CLASSES) {
+      setStatus(`Keep at least ${MIN_CLASSES} classes`);
+      return;
+    }
     if (!confirm("Delete this class?")) return;
     draft.classes.splice(i, 1);
     renderClasses();
@@ -392,17 +406,6 @@
     setStatus("Trainer deleted — click Save changes");
   });
 
-  cafeImagesRoot?.addEventListener("click", (event) => {
-    const btn = event.target.closest("[data-cafe-image-remove]");
-    if (!btn) return;
-    const i = Number(btn.getAttribute("data-cafe-image-remove"));
-    collectDraft();
-    if (!confirm("Delete this cafe photo?")) return;
-    draft.cafeImages.splice(i, 1);
-    renderCafeImages();
-    setStatus("Cafe photo deleted — click Save changes");
-  });
-
   plansRoot?.addEventListener("click", (event) => {
     const btn = event.target.closest("[data-plan-remove]");
     if (!btn) return;
@@ -412,17 +415,6 @@
     draft.plans.splice(i, 1);
     renderPlans();
     setStatus("Plan deleted — click Save changes");
-  });
-
-  faqsRoot?.addEventListener("click", (event) => {
-    const btn = event.target.closest("[data-faq-remove]");
-    if (!btn) return;
-    const i = Number(btn.getAttribute("data-faq-remove"));
-    collectDraft();
-    if (!confirm("Delete this FAQ?")) return;
-    draft.faqs.splice(i, 1);
-    renderFaqs();
-    setStatus("FAQ deleted — click Save changes");
   });
 
   classesRoot?.addEventListener("change", async (event) => {
@@ -503,6 +495,11 @@
         setStatus("Choose a photo first");
         return;
       }
+      collectDraft();
+      if ((draft.gallery || []).length >= MAX_GALLERY) {
+        setStatus(`Gallery limit is ${MAX_GALLERY} photos`);
+        return;
+      }
       try {
         setStatus("Processing gallery photo…");
         const src = await compressImage(file, 1400, 0.8);
@@ -513,6 +510,9 @@
           alt: document.getElementById("gallery-alt").value.trim() || file.name,
           category: document.getElementById("gallery-category").value,
         });
+        if (draft.gallery.length > MAX_GALLERY) {
+          draft.gallery = draft.gallery.slice(0, MAX_GALLERY);
+        }
         galleryFile.value = "";
         document.getElementById("gallery-alt").value = "";
         renderGallery();
@@ -525,6 +525,17 @@
 
   saveBtn.addEventListener("click", () => {
     const data = collectDraft();
+    if ((data.classes || []).length < MIN_CLASSES) {
+      setStatus(`Keep at least ${MIN_CLASSES} classes`);
+      return;
+    }
+    if ((data.cafeImages || []).length !== CAFE_PHOTO_COUNT) {
+      setStatus(`Cafe needs exactly ${CAFE_PHOTO_COUNT} photos`);
+      return;
+    }
+    if ((data.gallery || []).length > MAX_GALLERY) {
+      data.gallery = data.gallery.slice(0, MAX_GALLERY);
+    }
     const saved = window.JinisContent.saveContent(data);
     if (!saved) {
       setStatus("Save failed — storage may be full (try fewer/smaller photos)");

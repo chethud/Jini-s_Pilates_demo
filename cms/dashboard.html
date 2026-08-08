@@ -28,13 +28,12 @@
       </div>
       <nav>
         <button type="button" class="nav-item is-active" data-panel="overview">Overview</button>
-        <button type="button" class="nav-item" data-panel="about">About & Stats</button>
+        <button type="button" class="nav-item" data-panel="about">Stats</button>
         <button type="button" class="nav-item" data-panel="classes">Classes</button>
         <button type="button" class="nav-item" data-panel="trainers">Trainers</button>
         <button type="button" class="nav-item" data-panel="cafe">Cafe</button>
         <button type="button" class="nav-item" data-panel="plans">Plans</button>
         <button type="button" class="nav-item" data-panel="gallery">Gallery</button>
-        <button type="button" class="nav-item" data-panel="faq">FAQ</button>
         <button type="button" class="nav-item" data-panel="contact">Contact</button>
       </nav>
       <div class="sidebar-footer">
@@ -75,11 +74,6 @@
       </section>
 
       <section id="panel-about" class="panel">
-        <form class="card" data-form="about">
-          <h3>About</h3>
-          <label>Title<input name="aboutTitle" type="text"></label>
-          <label>Body<textarea name="aboutBody" rows="5"></textarea></label>
-        </form>
         <div class="card">
           <h3>Stats</h3>
           <div id="stats-fields" class="stack"></div>
@@ -92,7 +86,7 @@
             <h3>Classes</h3>
             <button type="button" id="class-add-btn" class="btn-primary">Add class</button>
           </div>
-          <p class="hint">Add, edit, change photos, or delete classes. Click Save changes when done.</p>
+          <p class="hint">Keep at least 6 classes. Add, edit, change photos, or delete extras. Click Save changes when done.</p>
           <div id="classes-fields" class="stack"></div>
         </div>
       </section>
@@ -115,10 +109,9 @@
         </form>
         <div class="card">
           <div class="card-head">
-            <h3>Cafe photos</h3>
-            <button type="button" id="cafe-image-add-btn" class="btn-primary">Add photo</button>
+            <h3>Cafe photos <span id="cafe-image-count">(0/4)</span></h3>
           </div>
-          <p class="hint">These photos appear in the homepage cafe carousel and the Cafe page.</p>
+          <p class="hint">Exactly 4 photos required. Change or replace photos — you cannot add more or go below 4.</p>
           <div id="cafe-images-fields" class="gallery-admin-grid"></div>
         </div>
       </section>
@@ -153,23 +146,12 @@
             </label>
             <label>Caption / alt text<input id="gallery-alt" type="text" placeholder="Describe the photo"></label>
             <button type="button" id="gallery-add-btn" class="btn-primary">Add photo to gallery</button>
-            <p class="hint">Photos appear on the Gallery page and category pages after Save changes.</p>
+            <p class="hint">Maximum 10 gallery photos. They appear on the Gallery page and category pages after Save.</p>
           </div>
         </div>
         <div class="card">
-          <h3>Gallery photos (<span id="gallery-list-count">0</span>)</h3>
+          <h3>Gallery photos (<span id="gallery-list-count">0</span>/10)</h3>
           <div id="gallery-fields" class="gallery-admin-grid"></div>
-        </div>
-      </section>
-
-      <section id="panel-faq" class="panel">
-        <div class="card">
-          <div class="card-head">
-            <h3>FAQ</h3>
-            <button type="button" id="faq-add-btn" class="btn-primary">Add FAQ</button>
-          </div>
-          <p class="hint">Add, edit, or delete FAQ items. Click Save changes when done.</p>
-          <div id="faq-fields" class="stack"></div>
         </div>
       </section>
 
