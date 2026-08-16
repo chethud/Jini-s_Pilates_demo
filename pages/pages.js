@@ -12,39 +12,22 @@
         <div class="card-body">
           <h3>${item.name}</h3>
           <p class="badge">${item.blurb}</p>
-          <a class="btn outline" href="../index.html#contact">Book Now</a>
+          <a class="btn outline" href="/#contact">Book Now</a>
         </div>
       </article>`).join('')}</div>`;
   }
 
   if (type === 'trainers') {
-    root.innerHTML = `<div class="card-grid cols-3">${c.trainers.map(item => `
-      <article class="card">
-        <img src="${window.JinisContent.assetUrl(item.image || 'assets/trainer_1_cex1xk_w.jpg', prefix)}" alt="${item.name}">
-        <div class="card-body">
-          <h3>${item.name}</h3>
-          <p class="role">${item.role}</p>
-          <p>${item.detail || ''}</p>
-        </div>
-      </article>`).join('')}</div>`;
+    location.replace('/#why-pilates');
+    return;
   }
 
-  if (type === 'plans') {
-    const baseFeatures = ['Unlimited Classes','Personal Trainer','Diet Consultation','Progress Tracking','Priority Booking'];
-    root.innerHTML = `<div class="card-grid cols-3">${(c.plans || []).map(plan => {
-      const features = plan.features || [];
-      const allFeatures = [...baseFeatures, ...features.filter(f => !baseFeatures.includes(f))];
-      return `
-      <article class="card plan ${plan.popular ? 'popular' : ''}">
-        ${plan.popular ? '<span class="pill">Popular</span>' : ''}
-        <p class="eyebrow">${plan.period}</p>
-        <h3>${plan.name}</h3>
-        <p class="price">${plan.price} <span>/ ${plan.cadence}</span></p>
-        <ul>${allFeatures.map(f => `<li class="${features.includes(f) ? 'on' : 'off'}">${f}</li>`).join('')}</ul>
-        <p class="note">${plan.note || ''}</p>
-        <a class="btn ${plan.popular ? 'btn-primary' : 'outline'}" href="../index.html#contact">Choose ${plan.name}</a>
-      </article>`;
-    }).join('')}</div>`;
+  if (type === 'plans' && window.JinisPlans) {
+    window.JinisPlans.render(root, c.plans || [], {
+      contactHref: '/#contact',
+      classes: c.classes || [],
+      resolveSrc: (src) => window.JinisContent.assetUrl(src, prefix),
+    });
   }
 
   if (type === 'cafe') {

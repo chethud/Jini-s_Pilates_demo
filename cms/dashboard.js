@@ -80,7 +80,7 @@
       .join("");
   };
 
-  const MIN_CLASSES = 6;
+  const MIN_CLASSES = 4;
   const MAX_CLASSES = 6;
   const MAX_GALLERY = 10;
   const CAFE_PHOTO_COUNT = 4;
@@ -194,13 +194,10 @@
           <strong>Plan ${i + 1}</strong>
           <button type="button" class="btn-ghost danger" data-plan-remove="${i}">Delete</button>
         </div>
-        <label>Name<input data-plan="name" type="text" value="${escapeAttr(item.name)}"></label>
-        <label>Period<input data-plan="period" type="text" value="${escapeAttr(item.period)}"></label>
+        <label>Class tab<input data-plan="tab" type="text" value="${escapeAttr(item.tab || item.period || "")}" placeholder="Reformer Pilates, Mat Pilates, Strength, Zumba"></label>
+        <label>Package<input data-plan="name" type="text" value="${escapeAttr(item.name)}"></label>
         <label>Price<input data-plan="price" type="text" value="${escapeAttr(item.price)}"></label>
-        <label>Cadence<input data-plan="cadence" type="text" value="${escapeAttr(item.cadence)}"></label>
-        <label>Note<input data-plan="note" type="text" value="${escapeAttr(item.note || "")}"></label>
-        <label>Features (comma separated)<input data-plan="features" type="text" value="${escapeAttr((item.features || []).join(", "))}"></label>
-        <label class="check"><input data-plan="popular" type="checkbox" ${item.popular ? "checked" : ""}> Popular plan</label>
+        <label>Validity<input data-plan="validity" type="text" value="${escapeAttr(item.validity || item.note || "")}"></label>
       </div>`
       )
       .join("");
@@ -291,19 +288,16 @@
       next.cafeImages.push({ ...fallback });
     }
 
-    next.plans = [...document.querySelectorAll("[data-plan-index]")].map((row) => ({
-      name: row.querySelector('[data-plan="name"]').value.trim(),
-      period: row.querySelector('[data-plan="period"]').value.trim(),
-      price: row.querySelector('[data-plan="price"]').value.trim(),
-      cadence: row.querySelector('[data-plan="cadence"]').value.trim(),
-      note: row.querySelector('[data-plan="note"]').value.trim(),
-      popular: row.querySelector('[data-plan="popular"]').checked,
-      features: row
-        .querySelector('[data-plan="features"]')
-        .value.split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
-    }));
+    next.plans = [...document.querySelectorAll("[data-plan-index]")].map((row) => {
+      const tab = row.querySelector('[data-plan="tab"]').value.trim();
+      return {
+        tab,
+        period: tab === "Strength" ? "Strength Training" : tab,
+        name: row.querySelector('[data-plan="name"]').value.trim(),
+        price: row.querySelector('[data-plan="price"]').value.trim(),
+        validity: row.querySelector('[data-plan="validity"]').value.trim(),
+      };
+    });
 
     // Keep existing FAQs in storage (FAQ panel removed from CMS UI)
     next.faqs = Array.isArray(draft.faqs) ? draft.faqs : [];
@@ -372,13 +366,11 @@
     collectDraft();
     draft.plans = draft.plans || [];
     draft.plans.push({
-      name: "New Plan",
-      period: "Monthly",
-      price: "₹ 0",
-      cadence: "monthly",
-      note: "Describe what’s included",
-      popular: false,
-      features: ["Progress Tracking"],
+      tab: "Reformer Pilates",
+      period: "Reformer Pilates",
+      name: "New package",
+      price: "₹0",
+      validity: "",
     });
     renderPlans();
     setStatus("Plan added — edit details, then Save changes");

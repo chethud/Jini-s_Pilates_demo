@@ -1,5 +1,5 @@
 (() => {
-  const STORAGE_KEY = "jinis_site_content_v1";
+  const STORAGE_KEY = "jinis_site_content_v4";
 
   const DEFAULT_GALLERY = [
     { id: "g1", src: "assets/gallery_studio_bptwifhk.jpg", alt: "Studio reception with wooden bench", category: "studio" },
@@ -32,15 +32,10 @@
       { value: "100%", label: "Personal Guidance" },
     ],
     classes: [
-      { name: "Mat Pilates", blurb: "50 min · All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class_mat_dkcnn3u_.jpg" },
-      { name: "Reformer Pilates", blurb: "55 min · Intermediate — Spring-loaded resistance work for full-body tone and precision.", image: "assets/class_reformer_cbidz7_n.jpg" },
-      { name: "Beginner Pilates", blurb: "45 min · Beginner — Foundations of breath, alignment and the core principles, unhurried.", image: "assets/class_group_sremfjhc.jpg" },
-      { name: "Advanced Pilates", blurb: "60 min · Advanced — Complex sequencing and deeper loading for seasoned practitioners.", image: "assets/class_reformer_cbidz7_n.jpg" },
-      { name: "Private Training", blurb: "60 min · Personalised — One-to-one programming built entirely around your body and goals.", image: "assets/gallery_members_cyis7hte.jpg" },
-      { name: "Group Sessions", blurb: "50 min · All levels — Small groups of six, so every cue still lands personally.", image: "assets/class_group_sremfjhc.jpg" },
-      { name: "Strength & Flexibility", blurb: "55 min · Intermediate — Blended resistance and mobility work for balanced conditioning.", image: "assets/class_mat_dkcnn3u_.jpg" },
-      { name: "Senior Pilates", blurb: "45 min · Gentle — Joint-friendly movement for balance, bone health and confidence.", image: "assets/gallery_studio_bptwifhk.jpg" },
-      { name: "Prenatal Pilates", blurb: "45 min · Prenatal — Safe, trimester-aware sessions supporting pelvic floor and posture.", image: "assets/gallery_members_cyis7hte.jpg" },
+      { name: "Reformer Pilates", blurb: "All levels — Spring-loaded reformer sessions for full-body strength, posture and control.", image: "assets/class_reformer_cbidz7_n.jpg" },
+      { name: "Mat Pilates", blurb: "All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class_mat_dkcnn3u_.jpg" },
+      { name: "Strength Training", blurb: "All levels — Focused strength training to build power, stability and everyday fitness.", image: "assets/class_mat_dkcnn3u_.jpg" },
+      { name: "Zumba", blurb: "All levels — High-energy dance fitness for cardio, coordination and fun.", image: "assets/class_group_sremfjhc.jpg" },
     ],
     trainers: [
       { name: "Jini Menon", role: "BASI Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer_1_cex1xk_w.jpg" },
@@ -55,33 +50,16 @@
       { src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter" },
     ],
     plans: [
-      {
-        name: "Starter",
-        period: "Monthly",
-        price: "₹ 3,500",
-        cadence: "monthly",
-        note: "8 group sessions per month",
-        popular: false,
-        features: ["Progress Tracking"],
-      },
-      {
-        name: "Professional",
-        period: "Quarterly",
-        price: "₹ 9,000",
-        cadence: "quarterly",
-        note: "Most chosen by our members",
-        popular: true,
-        features: ["Unlimited Classes", "Diet Consultation", "Progress Tracking", "Priority Booking"],
-      },
-      {
-        name: "Elite",
-        period: "Yearly",
-        price: "₹ 32,000",
-        cadence: "yearly",
-        note: "Includes 12 private sessions & cafe credit",
-        popular: false,
-        features: ["Unlimited Classes", "Personal Trainer", "Diet Consultation", "Progress Tracking", "Priority Booking"],
-      },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "12 Sessions", price: "₹7,899", validity: "45 days" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "36 Sessions", price: "₹23,697", validity: "105 days" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "6 Months", price: "₹47,394", validity: "6 months" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "12 Months", price: "₹94,788", validity: "12 months" },
+      { tab: "Mat Pilates", period: "Mat Pilates", name: "1 Month", price: "₹3,699", validity: "1 month" },
+      { tab: "Mat Pilates", period: "Mat Pilates", name: "3 Months", price: "₹11,097", validity: "3 months" },
+      { tab: "Mat Pilates", period: "Mat Pilates", name: "6 Months", price: "₹22,194", validity: "6 months" },
+      { tab: "Mat Pilates", period: "Mat Pilates", name: "12 Months", price: "₹44,388", validity: "12 months" },
+      { tab: "Strength", period: "Strength Training", name: "12 Sessions", price: "₹7,899", validity: "—" },
+      { tab: "Zumba", period: "Zumba", name: "12 Sessions", price: "₹3,500", validity: "—" },
     ],
     gallery: DEFAULT_GALLERY.slice(),
     phone: "+91 96868 68697",
@@ -146,13 +124,24 @@
     }
   };
 
+  const withoutClassPrice = (blurb) =>
+    String(blurb || "")
+      .replace(/\s*[·•]\s*₹\s*[\d,]+(?:\/-)?/g, "")
+      .replace(/₹\s*[\d,]+(?:\/-)?/g, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+
   const getContent = () => {
     const saved = readStore() || {};
+    const classes = (Array.isArray(saved.classes) ? saved.classes : DEFAULT_CONTENT.classes.slice()).map((item) => ({
+      ...item,
+      blurb: withoutClassPrice(item.blurb),
+    }));
     return {
       ...DEFAULT_CONTENT,
       ...saved,
       stats: Array.isArray(saved.stats) ? saved.stats : DEFAULT_CONTENT.stats.slice(),
-      classes: Array.isArray(saved.classes) ? saved.classes : DEFAULT_CONTENT.classes.slice(),
+      classes,
       trainers: Array.isArray(saved.trainers) ? saved.trainers : DEFAULT_CONTENT.trainers.slice(),
       cafeImages: Array.isArray(saved.cafeImages)
         ? saved.cafeImages

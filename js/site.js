@@ -75,65 +75,14 @@
       .join("");
   };
 
-  const PLAN_FEATURE_CATALOG = [
-    "Unlimited Classes",
-    "Personal Trainer",
-    "Diet Consultation",
-    "Progress Tracking",
-    "Priority Booking",
-  ];
-
-  const renderPlansGrid = (plans) => {
+  const renderPlansGrid = (plans, classes) => {
     const grid = qs("[data-cms-plans-grid]");
-    if (!grid || !Array.isArray(plans)) return;
-    const checkSvg =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
-
-    grid.innerHTML = plans
-      .map((plan) => {
-        const features = Array.isArray(plan.features) ? plan.features : [];
-        const catalog = [
-          ...PLAN_FEATURE_CATALOG,
-          ...features.filter((f) => !PLAN_FEATURE_CATALOG.includes(f)),
-        ];
-        const rows = catalog
-          .map((f) => {
-            const on = features.includes(f);
-            return `<li class="flex items-center gap-3 text-sm ${
-              on ? "text-foreground" : "text-muted-foreground/60 line-through"
-            }"><span class="grid h-5 w-5 shrink-0 place-items-center rounded-full ${
-              on ? "bg-sage/20 text-sage" : "bg-secondary text-muted-foreground"
-            }">${checkSvg}</span>${escapeHtml(f)}</li>`;
-          })
-          .join("");
-        const popular = !!plan.popular;
-        return `<div><article class="glass relative flex h-full flex-col rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 ${
-          popular ? "ring-1 ring-primary/30" : ""
-        }">
-          ${
-            popular
-              ? '<span class="absolute right-6 top-6 rounded-full bg-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">Popular</span>'
-              : ""
-          }
-          <p class="text-xs tracking-[0.24em] uppercase text-muted-foreground">${escapeHtml(
-            plan.period || ""
-          )}</p>
-          <h3 class="mt-2 text-2xl text-foreground">${escapeHtml(plan.name || "")}</h3>
-          <p class="mt-5 font-display text-4xl text-foreground">${escapeHtml(
-            plan.price || ""
-          )}<span class="ml-1 font-sans text-xs text-muted-foreground">/ ${escapeHtml(
-            plan.cadence || ""
-          )}</span></p>
-          <ul class="mt-7 grid gap-3">${rows}</ul>
-          <p class="mt-6 text-xs text-muted-foreground">${escapeHtml(plan.note || "")}</p>
-          <a href="#contact" class="mt-7 inline-flex items-center justify-center rounded-full px-6 py-3.5 text-xs font-medium transition-all hover:-translate-y-0.5 ${
-            popular
-              ? "bg-primary text-primary-foreground"
-              : "border border-primary/40 text-foreground hover:bg-primary hover:text-primary-foreground"
-          }">Choose ${escapeHtml(plan.name || "Plan")}</a>
-        </article></div>`;
-      })
-      .join("");
+    if (!grid || !window.JinisPlans) return;
+    window.JinisPlans.render(grid, plans, {
+      contactHref: "#contact",
+      classes,
+      resolveSrc: asset,
+    });
   };
 
   const renderCafeStage = (images) => {
@@ -241,10 +190,48 @@
 
     renderClassesGrid(data.classes);
     renderTrainersGrid(data.trainers);
-    renderPlansGrid(data.plans);
+    renderPlansGrid(data.plans, data.classes);
     renderCafeStage(data.cafeImages);
     renderHomeGallery(data.gallery);
     renderFaqs(data.faqs);
+    renderContactClasses(data.classes);
+    applyPendingPackage();
+  };
+
+  const applyPendingPackage = () => {
+    try {
+      const raw = sessionStorage.getItem("jinis_pending_package");
+      if (!raw) return;
+      const pending = JSON.parse(raw);
+      const select = qs("#class");
+      if (select && pending.className) {
+        const match = [...select.options].find(
+          (opt) => opt.value.toLowerCase() === String(pending.className).toLowerCase()
+        );
+        if (match) select.value = match.value;
+      }
+      const message = qs("#message");
+      if (message && pending.package && !message.value.trim()) {
+        message.value = `I'd like the ${pending.package} package${pending.price ? ` (${pending.price})` : ""}.`;
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const renderContactClasses = (classes) => {
+    const select = qs("#class");
+    if (!select || !Array.isArray(classes) || !classes.length) return;
+    const current = select.value;
+    select.innerHTML =
+      '<option value="" disabled selected>Select a class</option>' +
+      classes
+        .map(
+          (item) =>
+            `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>`
+        )
+        .join("");
+    if (current && classes.some((c) => c.name === current)) select.value = current;
   };
 
   const chevronSvg =
