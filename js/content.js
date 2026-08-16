@@ -7,8 +7,8 @@
     { id: "g3", src: "assets/gallery_equipment_be6bqby0.jpg", alt: "Reformer straps close up", category: "equipment" },
     { id: "g4", src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter", category: "cafe" },
     { id: "g5", src: "assets/gallery_members_cyis7hte.jpg", alt: "Members chatting after class", category: "members" },
-    { id: "g6", src: "assets/class_group_sremfjhc.jpg", alt: "Group class event", category: "events" },
-    { id: "g7", src: "assets/class_mat_dkcnn3u_.jpg", alt: "Mat Pilates stretch", category: "classes" },
+    { id: "g6", src: "assets/about-group.png", alt: "Group class event", category: "events" },
+    { id: "g7", src: "assets/class-strength.png", alt: "Mat Pilates stretch", category: "classes" },
     { id: "g8", src: "assets/food_1_bce_p0_t.jpg", alt: "Smoothie and protein bowl", category: "cafe" },
     { id: "g9", src: "assets/food_3_cmezi_2r.jpg", alt: "Salad bowl and coffee", category: "cafe" },
   ];
@@ -174,11 +174,7 @@
         /class_mat_dkcnn3u_/i.test(String(image || ""))
       ) {
         image = "assets/class-mat.png";
-      } else if (
-        !custom &&
-        /^Strength Training$/i.test(String(item.name || "")) &&
-        /class_mat_dkcnn3u_/i.test(String(image || ""))
-      ) {
+      } else if (!custom && /^Strength Training$/i.test(String(item.name || ""))) {
         image = "assets/class-strength.png";
       } else if (
         !custom &&
@@ -199,7 +195,17 @@
         ? saved.cafeImages
         : DEFAULT_CONTENT.cafeImages.slice(),
       plans: Array.isArray(saved.plans) ? saved.plans : DEFAULT_CONTENT.plans.slice(),
-      gallery: Array.isArray(saved.gallery) ? saved.gallery : DEFAULT_CONTENT.gallery.slice(),
+      gallery: (Array.isArray(saved.gallery) ? saved.gallery : DEFAULT_CONTENT.gallery.slice()).map((item) => {
+        const custom = String(item.src || "").startsWith("data:");
+        if (custom) return item;
+        if (/class_group_sremfjhc/i.test(String(item.src || "")) || item.id === "g6") {
+          return { ...item, src: "assets/about-group.png" };
+        }
+        if (/class_mat_dkcnn3u_/i.test(String(item.src || "")) || item.id === "g7") {
+          return { ...item, src: "assets/class-strength.png" };
+        }
+        return item;
+      }),
       faqs: Array.isArray(saved.faqs) ? saved.faqs : DEFAULT_CONTENT.faqs.slice(),
       testimonials: (Array.isArray(saved.testimonials)
         ? saved.testimonials

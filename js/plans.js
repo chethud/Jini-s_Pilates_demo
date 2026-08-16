@@ -10,7 +10,7 @@
     return {
       title: match?.name || tab,
       line: String(match?.blurb || "").replace(/^[^-—]+[—–-]\s*/, ""),
-      image: match?.image || (tab === "Reformer Pilates" ? "assets/hero-home.jpg" : ""),
+      image: match?.image || (tab === "Reformer Pilates" ? "assets/hero-home.jpg" : tab === "Strength" ? "assets/class-strength.png" : ""),
       featured: tab === "Reformer Pilates",
     };
   };
