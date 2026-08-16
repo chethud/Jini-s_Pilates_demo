@@ -51,9 +51,12 @@ class Handler(SimpleHTTPRequestHandler):
         clean = rel.rstrip("/") or "/"
         slug = clean.lstrip("/")
         if slug in PAGE_SLUGS:
-            mapped = ROOT / "pages" / f"{slug}.html"
+            mapped = ROOT / f"{slug}.html"
             if mapped.is_file():
                 return str(mapped)
+            nested = ROOT / "pages" / f"{slug}.html"
+            if nested.is_file():
+                return str(nested)
         target = (ROOT / rel.lstrip("/\\")).resolve()
         try:
             target.relative_to(ROOT)

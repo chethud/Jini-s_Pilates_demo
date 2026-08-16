@@ -19,11 +19,11 @@
     { "source": "/gallery/cafe", "destination": "/gallery/cafe.html" },
     { "source": "/gallery/members", "destination": "/gallery/members.html" },
     { "source": "/gallery/events", "destination": "/gallery/events.html" },
-    { "source": "/about", "destination": "/pages/about.html" },
-    { "source": "/classes", "destination": "/pages/classes.html" },
-    { "source": "/trainers", "destination": "/pages/trainers.html" },
-    { "source": "/cafe", "destination": "/pages/cafe.html" },
-    { "source": "/plans", "destination": "/pages/plans.html" }
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/classes", "destination": "/classes.html" },
+    { "source": "/trainers", "destination": "/trainers.html" },
+    { "source": "/cafe", "destination": "/cafe.html" },
+    { "source": "/plans", "destination": "/plans.html" }
   ],
   "headers": [
     {
