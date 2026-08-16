@@ -22,7 +22,7 @@
     heroBody:
       "Experience personalized Pilates sessions that improve strength, flexibility, posture, balance, and overall wellness in a calm and welcoming environment.",
     heroImage: "assets/hero-home.jpg?v=2",
-    aboutTitle: "About Jini's Pilates Studio with Cafe",
+    aboutTitle: "About Jini's Pilates Studio",
     aboutBody:
       "Nestled in vibrant Mysuru, Jini's Pilates Studio is the ultimate haven for fitness enthusiasts. This trendy studio blends the best of traditional Pilates with modern fitness vibes, creating a dynamic space where strength, flexibility and wellness take centre stage.",
     stats: [
@@ -65,28 +65,28 @@
       {
         name: "Ananya",
         quote:
-          "I can't say enough about Jini's Pilates Studio! From the moment I walked in, I felt welcomed and motivated. The variety of classes keeps me engaged and the instructors are knowledgeable and incredibly supportive. I've found a fitness family that keeps me coming back for more.",
+          "I can't say enough about Jini's Pilates Studio! From the moment I walked in, I felt welcomed and motivated. The variety of classes keeps me engaged and the instructors are knowledgeable and incredibly supportive.",
         image: "assets/testimonial-ananya.png",
         rating: 5,
       },
       {
         name: "Kavya",
         quote:
-          "I am thrilled to share my experience with Jini's Pilates Studio. Embarking on this fitness journey has been nothing short of transformative, and I am incredibly grateful for the guidance, expertise and support the studio has provided me.",
+          "Embarking on this fitness journey has been nothing short of transformative, and I am incredibly grateful for the guidance, expertise and support the studio has provided me.",
         image: "assets/testimonial-kavya.png",
         rating: 5,
       },
       {
         name: "Diya",
         quote:
-          "I've finally found my fitness home at Jini's Pilates Studio! The atmosphere is energizing, the trainers are top-notch and the variety of classes keeps me engaged. Since joining, I've seen remarkable progress in my strength and overall well-being.",
+          "I've finally found my fitness home at Jini's Pilates Studio! The atmosphere is energizing, the trainers are top-notch and the variety of classes keeps me engaged.",
         image: "assets/testimonial-diya.png",
         rating: 5,
       },
       {
         name: "Ishika",
         quote:
-          "The atmosphere is motivating, the trainers are knowledgeable and supportive, and the variety of classes keeps me engaged. Thanks to their guidance, I've achieved fitness goals I never thought possible. Highly recommended.",
+          "The atmosphere is motivating, the trainers are knowledgeable and supportive, and the variety of classes keeps me engaged. Thanks to their guidance, I've achieved fitness goals I never thought possible.",
         image: "assets/testimonial-ishika.png",
         rating: 5,
       },
@@ -185,9 +185,17 @@
       }
       return { ...item, blurb: withoutClassPrice(item.blurb), image };
     });
+    const aboutTitle = (() => {
+      const title = String(saved.aboutTitle || DEFAULT_CONTENT.aboutTitle);
+      return /About Jini'?s Pilates Studio with Cafe/i.test(title)
+        ? DEFAULT_CONTENT.aboutTitle
+        : title;
+    })();
+
     return {
       ...DEFAULT_CONTENT,
       ...saved,
+      aboutTitle,
       stats: Array.isArray(saved.stats) ? saved.stats : DEFAULT_CONTENT.stats.slice(),
       classes,
       trainers: Array.isArray(saved.trainers) ? saved.trainers : DEFAULT_CONTENT.trainers.slice(),
@@ -216,9 +224,16 @@
       ).map((item, i) => {
         const fallback = DEFAULT_CONTENT.testimonials[i];
         const custom = String(item.image || "").startsWith("data:");
+        const quote = String(item.quote || "");
+        // Pull shorter defaults for anyone still on the old long stock quotes.
+        const legacy =
+          /fitness family that keeps me coming back|thrilled to share my experience|remarkable progress in my strength|Highly recommended\.?\s*$/i.test(
+            quote
+          );
         return {
           ...item,
           image: custom ? item.image : fallback?.image || item.image,
+          quote: legacy || !quote ? fallback?.quote || quote : quote,
         };
       }),
     };

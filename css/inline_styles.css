@@ -291,17 +291,52 @@ main > section .gap-12 {
   gap: 1.75rem !important;
 }
 
+/* Why Pilates — always-scrolling horizontal marquee */
+.why-marquee {
+  margin-top: 2.25rem;
+  overflow: hidden;
+  padding: 0.4rem 0;
+}
+
+.why-marquee-track {
+  --gap: 1rem;
+  display: flex;
+  width: max-content;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: why-marquee 22s linear infinite;
+}
+
+.why-marquee-track > li {
+  flex: 0 0 15rem;
+}
+
+@keyframes why-marquee {
+  to {
+    transform: translateX(calc(-50% - var(--gap) / 2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-marquee-track {
+    animation: none;
+  }
+  .why-marquee {
+    overflow-x: auto;
+  }
+}
+
 /* Testimonials — static grid (React Embla carousel removed) */
 #testimonials .testimonials-track {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
-  transform: none !important;
 }
 
 #testimonials .testimonials-slide {
   min-width: 0;
-  transform: none !important;
 }
 
 #hero .bg-gradient-to-b {
@@ -360,6 +395,66 @@ html.dark #hero p:has(> [data-cms="heroBody"])::before {
 
 @media (max-width: 720px) {
   #testimonials .testimonials-track {
-    grid-template-columns: 1fr;
+    --testimonial-gap: 0.75rem;
+    display: flex;
+    width: max-content;
+    gap: var(--testimonial-gap);
+    animation: testimonial-marquee 48s linear infinite;
+  }
+
+  #testimonials .testimonials-slide {
+    flex: 0 0 min(78vw, 17.5rem);
+  }
+
+  #testimonials .testimonials-slide article {
+    padding: 1rem !important;
+  }
+
+  #testimonials .testimonials-slide article > svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  #testimonials .testimonials-slide p.mt-4 {
+    margin-top: 0.5rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+  }
+
+  #testimonials .testimonials-slide .mt-6 {
+    margin-top: 0.7rem !important;
+  }
+
+  #testimonials .testimonials-slide .mt-5 {
+    margin-top: 0.55rem !important;
+  }
+
+  #testimonials .testimonials-slide .mt-5 img {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  #testimonials .testimonials-slide .mt-5 p {
+    font-size: 0.92rem !important;
+  }
+
+  #testimonials .testimonials-grid-wrap {
+    overflow: hidden;
+  }
+}
+
+@keyframes testimonial-marquee {
+  to {
+    transform: translateX(calc(-50% - var(--testimonial-gap) / 2));
+  }
+}
+
+@media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+  #testimonials .testimonials-grid-wrap {
+    overflow-x: auto;
+  }
+
+  #testimonials .testimonials-track {
+    animation: none;
   }
 }

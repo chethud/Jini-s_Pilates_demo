@@ -1,5 +1,7 @@
 (() => {
   const LINKS = [
+    { href: "/#about", label: "About" },
+    { href: "/#why-pilates", label: "Why Pilates" },
     { href: "/classes", label: "Classes" },
     { href: "/cafe", label: "Cafe" },
     { href: "/plans", label: "Plans" },

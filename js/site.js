@@ -145,54 +145,6 @@
     });
   };
 
-  const HOME_GALLERY_LIMIT = 7;
-
-  const bindHomeGalleryLightbox = () => {
-    let lightbox = qs("#cms-lightbox");
-    if (!lightbox) {
-      lightbox = document.createElement("div");
-      lightbox.id = "cms-lightbox";
-      lightbox.className = "cms-lightbox";
-      lightbox.innerHTML =
-        '<button type="button" class="cms-lightbox-close" aria-label="Close">×</button><img alt="">';
-      document.body.appendChild(lightbox);
-      lightbox.addEventListener("click", (e) => {
-        if (e.target === lightbox || e.target.classList.contains("cms-lightbox-close")) {
-          lightbox.classList.remove("is-open");
-        }
-      });
-    }
-    qsa('#gallery button[aria-label^="Open larger view"]').forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const img = qs("img", btn);
-        if (!img) return;
-        const big = qs("img", lightbox);
-        big.src = img.src;
-        big.alt = img.alt || "";
-        lightbox.classList.add("is-open");
-      });
-    });
-  };
-
-  const renderHomeGallery = (gallery) => {
-    const grid = qs("[data-cms-gallery-grid]");
-    if (!grid || !Array.isArray(gallery)) return;
-    const items = gallery.slice(0, HOME_GALLERY_LIMIT);
-    grid.innerHTML = items
-      .map((item) => {
-        const src = asset(item.src);
-        const alt = item.alt || "Gallery photo";
-        const cat = String(item.category || "").toLowerCase();
-        return `<div><button type="button" class="group block w-full overflow-hidden rounded-3xl shadow-soft" aria-label="Open larger view: ${escapeHtml(
-          alt
-        )}" data-category="${escapeHtml(cat)}"><img src="${src}" alt="${escapeHtml(
-          alt
-        )}" loading="lazy" class="w-full object-cover transition-transform duration-700 group-hover:scale-110"></button></div>`;
-      })
-      .join("");
-    bindHomeGalleryLightbox();
-  };
-
   /* ---------- apply CMS content ---------- */
   const applyContent = (data) => {
     if (!data) return;
@@ -236,7 +188,6 @@
     renderTestimonialsGrid(data.testimonials);
     renderPlansGrid(data.plans, data.classes);
     renderCafeStage(data.cafeImages);
-    renderHomeGallery(data.gallery);
     renderFaqs(data.faqs);
     renderContactClasses(data.classes);
     applyPendingPackage();
@@ -498,5 +449,52 @@
     });
   });
 
+  /* ---------- Why Pilates: seamless horizontal marquee ---------- */
+  const setupWhyMarquee = () => {
+    const list = qs("#why-pilates ul");
+    if (!list || list.dataset.marquee) return;
+    list.dataset.marquee = "1";
+    list.className = "why-marquee-track";
+    // A second copy is what makes the -50% loop seamless.
+    [...list.children].forEach((item) => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      list.appendChild(clone);
+    });
+    const wrap = document.createElement("div");
+    wrap.className = "why-marquee";
+    list.parentNode.insertBefore(wrap, list);
+    wrap.appendChild(list);
+  };
+  setupWhyMarquee();
+
+  const why = qs("#why-pilates");
+  const testimonials = qs("#testimonials");
+  if (why && testimonials) why.insertAdjacentElement("afterend", testimonials);
+  setText(qs("#membership .pkg-section-head .eyebrow"), "Plan");
+
   applyContent(content);
+
+  /* Testimonials scroll continuously on phones only. The duplicate copy that makes
+     the loop seamless would show as repeated cards in the desktop grid, so it is
+     added and removed with the phone breakpoint. */
+  const phone = window.matchMedia("(max-width: 720px)");
+  const syncTestimonialMarquee = () => {
+    const track = qs("#testimonials .testimonials-track");
+    if (!track) return;
+    if (phone.matches && !track.dataset.marquee) {
+      track.dataset.marquee = "1";
+      [...track.children].forEach((item) => {
+        const clone = item.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        clone.dataset.marqueeClone = "1";
+        track.appendChild(clone);
+      });
+    } else if (!phone.matches && track.dataset.marquee) {
+      qsa("[data-marquee-clone]", track).forEach((clone) => clone.remove());
+      delete track.dataset.marquee;
+    }
+  };
+  syncTestimonialMarquee();
+  phone.addEventListener("change", syncTestimonialMarquee);
 })();
