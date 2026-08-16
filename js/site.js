@@ -115,13 +115,34 @@
     const stage = qs("[data-cms-cafe-stage]");
     if (!stage || !Array.isArray(images) || !images.length) return;
     stage.innerHTML = images
-      .map((item) => {
+      .map((item, i) => {
         const src = asset(item.src);
-        return `<article class="cafe-card">
+        return `<article class="cafe-card${i === 0 ? " is-active" : ""}">
           <img src="${src}" alt="${escapeHtml(item.alt || "Cafe")}" width="800" height="1000" loading="lazy">
         </article>`;
       })
       .join("");
+    bindCafeSwitch();
+  };
+
+  const bindCafeSwitch = () => {
+    const root = qs("[data-cafe-carousel]");
+    if (!root) return;
+    const cards = () => qsa(".cafe-card", root);
+    let index = Math.max(0, cards().findIndex((el) => el.classList.contains("is-active")));
+    const show = (n) => {
+      const list = cards();
+      if (!list.length) return;
+      index = (n + list.length) % list.length;
+      list.forEach((el, i) => el.classList.toggle("is-active", i === index));
+    };
+    show(index);
+    if (root.dataset.switchBound === "1") return;
+    root.dataset.switchBound = "1";
+    root.addEventListener("click", (event) => {
+      if (event.target.closest("[data-cafe-prev]")) show(index - 1);
+      if (event.target.closest("[data-cafe-next]")) show(index + 1);
+    });
   };
 
   const HOME_GALLERY_LIMIT = 7;

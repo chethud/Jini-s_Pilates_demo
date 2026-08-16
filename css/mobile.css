@@ -2,60 +2,36 @@
 #hero .bg-gradient-to-b {
   display: block;
   background-image: linear-gradient(
-    90deg,
-    rgb(247 244 239 / 0.92) 0%,
-    rgb(247 244 239 / 0.7) 34%,
-    rgb(247 244 239 / 0) 64%
+    to right,
+    rgb(255 255 255 / 0.82) 0%,
+    rgb(247 244 239 / 0.55) 32%,
+    rgb(255 255 255 / 0.18) 50%,
+    transparent 62%
   ) !important;
 }
 
-#hero .hero-readout,
 #hero [data-cms="heroSubtitle"],
 #hero p:has(> [data-cms="heroBody"]) {
-  background: #f4f0e8;
-  color: #1a2e28;
+  position: relative;
+  z-index: 0;
+  width: fit-content;
+  max-width: 36rem;
+  color: #12221e;
 }
 
-#hero .hero-readout {
-  width: min(36rem, 100%);
-  margin-top: 1.25rem;
-  padding: 1rem 1.1rem 1.05rem;
-  border-radius: 1.1rem;
-  box-shadow: 0 12px 30px rgba(28, 25, 23, 0.14);
-}
-
-#hero .hero-readout [data-cms="heroSubtitle"],
-#hero .hero-readout p:has(> [data-cms="heroBody"]) {
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-#hero [data-cms="heroSubtitle"] {
-  margin-top: 1.25rem;
-  padding: 0.7rem 0.95rem;
-  border-radius: 0.85rem;
-  color: #1a2e28;
-}
-
-#hero p:has(> [data-cms="heroBody"]) {
-  margin-top: 0.65rem;
-  padding: 0.7rem 0.95rem;
-  border-radius: 0.85rem;
-}
-
-#hero .hero-readout [data-cms="heroSubtitle"] {
-  margin-top: 0;
-}
-
-#hero .hero-readout .mt-5 {
-  margin-top: 0.55rem;
+#hero [data-cms="heroSubtitle"]::before,
+#hero p:has(> [data-cms="heroBody"])::before {
+  content: "";
+  position: absolute;
+  inset: -1.4em -1.8em;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(247 244 239 / 0.8), rgb(247 244 239 / 0.22) 55%, transparent 100%);
+  filter: blur(22px);
+  pointer-events: none;
 }
 
 #hero [data-cms="heroBody"] {
-  color: #3a4742;
+  color: #12221e;
 }
 
 html {
@@ -279,10 +255,14 @@ svg {
     columns: 1 !important;
   }
 
+  .cafe-showcase {
+    max-width: none;
+  }
+
   .cafe-showcase-stage {
     max-width: none;
-    height: min(58vw, 280px);
-    min-height: 220px;
+    height: auto;
+    min-height: 0;
   }
 
   #contact iframe {

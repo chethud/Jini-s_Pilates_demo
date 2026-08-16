@@ -66,28 +66,28 @@
         name: "Ananya",
         quote:
           "I can't say enough about Jini's Pilates Studio! From the moment I walked in, I felt welcomed and motivated. The variety of classes keeps me engaged and the instructors are knowledgeable and incredibly supportive. I've found a fitness family that keeps me coming back for more.",
-        image: "assets/trainer_2_cx4_bncv.jpg",
+        image: "assets/testimonial-ananya.png",
         rating: 5,
       },
       {
         name: "Kavya",
         quote:
           "I am thrilled to share my experience with Jini's Pilates Studio. Embarking on this fitness journey has been nothing short of transformative, and I am incredibly grateful for the guidance, expertise and support the studio has provided me.",
-        image: "assets/trainer_1_cex1xk_w.jpg",
+        image: "assets/testimonial-kavya.png",
         rating: 5,
       },
       {
         name: "Diya",
         quote:
           "I've finally found my fitness home at Jini's Pilates Studio! The atmosphere is energizing, the trainers are top-notch and the variety of classes keeps me engaged. Since joining, I've seen remarkable progress in my strength and overall well-being.",
-        image: "assets/trainer_3_dj_srliy.jpg",
+        image: "assets/testimonial-diya.png",
         rating: 5,
       },
       {
         name: "Ishika",
         quote:
           "The atmosphere is motivating, the trainers are knowledgeable and supportive, and the variety of classes keeps me engaged. Thanks to their guidance, I've achieved fitness goals I never thought possible. Highly recommended.",
-        image: "assets/gallery_members_cyis7hte.jpg",
+        image: "assets/testimonial-ishika.png",
         rating: 5,
       },
     ],
@@ -179,9 +179,17 @@
       plans: Array.isArray(saved.plans) ? saved.plans : DEFAULT_CONTENT.plans.slice(),
       gallery: Array.isArray(saved.gallery) ? saved.gallery : DEFAULT_CONTENT.gallery.slice(),
       faqs: Array.isArray(saved.faqs) ? saved.faqs : DEFAULT_CONTENT.faqs.slice(),
-      testimonials: Array.isArray(saved.testimonials)
+      testimonials: (Array.isArray(saved.testimonials)
         ? saved.testimonials
-        : DEFAULT_CONTENT.testimonials.slice(),
+        : DEFAULT_CONTENT.testimonials.slice()
+      ).map((item, i) => {
+        const fallback = DEFAULT_CONTENT.testimonials[i];
+        const custom = String(item.image || "").startsWith("data:");
+        return {
+          ...item,
+          image: custom ? item.image : fallback?.image || item.image,
+        };
+      }),
     };
   };
 
