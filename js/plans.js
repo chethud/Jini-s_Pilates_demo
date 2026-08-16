@@ -77,7 +77,7 @@
     const price = startingPrice(packages);
     const cta = packages.length > 1 ? "Explore packages" : "Explore package";
     const role = featured ? "pkg-card pkg-hero" : "pkg-card pkg-side";
-    return `<button type="button" class="${role}" data-open-packages="${escapeHtml(tab)}">
+    return `<div class="pkg-card-wrap"><button type="button" class="${role}" data-open-packages="${escapeHtml(tab)}">
       <div class="pkg-card-media">
         <img src="${escapeHtml(img)}" alt="${escapeHtml(meta.title)}" width="1200" height="800" loading="lazy">
       </div>
@@ -88,21 +88,35 @@
         <p class="pkg-price">${escapeHtml(price)}</p>
         <p class="pkg-cta">${escapeHtml(cta)} <span aria-hidden="true">→</span></p>
       </div>
-    </button>`;
+    </button></div>`;
   };
+
+  const panelOf = (root) => root.querySelector(".pkg-modal-panel");
 
   const closeModal = (root) => {
     const modal = root.querySelector("[data-pkg-modal]");
+    const panel = panelOf(root);
     if (!modal) return;
-    modal.hidden = true;
+    const wrap = root.querySelector(".pkg-card-wrap.is-pkg-host");
+    wrap?.classList.remove("is-pkg-open");
+    modal.classList.remove("is-open");
+    const hide = () => {
+      wrap?.classList.remove("is-pkg-host");
+      if (panel && panel.parentElement !== modal) modal.appendChild(panel);
+      modal.hidden = true;
+      modal.removeEventListener("transitionend", hide);
+    };
+    modal.addEventListener("transitionend", hide);
+    setTimeout(hide, 340);
     document.body.style.overflow = "";
   };
 
-  const openModal = (root, tab, groups, options) => {
+  const openModal = (root, tab, groups, options, card) => {
     const modal = root.querySelector("[data-pkg-modal]");
+    const panel = panelOf(root);
     const titleEl = root.querySelector("[data-pkg-modal-title]");
     const list = root.querySelector("[data-pkg-options]");
-    if (!modal || !list) return;
+    if (!modal || !panel || !list) return;
     const packages = groups[tab] || [];
     const meta = classMeta(tab, options.classes);
     titleEl.textContent = `${meta.title} Packages`;
@@ -119,10 +133,27 @@
         </button>`;
       })
       .join("");
+    root.querySelectorAll(".pkg-card-wrap.is-pkg-host").forEach((el) => {
+      el.classList.remove("is-pkg-open", "is-pkg-host");
+    });
+    const mobile = window.matchMedia("(max-width: 800px)").matches;
+    const wrap = card?.closest(".pkg-card-wrap");
+    if (mobile && wrap) {
+      wrap.appendChild(panel);
+      wrap.classList.add("is-pkg-host");
+    } else if (panel.parentElement !== modal) {
+      modal.appendChild(panel);
+    }
     modal.hidden = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (mobile && wrap) wrap.classList.add("is-pkg-open");
+        modal.classList.add("is-open");
+      });
+    });
     modal.setAttribute("data-active-tab", tab);
     document.body.style.overflow = "hidden";
-    list.querySelector(".pkg-option")?.focus();
+    list.querySelector(".pkg-option")?.focus({ preventScroll: true });
   };
 
   const continueBooking = (root, groups, options) => {
@@ -192,7 +223,9 @@
     </div>`;
 
     root.querySelectorAll("[data-open-packages]").forEach((btn) => {
-      btn.addEventListener("click", () => openModal(root, btn.getAttribute("data-open-packages"), groups, opts));
+      btn.addEventListener("click", () =>
+        openModal(root, btn.getAttribute("data-open-packages"), groups, opts, btn)
+      );
     });
     root.querySelectorAll("[data-pkg-close]").forEach((el) => {
       el.addEventListener("click", () => closeModal(root));

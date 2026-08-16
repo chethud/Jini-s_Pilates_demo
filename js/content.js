@@ -21,7 +21,7 @@
     heroSubtitle: "Your Path To A Stronger You.",
     heroBody:
       "Experience personalized Pilates sessions that improve strength, flexibility, posture, balance, and overall wellness in a calm and welcoming environment.",
-    heroImage: "assets/hero-home.jpg",
+    heroImage: "assets/hero-home.jpg?v=2",
     aboutTitle: "About Jini's Pilates Studio with Cafe",
     aboutBody:
       "Nestled in vibrant Mysuru, Jini's Pilates Studio is the ultimate haven for fitness enthusiasts. This trendy studio blends the best of traditional Pilates with modern fitness vibes, creating a dynamic space where strength, flexibility and wellness take centre stage.",

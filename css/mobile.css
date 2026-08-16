@@ -1,6 +1,61 @@
 /* Phone and small-tablet layout — loaded last so it can override page styles */
 #hero .bg-gradient-to-b {
-  display: none;
+  display: block;
+  background-image: linear-gradient(
+    90deg,
+    rgb(247 244 239 / 0.92) 0%,
+    rgb(247 244 239 / 0.7) 34%,
+    rgb(247 244 239 / 0) 64%
+  ) !important;
+}
+
+#hero .hero-readout,
+#hero [data-cms="heroSubtitle"],
+#hero p:has(> [data-cms="heroBody"]) {
+  background: #f4f0e8;
+  color: #1a2e28;
+}
+
+#hero .hero-readout {
+  width: min(36rem, 100%);
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem 1.05rem;
+  border-radius: 1.1rem;
+  box-shadow: 0 12px 30px rgba(28, 25, 23, 0.14);
+}
+
+#hero .hero-readout [data-cms="heroSubtitle"],
+#hero .hero-readout p:has(> [data-cms="heroBody"]) {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#hero [data-cms="heroSubtitle"] {
+  margin-top: 1.25rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0.85rem;
+  color: #1a2e28;
+}
+
+#hero p:has(> [data-cms="heroBody"]) {
+  margin-top: 0.65rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0.85rem;
+}
+
+#hero .hero-readout [data-cms="heroSubtitle"] {
+  margin-top: 0;
+}
+
+#hero .hero-readout .mt-5 {
+  margin-top: 0.55rem;
+}
+
+#hero [data-cms="heroBody"] {
+  color: #3a4742;
 }
 
 html {
@@ -96,11 +151,12 @@ svg {
   #hero.min-h-dvh,
   #hero .min-h-dvh,
   #hero .mx-auto.flex {
-    min-height: 100dvh !important;
+    min-height: 0 !important;
+    height: auto;
   }
 
   #hero {
-    min-height: 100dvh !important;
+    min-height: unset !important;
   }
 
   #hero .absolute.inset-0 img,
@@ -113,9 +169,9 @@ svg {
 
 @media (max-width: 720px) {
   #hero .mx-auto.flex {
-    padding-top: 6.25rem;
-    padding-bottom: 1.5rem !important;
-    justify-content: center;
+    padding-top: 5.5rem;
+    padding-bottom: 1rem !important;
+    justify-content: flex-start;
   }
 
   #hero h1,
@@ -136,8 +192,8 @@ svg {
   }
 
   main > section:not(#hero) {
-    padding-top: 2.25rem !important;
-    padding-bottom: 2.25rem !important;
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
   }
 
   main > section:not(#hero) .blob {
@@ -154,7 +210,7 @@ svg {
   }
 
   #about {
-    padding-top: 1.5rem !important;
+    padding-top: 0.75rem !important;
   }
 
   #about .lg\:grid-cols-2,
@@ -243,8 +299,8 @@ svg {
   .pkg-side .pkg-card-media,
   .pkg-solo .pkg-card-media,
   .pkg-card img {
-    min-height: 14rem;
-    height: 14rem;
+    min-height: 25rem;
+    height: 25rem;
   }
 
   .pkg-modal {
@@ -257,6 +313,12 @@ svg {
     max-height: min(90dvh, 40rem);
     border-radius: 1.25rem 1.25rem 0.75rem 0.75rem;
     padding: 1.25rem 1rem 1.15rem;
+  }
+
+  .pkg-card-wrap.is-pkg-host .pkg-modal-panel {
+    max-height: none;
+    height: 100%;
+    border-radius: 1.35rem;
   }
 
   .pkg-option {

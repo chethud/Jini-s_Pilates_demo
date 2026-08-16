@@ -21,6 +21,10 @@
   margin-inline: auto;
 }
 
+.pkg-card-wrap {
+  position: relative;
+}
+
 .pkg-card {
   position: relative;
   display: block;
@@ -150,10 +154,6 @@
   color: #7dcebf;
 }
 
-.pkg-modal[hidden] {
-  display: none !important;
-}
-
 .pkg-modal {
   position: fixed;
   inset: 0;
@@ -161,6 +161,16 @@
   display: grid;
   place-items: center;
   padding: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.pkg-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .pkg-modal-backdrop {
@@ -181,6 +191,12 @@
   color: #1c1917;
   padding: 1.5rem 1.4rem 1.35rem;
   box-shadow: 0 28px 60px rgba(28, 25, 23, 0.22);
+  transform: translateY(1.25rem) scale(0.98);
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pkg-modal.is-open .pkg-modal-panel {
+  transform: none;
 }
 
 .pkg-modal-kicker {
@@ -318,8 +334,8 @@
   .pkg-side .pkg-card-media,
   .pkg-solo .pkg-card-media,
   .pkg-card img {
-    min-height: 14rem;
-    height: 14rem;
+    min-height: 25rem;
+    height: 25rem;
   }
 
   .pkg-side .pkg-title,
@@ -333,15 +349,55 @@
   .pkg-hero .pkg-price {
     font-size: 1.5rem;
   }
+
+  .pkg-modal-panel {
+    transform: translateY(110%);
+  }
+
+  .pkg-modal.is-open .pkg-modal-panel {
+    transform: none;
+  }
+
+  .pkg-card-wrap.is-pkg-host {
+    z-index: 90;
+    overflow: hidden;
+    border-radius: 1.35rem;
+  }
+
+  .pkg-card-wrap.is-pkg-host .pkg-card:hover {
+    transform: none;
+  }
+
+  .pkg-card-wrap.is-pkg-host .pkg-modal-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    max-height: none;
+    height: 100%;
+    margin: 0;
+    border-radius: 1.35rem;
+    transform: translateY(100%);
+    box-shadow: none;
+  }
+
+  .pkg-card-wrap.is-pkg-open .pkg-modal-panel {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pkg-card,
-  .pkg-card img {
+  .pkg-card img,
+  .pkg-modal,
+  .pkg-modal-panel {
     transition: none;
   }
   .pkg-card:hover,
   .pkg-card:hover img {
+    transform: none;
+  }
+  .pkg-modal-panel {
     transform: none;
   }
 }
