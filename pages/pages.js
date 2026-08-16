@@ -17,11 +17,6 @@
       </article>`).join('')}</div>`;
   }
 
-  if (type === 'trainers') {
-    location.replace('/#why-pilates');
-    return;
-  }
-
   if (type === 'plans' && window.JinisPlans) {
     window.JinisPlans.render(root, c.plans || [], {
       contactHref: '/#contact',

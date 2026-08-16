@@ -312,9 +312,26 @@
     width: 100%;
     grid-template-columns: 1fr;
   }
+
   .pkg-hero .pkg-card-media,
-  .pkg-hero img {
-    min-height: 18rem;
+  .pkg-hero img,
+  .pkg-side .pkg-card-media,
+  .pkg-solo .pkg-card-media,
+  .pkg-card img {
+    min-height: 14rem;
+    height: 14rem;
+  }
+
+  .pkg-side .pkg-title,
+  .pkg-solo .pkg-title,
+  .pkg-hero .pkg-title {
+    font-size: 1.45rem;
+  }
+
+  .pkg-side .pkg-price,
+  .pkg-solo .pkg-price,
+  .pkg-hero .pkg-price {
+    font-size: 1.5rem;
   }
 }
 

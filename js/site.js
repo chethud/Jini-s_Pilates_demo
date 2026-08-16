@@ -113,19 +113,15 @@
 
   const renderCafeStage = (images) => {
     const stage = qs("[data-cms-cafe-stage]");
-    const carousel = qs("[data-cafe-carousel]");
     if (!stage || !Array.isArray(images) || !images.length) return;
     stage.innerHTML = images
-      .map((item, i) => {
+      .map((item) => {
         const src = asset(item.src);
-        return `<article class="cafe-card" data-cafe-slide="${i}">
+        return `<article class="cafe-card">
           <img src="${src}" alt="${escapeHtml(item.alt || "Cafe")}" width="800" height="1000" loading="lazy">
         </article>`;
       })
       .join("");
-    if (carousel && typeof window.JinisInitCafeCarousel === "function") {
-      window.JinisInitCafeCarousel(true);
-    }
   };
 
   const HOME_GALLERY_LIMIT = 7;
@@ -396,8 +392,6 @@
   /* FAQ accordion bound in renderFaqs / bindFaqAccordion */
 
   /* gallery preview is rendered from CMS in applyContent (7 photos); full set on gallery pages */
-
-  /* cafe carousel moved to js/cafe.js */
 
   /* ---------- review dots ---------- */
   const reviewBtns = qsa('button[aria-label^="Show review by"]');

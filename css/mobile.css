@@ -1,4 +1,8 @@
 /* Phone and small-tablet layout — loaded last so it can override page styles */
+#hero .bg-gradient-to-b {
+  display: none;
+}
+
 html {
   overflow-x: clip;
 }
@@ -92,12 +96,11 @@ svg {
   #hero.min-h-dvh,
   #hero .min-h-dvh,
   #hero .mx-auto.flex {
-    min-height: 0 !important;
-    height: auto;
+    min-height: 100dvh !important;
   }
 
   #hero {
-    min-height: unset !important;
+    min-height: 100dvh !important;
   }
 
   #hero .absolute.inset-0 img,
@@ -106,22 +109,13 @@ svg {
     object-fit: cover;
     object-position: center 30%;
   }
-
-  #hero .bg-gradient-to-b {
-    background-image: linear-gradient(
-      to bottom,
-      rgba(247, 244, 239, 0.38),
-      rgba(247, 244, 239, 0.22) 50%,
-      #eef7f4 100%
-    );
-  }
 }
 
 @media (max-width: 720px) {
   #hero .mx-auto.flex {
     padding-top: 6.25rem;
-    padding-bottom: 0.35rem !important;
-    justify-content: flex-start;
+    padding-bottom: 1.5rem !important;
+    justify-content: center;
   }
 
   #hero h1,
@@ -142,12 +136,91 @@ svg {
   }
 
   main > section:not(#hero) {
-    padding-top: 2.5rem !important;
-    padding-bottom: 2.5rem !important;
+    padding-top: 2.25rem !important;
+    padding-bottom: 2.25rem !important;
+  }
+
+  main > section:not(#hero) .blob {
+    display: none;
+  }
+
+  main > section:not(#hero) > .mx-auto {
+    width: min(1200px, calc(100vw - 1.75rem)) !important;
+  }
+
+  main > section:not(#hero) h2 {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
   }
 
   #about {
-    padding-top: 1.15rem !important;
+    padding-top: 1.5rem !important;
+  }
+
+  #about .lg\:grid-cols-2,
+  #why-pilates ul,
+  #why-pilates [data-cms-trainers-grid],
+  #classes [data-cms-classes-grid],
+  #contact .lg\:grid-cols-\[1\.05fr_1fr\],
+  #contact form .sm\:grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  #about .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  #about .grid.grid-cols-2 > img,
+  #about .grid.grid-cols-2 > .col-span-2 img {
+    height: 12.5rem !important;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  #about .grid.grid-cols-2 > .glass {
+    height: auto !important;
+    min-height: 0;
+  }
+
+  #about [class*="lg:grid-cols-4"],
+  #about .sm\:grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] img.h-80 {
+    height: 14rem !important;
+  }
+
+  #cafe ul.sm\:grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .gallery-page-links {
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .gallery-page-links a {
+    flex: 0 0 auto;
+    font-size: 0.75rem !important;
+    padding: 0.55rem 0.9rem !important;
+  }
+
+  #faq [data-faq-item] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #faq [data-faq-q] {
+    font-size: 0.98rem !important;
+  }
+
+  #gallery [data-cms-gallery-grid] {
+    columns: 1 !important;
   }
 
   .cafe-showcase-stage {
@@ -156,37 +229,8 @@ svg {
     min-height: 220px;
   }
 
-  .cafe-card.is-prev,
-  .cafe-card.is-next {
-    display: none;
-  }
-
-  .cafe-card.is-active {
-    left: 0 !important;
-    width: 100% !important;
-  }
-
-  .cafe-showcase-controls {
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  #contact .lg\:grid-cols-\[1\.05fr_1fr\] {
-    grid-template-columns: 1fr;
-  }
-
   #contact iframe {
     height: 16rem;
-  }
-
-  .gallery-page-links {
-    justify-content: flex-start !important;
-  }
-
-  .gallery-page-links a {
-    font-size: 0.75rem !important;
-    padding: 0.55rem 0.9rem !important;
   }
 
   .fixed.bottom-5.right-5 {
@@ -195,13 +239,12 @@ svg {
   }
 
   .pkg-hero .pkg-card-media,
-  .pkg-hero img {
-    min-height: 15rem;
-  }
-
+  .pkg-hero img,
   .pkg-side .pkg-card-media,
-  .pkg-solo .pkg-card-media {
-    min-height: 12.5rem;
+  .pkg-solo .pkg-card-media,
+  .pkg-card img {
+    min-height: 14rem;
+    height: 14rem;
   }
 
   .pkg-modal {

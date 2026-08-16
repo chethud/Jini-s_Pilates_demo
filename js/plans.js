@@ -1,28 +1,18 @@
 (() => {
   const TAB_ORDER = ["Reformer Pilates", "Mat Pilates", "Strength", "Zumba"];
 
-  const CLASS_META = {
-    "Reformer Pilates": {
-      title: "Reformer Pilates",
-      line: "Strength • Control • Flexibility",
-      image: "assets/hero-home.jpg",
-      featured: true,
-    },
-    "Mat Pilates": {
-      title: "Mat Pilates",
-      line: "Improve mobility & body awareness",
-      image: "assets/class_mat_dkcnn3u_.jpg",
-    },
-    Strength: {
-      title: "Strength Training",
-      line: "Build strength and confidence",
-      image: "assets/gallery_equipment_be6bqby0.jpg",
-    },
-    Zumba: {
-      title: "Zumba",
-      line: "Move • Dance • Have fun",
-      image: "assets/class_group_sremfjhc.jpg",
-    },
+  const classMeta = (tab, classes) => {
+    const match = (classes || []).find((item) => {
+      const name = String(item.name || "");
+      if (tab === "Strength") return /strength/i.test(name);
+      return name.toLowerCase() === tab.toLowerCase();
+    });
+    return {
+      title: match?.name || tab,
+      line: String(match?.blurb || "").replace(/^[^-—]+[—–-]\s*/, ""),
+      image: match?.image || (tab === "Reformer Pilates" ? "assets/hero-home.jpg" : ""),
+      featured: tab === "Reformer Pilates",
+    };
   };
 
   const escapeHtml = (value) =>
@@ -76,18 +66,12 @@
   };
 
   const classImage = (tab, classes, resolveSrc) => {
-    const meta = CLASS_META[tab] || {};
-    const match = (classes || []).find((item) => {
-      const name = String(item.name || "");
-      if (tab === "Strength") return /strength/i.test(name);
-      return name.toLowerCase() === String(meta.title || tab).toLowerCase() || name === tab;
-    });
-    const src = tab === "Reformer Pilates" ? meta.image : match?.image || meta.image;
-    return resolveSrc(src);
+    const meta = classMeta(tab, classes);
+    return resolveSrc(meta.image);
   };
 
   const cardMarkup = (tab, packages, options) => {
-    const meta = CLASS_META[tab] || { title: tab, line: "" };
+    const meta = classMeta(tab, options.classes);
     const featured = !!meta.featured;
     const img = classImage(tab, options.classes, options.resolveSrc);
     const price = startingPrice(packages);
@@ -120,7 +104,7 @@
     const list = root.querySelector("[data-pkg-options]");
     if (!modal || !list) return;
     const packages = groups[tab] || [];
-    const meta = CLASS_META[tab] || { title: tab };
+    const meta = classMeta(tab, options.classes);
     titleEl.textContent = `${meta.title} Packages`;
     list.innerHTML = packages
       .map((plan, i) => {
@@ -148,7 +132,7 @@
     const index = Number(selected?.getAttribute("data-pkg-index") || 0);
     const plan = (groups[tab] || [])[index];
     if (!plan) return;
-    const className = plan.period || CLASS_META[tab]?.title || tab;
+    const className = plan.period || classMeta(tab, options.classes).title || tab;
     try {
       sessionStorage.setItem(
         "jinis_pending_package",
@@ -170,8 +154,7 @@
     if (src.startsWith("data:") || src.startsWith("http") || src.startsWith("/") || src.startsWith("../")) {
       return src;
     }
-    const inPages = /\/pages(\/|$)/.test(location.pathname);
-    return (inPages ? "/" : "") + src.replace(/^\//, "");
+    return src.replace(/^\//, "");
   };
 
   const render = (root, plans, options = {}) => {

@@ -50,13 +50,15 @@ class Handler(SimpleHTTPRequestHandler):
             rel += "index.html"
         clean = rel.rstrip("/") or "/"
         slug = clean.lstrip("/")
+        parts = [p for p in slug.split("/") if p]
+        if len(parts) == 2 and parts[0] == "gallery" and "." not in parts[1]:
+            gallery = ROOT / "gallery" / "index.html"
+            if gallery.is_file():
+                return str(gallery)
         if slug in PAGE_SLUGS:
             mapped = ROOT / f"{slug}.html"
             if mapped.is_file():
                 return str(mapped)
-            nested = ROOT / "pages" / f"{slug}.html"
-            if nested.is_file():
-                return str(nested)
         target = (ROOT / rel.lstrip("/\\")).resolve()
         try:
             target.relative_to(ROOT)
