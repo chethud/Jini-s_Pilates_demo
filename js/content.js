@@ -32,10 +32,10 @@
       { value: "100%", label: "Personal Guidance" },
     ],
     classes: [
-      { name: "Reformer Pilates", blurb: "All levels — Spring-loaded reformer sessions for full-body strength, posture and control.", image: "assets/class_reformer_cbidz7_n.jpg" },
-      { name: "Mat Pilates", blurb: "All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class_mat_dkcnn3u_.jpg" },
-      { name: "Strength Training", blurb: "All levels — Focused strength training to build power, stability and everyday fitness.", image: "assets/class_mat_dkcnn3u_.jpg" },
-      { name: "Zumba", blurb: "All levels — High-energy dance fitness for cardio, coordination and fun.", image: "assets/class_group_sremfjhc.jpg" },
+      { name: "Reformer Pilates", blurb: "All levels — Spring-loaded reformer sessions for full-body strength, posture and control.", image: "assets/class-reformer.png" },
+      { name: "Mat Pilates", blurb: "All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class-mat.png" },
+      { name: "Strength Training", blurb: "All levels — Focused strength training to build power, stability and everyday fitness.", image: "assets/class-strength.png" },
+      { name: "Zumba", blurb: "All levels — High-energy dance fitness for cardio, coordination and fun.", image: "assets/about-group.png" },
     ],
     trainers: [
       { name: "Jini Menon", role: "BASI Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer_1_cex1xk_w.jpg" },
@@ -163,10 +163,32 @@
 
   const getContent = () => {
     const saved = readStore() || {};
-    const classes = (Array.isArray(saved.classes) ? saved.classes : DEFAULT_CONTENT.classes.slice()).map((item) => ({
-      ...item,
-      blurb: withoutClassPrice(item.blurb),
-    }));
+    const classes = (Array.isArray(saved.classes) ? saved.classes : DEFAULT_CONTENT.classes.slice()).map((item) => {
+      const custom = String(item.image || "").startsWith("data:");
+      let image = item.image;
+      if (!custom && /class_reformer_cbidz7_n/i.test(String(image || ""))) {
+        image = "assets/class-reformer.png";
+      } else if (
+        !custom &&
+        /^Mat Pilates$/i.test(String(item.name || "")) &&
+        /class_mat_dkcnn3u_/i.test(String(image || ""))
+      ) {
+        image = "assets/class-mat.png";
+      } else if (
+        !custom &&
+        /^Strength Training$/i.test(String(item.name || "")) &&
+        /class_mat_dkcnn3u_/i.test(String(image || ""))
+      ) {
+        image = "assets/class-strength.png";
+      } else if (
+        !custom &&
+        /^Zumba$/i.test(String(item.name || "")) &&
+        /class_group_sremfjhc/i.test(String(image || ""))
+      ) {
+        image = "assets/about-group.png";
+      }
+      return { ...item, blurb: withoutClassPrice(item.blurb), image };
+    });
     return {
       ...DEFAULT_CONTENT,
       ...saved,
