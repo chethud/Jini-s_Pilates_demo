@@ -172,7 +172,7 @@
   background: rgba(244, 248, 246, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  padding: 96px 28px 40px;
+  padding: 96px max(1.2rem, env(safe-area-inset-right)) 40px max(1.2rem, env(safe-area-inset-left));
   font-family: var(--nav-font);
 }
 
@@ -192,7 +192,7 @@
   color: var(--nav-ink);
   font-size: 1.05rem;
   font-weight: 500;
-  padding: 12px 4px;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(26, 36, 33, 0.08);
 }
 

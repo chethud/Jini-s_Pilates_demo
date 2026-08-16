@@ -73,45 +73,7 @@ html {
   padding-top: 2.5rem;
 }
 
-/* Mobile drawer */
-.mobile-nav {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  background: color-mix(in oklab, var(--background, #f7f4ef) 94%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 96px 28px 40px;
-}
-.mobile-nav.is-open,
-.mobile-nav.is-open[hidden] {
-  display: block !important;
-}
-.mobile-nav nav {
-  display: grid;
-  gap: 8px;
-  max-width: 420px;
-}
-.mobile-nav a {
-  display: block;
-  text-decoration: none;
-  color: #1a2421;
-  font-weight: 500;
-  font-size: 1.05rem;
-  border-radius: 999px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(28, 36, 34, 0.08);
-}
-.mobile-nav a:hover { background: rgba(47, 157, 138, 0.12); }
-.mobile-nav .mobile-nav-cta {
-  margin-top: 10px;
-  background: var(--primary, #2f9d8a);
-  color: #fff;
-  text-align: center;
-}
-body.menu-open { overflow: hidden; }
+/* Mobile drawer styles live in css/site-nav.css */
 
 /* FAQ open chevron */
 #faq [data-faq-item][data-state="open"] button svg {
