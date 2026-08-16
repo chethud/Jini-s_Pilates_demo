@@ -53,4 +53,7 @@ html.dark .badge{color:#c9d6d1}
 @media (max-width:900px){
   .card-grid,.card-grid.cols-3,.card-grid.cols-4,.cafe-layout{grid-template-columns:1fr}
   .cafe-photos{grid-template-columns:1fr 1fr}
+  .card-grid.stats{grid-template-columns:1fr 1fr;gap:12px}
+  .stat-card{padding:16px}
+  .stat-card strong{font-size:1.6rem}
 }
