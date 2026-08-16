@@ -3,7 +3,7 @@
 
   const DEFAULT_GALLERY = [
     { id: "g1", src: "assets/gallery_studio_bptwifhk.jpg", alt: "Studio reception with wooden bench", category: "studio" },
-    { id: "g2", src: "assets/class_reformer_cbidz7_n.jpg", alt: "Reformer Pilates session", category: "classes" },
+    { id: "g2", src: "assets/class-reformer.png", alt: "Reformer Pilates session", category: "classes" },
     { id: "g3", src: "assets/gallery_equipment_be6bqby0.jpg", alt: "Reformer straps close up", category: "equipment" },
     { id: "g4", src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter", category: "cafe" },
     { id: "g5", src: "assets/gallery_members_cyis7hte.jpg", alt: "Members chatting after class", category: "members" },
@@ -200,6 +200,9 @@
         if (custom) return item;
         if (/class_group_sremfjhc/i.test(String(item.src || "")) || item.id === "g6") {
           return { ...item, src: "assets/about-group.png" };
+        }
+        if (/class_reformer_cbidz7_n/i.test(String(item.src || "")) || item.id === "g2") {
+          return { ...item, src: "assets/class-reformer.png" };
         }
         if (/class_mat_dkcnn3u_/i.test(String(item.src || "")) || item.id === "g7") {
           return { ...item, src: "assets/class-strength.png" };
