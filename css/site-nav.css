@@ -241,7 +241,7 @@ html.dark .mobile-nav a {
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   #site-header .site-nav-desktop,
   #site-header .nav-cta {
     display: none;

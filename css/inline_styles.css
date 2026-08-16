@@ -338,7 +338,7 @@ body.menu-open { overflow: hidden; }
   display: none !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   .site-nav-desktop {
     display: none !important;
   }
