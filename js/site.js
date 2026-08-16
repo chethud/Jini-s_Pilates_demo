@@ -366,50 +366,6 @@
     reveals.forEach((el) => el.classList.add("is-visible"));
   }
 
-  /* ---------- theme toggle ---------- */
-  const themeBtn = qs('button[aria-label="Switch to dark mode"], button[aria-label="Switch to light mode"]');
-  const applyTheme = (dark) => {
-    document.documentElement.classList.toggle("dark", dark);
-    if (themeBtn) {
-      themeBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
-    }
-    try {
-      localStorage.setItem("jinis_theme", dark ? "dark" : "light");
-    } catch {
-      /* ignore */
-    }
-  };
-  try {
-    const saved = localStorage.getItem("jinis_theme");
-    if (saved === "dark") applyTheme(true);
-  } catch {
-    /* ignore */
-  }
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      applyTheme(!document.documentElement.classList.contains("dark"));
-    });
-  }
-
-  /* ---------- mobile menu ---------- */
-  const menuBtn = qs('#menu-toggle, button[aria-label="Open menu"], button[aria-label="Close menu"]');
-  const mobileNav = qs("#mobile-nav");
-  const setMenu = (open) => {
-    if (!menuBtn || !mobileNav) return;
-    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-    mobileNav.classList.toggle("is-open", open);
-    mobileNav.hidden = !open;
-    document.body.classList.toggle("menu-open", open);
-  };
-  if (menuBtn && mobileNav) {
-    menuBtn.addEventListener("click", () => {
-      const open = menuBtn.getAttribute("aria-expanded") !== "true";
-      setMenu(open);
-    });
-    qsa("a", mobileNav).forEach((a) => a.addEventListener("click", () => setMenu(false)));
-  }
-
   /* FAQ accordion bound in renderFaqs / bindFaqAccordion */
 
   /* gallery preview is rendered from CMS in applyContent (7 photos); full set on gallery pages */
@@ -539,7 +495,6 @@
       e.preventDefault();
       const top = target.getBoundingClientRect().top + window.scrollY - 88;
       window.scrollTo({ top, behavior: "smooth" });
-      setMenu(false);
     });
   });
 

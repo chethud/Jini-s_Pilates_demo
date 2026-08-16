@@ -219,6 +219,33 @@ html.dark {
   --nav-bg: #121917;
   --nav-ink: #f4f8f6;
   --nav-muted: #a8b5b1;
+  --background: #121917;
+  --foreground: #f4f8f6;
+  color-scheme: dark;
+}
+
+html.dark body,
+html.dark .bg-background,
+html.dark .min-h-dvh {
+  background-color: #121917;
+  color: #f4f8f6;
+}
+
+html.dark .text-foreground {
+  color: #f4f8f6;
+}
+
+html.dark .text-muted-foreground {
+  color: #a8b5b1;
+}
+
+html.dark .surface-warm {
+  background-color: #161e1c;
+}
+
+html.dark .glass {
+  background-color: rgba(28, 38, 35, 0.82);
+  color: #f4f8f6;
 }
 
 html.dark #site-header.is-scrolled .nav-shell {

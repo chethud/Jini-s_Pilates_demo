@@ -9,18 +9,23 @@
     members: "Members",
     events: "Events",
   };
-  const seg = location.pathname.replace(/\/+$/, "").split("/").pop();
+  const params = new URLSearchParams(location.search);
+  const seg = params.get("cat") || location.pathname.replace(/\/+$/, "").split("/").pop();
   const page = CATS.includes(seg) ? seg : "all";
 
   document.querySelectorAll(".filters a").forEach((a) => {
     const href = a.getAttribute("href") || "";
-    a.classList.toggle("is-active", page === "all" ? href === "/gallery" : href.endsWith("/" + page));
+    const cat = new URL(href, location.origin).searchParams.get("cat");
+    const pathEnd = href.replace(/\/+$/, "").split("/").pop();
+    const linkPage = CATS.includes(cat) ? cat : CATS.includes(pathEnd) ? pathEnd : "all";
+    a.classList.toggle("is-active", linkPage === page);
   });
   const eyebrow = document.querySelector(".page-hero .eyebrow");
   if (eyebrow) eyebrow.textContent = "Gallery · " + labels[page];
   document.title = `${labels[page]} Gallery · Jini's Pilates Studio`;
 
-  const content = window.JinisContent.getContent();
+  const content = window.JinisContent?.getContent?.();
+  if (!content) return;
   const prefix = "/";
   const grid = document.getElementById("gallery-grid");
   const empty = document.getElementById("gallery-empty");

@@ -12,6 +12,7 @@
   "rewrites": [
     { "source": "/cms", "destination": "/cms/index.html" },
     { "source": "/cms/dashboard", "destination": "/cms/dashboard.html" },
+    { "source": "/favicon.ico", "destination": "/assets/logo.png" },
     { "source": "/gallery", "destination": "/gallery/index.html" },
     { "source": "/gallery/:page", "destination": "/gallery/index.html" },
     { "source": "/about", "destination": "/about.html" },
@@ -24,7 +25,7 @@
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]
     }
   ]

@@ -251,6 +251,7 @@
   text-align: left;
   cursor: pointer;
   color: inherit;
+  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
 }
 
 .pkg-option:last-of-type {
@@ -296,8 +297,9 @@
 }
 
 .pkg-option-price {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.35rem;
+  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
   white-space: nowrap;
 }
 

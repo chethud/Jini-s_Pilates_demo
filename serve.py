@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 PAGE_SLUGS = {"about", "classes", "cafe", "plans", "trainers"}
+GALLERY_PAGES = {"studio", "classes", "equipment", "cafe", "members", "events"}
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -46,15 +47,16 @@ class Handler(SimpleHTTPRequestHandler):
 
     def translate_path(self, path: str) -> str:
         rel = urllib.parse.unquote(urllib.parse.urlparse(path).path)
+        parts = [p for p in rel.split("/") if p]
+        if parts == ["favicon.ico"]:
+            logo = ROOT / "assets" / "logo.png"
+            if logo.is_file():
+                return str(logo)
+        if parts == ["gallery"] or (len(parts) == 2 and parts[0] == "gallery" and parts[1] in GALLERY_PAGES):
+            return str(ROOT / "gallery" / "index.html")
         if rel.endswith("/"):
             rel += "index.html"
-        clean = rel.rstrip("/") or "/"
-        slug = clean.lstrip("/")
-        parts = [p for p in slug.split("/") if p]
-        if len(parts) == 2 and parts[0] == "gallery" and "." not in parts[1]:
-            gallery = ROOT / "gallery" / "index.html"
-            if gallery.is_file():
-                return str(gallery)
+        slug = (rel.rstrip("/") or "/").lstrip("/")
         if slug in PAGE_SLUGS:
             mapped = ROOT / f"{slug}.html"
             if mapped.is_file():
