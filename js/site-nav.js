@@ -1,7 +1,5 @@
 (() => {
   const LINKS = [
-    { href: "/about", label: "About" },
-    { href: "/#why-pilates", label: "Why Pilates" },
     { href: "/classes", label: "Classes" },
     { href: "/cafe", label: "Cafe" },
     { href: "/plans", label: "Plans" },
@@ -56,15 +54,31 @@
   window.addEventListener("scroll", onScroll, { passive: true });
 
   const menuBtn = header.querySelector(".site-menu-toggle");
+  let closeTimer;
   const setMenu = (open) => {
     if (!menuBtn) return;
     menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
     menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-    mobileNav.classList.toggle("is-open", open);
-    mobileNav.hidden = !open;
     document.body.classList.toggle("menu-open", open);
+    clearTimeout(closeTimer);
+    if (open) {
+      mobileNav.classList.remove("is-closing");
+      mobileNav.hidden = false;
+      mobileNav.classList.add("is-open");
+      return;
+    }
+    if (!mobileNav.classList.contains("is-open")) return;
+    // Keep the panel mounted until the slide-out animation finishes.
+    mobileNav.classList.add("is-closing");
+    closeTimer = setTimeout(() => {
+      mobileNav.classList.remove("is-open", "is-closing");
+      mobileNav.hidden = true;
+    }, 340);
   };
   menuBtn?.addEventListener("click", () => setMenu(menuBtn.getAttribute("aria-expanded") !== "true"));
+  mobileNav.addEventListener("click", (event) => {
+    if (event.target === mobileNav) setMenu(false);
+  });
   mobileNav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
 
   const themeBtn = header.querySelector(".nav-theme");

@@ -6,19 +6,15 @@
 
 .pkg-layout {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
   margin-top: 2rem;
 }
 
-.pkg-pair {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
+/* Flatten the hero/pair/solo wrappers so every card is one equal grid cell. */
+.pkg-pair,
 .pkg-solo {
-  width: min(100%, calc(50% - 0.5rem));
-  margin-inline: auto;
+  display: contents;
 }
 
 .pkg-card-wrap {
@@ -67,6 +63,7 @@
 .pkg-card-media {
   position: relative;
   overflow: hidden;
+  aspect-ratio: 4 / 5;
 }
 
 .pkg-card-media::after {
@@ -74,20 +71,6 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(28, 25, 23, 0.08) 20%, rgba(28, 25, 23, 0.78) 100%);
-}
-
-.pkg-hero .pkg-card-media {
-  min-height: 22rem;
-}
-
-.pkg-hero img {
-  min-height: 22rem;
-  object-position: center;
-}
-
-.pkg-side .pkg-card-media,
-.pkg-solo .pkg-card-media {
-  min-height: 14.5rem;
 }
 
 .pkg-card-body {
@@ -110,14 +93,9 @@
 .pkg-title {
   margin: 0.35rem 0 0;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: 1.35rem;
   font-weight: 500;
   line-height: 1.1;
-}
-
-.pkg-side .pkg-title,
-.pkg-solo .pkg-title {
-  font-size: 1.35rem;
 }
 
 .pkg-line {
@@ -130,13 +108,8 @@
 .pkg-price {
   margin: 0.85rem 0 0;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.85rem;
-  line-height: 1;
-}
-
-.pkg-side .pkg-price,
-.pkg-solo .pkg-price {
   font-size: 1.45rem;
+  line-height: 1;
 }
 
 .pkg-cta {
@@ -333,30 +306,17 @@ html.dark .pkg-modal-close:hover {
 }
 
 @media (max-width: 800px) {
-  .pkg-pair,
-  .pkg-solo {
-    width: 100%;
-    grid-template-columns: 1fr;
-  }
-
-  .pkg-hero .pkg-card-media,
-  .pkg-hero img,
-  .pkg-side .pkg-card-media,
-  .pkg-solo .pkg-card-media,
+  /* Tall enough for the package list that slides up inside the card. */
+  .pkg-card-media,
   .pkg-card img {
-    min-height: 25rem;
     height: 25rem;
   }
 
-  .pkg-side .pkg-title,
-  .pkg-solo .pkg-title,
-  .pkg-hero .pkg-title {
+  .pkg-title {
     font-size: 1.45rem;
   }
 
-  .pkg-side .pkg-price,
-  .pkg-solo .pkg-price,
-  .pkg-hero .pkg-price {
+  .pkg-price {
     font-size: 1.5rem;
   }
 

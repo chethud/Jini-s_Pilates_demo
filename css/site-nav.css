@@ -169,11 +169,11 @@
   position: fixed;
   inset: 0;
   z-index: 70;
-  background: rgba(244, 248, 246, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 96px max(1.2rem, env(safe-area-inset-right)) 40px max(1.2rem, env(safe-area-inset-left));
+  background: rgba(16, 26, 22, 0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   font-family: var(--nav-font);
+  animation: mobile-nav-scrim 0.3s ease both;
 }
 
 .mobile-nav.is-open,
@@ -182,8 +182,58 @@
 }
 
 .mobile-nav nav {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(320px, 84vw);
   display: grid;
+  align-content: start;
   gap: 8px;
+  overflow-y: auto;
+  background: rgba(244, 248, 246, 0.98);
+  box-shadow: -18px 0 44px rgba(16, 26, 22, 0.2);
+  padding: 96px max(1.2rem, env(safe-area-inset-right)) 40px 1.2rem;
+  animation: mobile-nav-slide 0.34s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Separate keyframe names (not animation-direction) so the exit actually restarts and plays. */
+.mobile-nav.is-closing {
+  animation-name: mobile-nav-scrim-out;
+}
+
+.mobile-nav.is-closing nav {
+  animation-name: mobile-nav-slide-out;
+  animation-timing-function: cubic-bezier(0.55, 0, 0.68, 0.53);
+}
+
+@keyframes mobile-nav-scrim {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes mobile-nav-scrim-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mobile-nav-slide {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes mobile-nav-slide-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav,
+  .mobile-nav nav {
+    animation-duration: 0.01ms;
+  }
 }
 
 .mobile-nav a {
@@ -208,6 +258,11 @@
 
 body.menu-open {
   overflow: hidden;
+}
+
+/* Keep the toggle tappable above the open drawer so it can close the menu. */
+body.menu-open #site-header {
+  z-index: 80;
 }
 
 /* Space for fixed header on subpages */
@@ -283,7 +338,7 @@ html.dark #site-header.is-scrolled .nav-shell {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-html.dark .mobile-nav {
+html.dark .mobile-nav nav {
   background: rgba(36, 48, 44, 0.98);
 }
 
