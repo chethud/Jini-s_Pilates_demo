@@ -75,6 +75,32 @@
       .join("");
   };
 
+  const renderTestimonialsGrid = (items) => {
+    const grid = qs("[data-cms-testimonials-grid]");
+    if (!grid || !Array.isArray(items)) return;
+    const quoteIcon =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote text-primary/60" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>';
+    const star =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star fill-primary text-primary" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>';
+    grid.innerHTML = items
+      .map((item) => {
+        const rating = Math.min(5, Math.max(1, Number(item.rating) || 5));
+        const stars = Array.from({ length: rating }, () => `<span>${star}</span>`).join("");
+        const img = asset(item.image || "assets/gallery_members_cyis7hte.jpg");
+        const name = escapeHtml(item.name || "Member");
+        return `<div class="testimonials-slide"><article class="glass flex h-full flex-col rounded-3xl p-7">
+          ${quoteIcon}
+          <p class="mt-4 grow text-sm leading-relaxed text-muted-foreground">${escapeHtml(item.quote || "")}</p>
+          <div class="mt-6 flex items-center gap-1" aria-label="${rating} out of 5 stars">${stars}</div>
+          <div class="mt-5 flex min-w-0 items-center gap-3">
+            <img src="${img}" alt="${name}" width="80" height="80" loading="lazy" class="h-11 w-11 shrink-0 rounded-full object-cover object-top">
+            <p class="truncate font-display text-base text-foreground">${name}</p>
+          </div>
+        </article></div>`;
+      })
+      .join("");
+  };
+
   const renderPlansGrid = (plans, classes) => {
     const grid = qs("[data-cms-plans-grid]");
     if (!grid || !window.JinisPlans) return;
@@ -190,6 +216,7 @@
 
     renderClassesGrid(data.classes);
     renderTrainersGrid(data.trainers);
+    renderTestimonialsGrid(data.testimonials);
     renderPlansGrid(data.plans, data.classes);
     renderCafeStage(data.cafeImages);
     renderHomeGallery(data.gallery);

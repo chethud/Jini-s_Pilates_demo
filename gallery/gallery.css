@@ -16,6 +16,10 @@ body {
   color: var(--ink);
   background: linear-gradient(180deg, #eef7f4, var(--bg) 40%, #f7fbf9);
 }
+html.dark body {
+  color: #f4f8f6;
+  background: linear-gradient(180deg, #121917, #1a2421);
+}
 
 a { color: inherit; }
 

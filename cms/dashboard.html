@@ -33,6 +33,7 @@
         <button type="button" class="nav-item" data-panel="trainers">Trainers</button>
         <button type="button" class="nav-item" data-panel="cafe">Cafe</button>
         <button type="button" class="nav-item" data-panel="plans">Plans</button>
+        <button type="button" class="nav-item" data-panel="testimonials">Testimonials</button>
         <button type="button" class="nav-item" data-panel="gallery">Gallery</button>
       </nav>
       <div class="sidebar-footer">
@@ -43,7 +44,7 @@
     <main class="main">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Signed in as <strong>Jinis</strong></p>
+          <p class="eyebrow">Signed in as <strong id="cms-user-name">Jinis</strong></p>
           <h2 id="panel-title">Overview</h2>
         </div>
         <div class="topbar-actions">
@@ -58,6 +59,7 @@
           <article class="stat"><span>Classes</span><strong id="stat-classes">0</strong></article>
           <article class="stat"><span>Trainers</span><strong id="stat-trainers">0</strong></article>
           <article class="stat"><span>Plans</span><strong id="stat-plans">0</strong></article>
+          <article class="stat"><span>Testimonials</span><strong id="stat-testimonials">0</strong></article>
         </div>
         <div class="card">
           <h3>Site pages</h3>
@@ -67,6 +69,7 @@
             <a class="btn-ghost" href="/#why-pilates" target="_blank" rel="noopener">Trainers</a>
             <a class="btn-ghost" href="/plans" target="_blank" rel="noopener">Plans</a>
             <a class="btn-ghost" href="/cafe" target="_blank" rel="noopener">Cafe</a>
+            <a class="btn-ghost" href="/#testimonials" target="_blank" rel="noopener">Testimonials</a>
             <button type="button" id="reset-btn" class="btn-ghost">Reset defaults</button>
           </div>
         </div>
@@ -123,6 +126,17 @@
           </div>
           <p class="hint">Group packages by class tab: Reformer Pilates, Mat Pilates, Strength, or Zumba. Click Save changes when done.</p>
           <div id="plans-fields" class="stack"></div>
+        </div>
+      </section>
+
+      <section id="panel-testimonials" class="panel">
+        <div class="card">
+          <div class="card-head">
+            <h3>Testimonials</h3>
+            <button type="button" id="testimonial-add-btn" class="btn-primary">Add testimonial</button>
+          </div>
+          <p class="hint">Edit member quotes shown on the homepage. Keep at least 2, maximum 8. Click Save changes when done.</p>
+          <div id="testimonials-fields" class="stack"></div>
         </div>
       </section>
 

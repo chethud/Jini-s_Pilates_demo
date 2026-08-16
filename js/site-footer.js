@@ -53,10 +53,21 @@
   </div>
 </footer>`;
 
-  const existing = document.querySelector("footer");
-  if (existing) {
-    existing.outerHTML = html;
-    return;
+  const mount = () => {
+    if (document.documentElement.dataset.siteFooter === "1") return;
+    document.documentElement.dataset.siteFooter = "1";
+    const footers = Array.from(document.querySelectorAll("footer"));
+    if (footers.length) {
+      footers[0].outerHTML = html;
+      footers.slice(1).forEach((el) => el.remove());
+      return;
+    }
+    document.body.insertAdjacentHTML("beforeend", html);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mount, { once: true });
+  } else {
+    mount();
   }
-  document.body.insertAdjacentHTML("beforeend", html);
 })();

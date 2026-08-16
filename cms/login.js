@@ -21,7 +21,7 @@
       return;
     }
 
-    window.JinisCMS.setAuthed(true);
+    window.JinisCMS.setAuthed(true, id);
     location.replace("/cms/dashboard.html");
   });
 })();

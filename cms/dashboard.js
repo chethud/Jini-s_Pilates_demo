@@ -4,6 +4,11 @@
     return;
   }
 
+  const signedIn = document.getElementById("cms-user-name");
+  if (signedIn && window.JinisCMS.currentUser) {
+    signedIn.textContent = window.JinisCMS.currentUser();
+  }
+
   const panelTitle = document.getElementById("panel-title");
   const logoutBtn = document.getElementById("logout-btn");
   const saveBtn = document.getElementById("save-btn");
@@ -84,6 +89,8 @@
   const MAX_CLASSES = 6;
   const MAX_GALLERY = 10;
   const CAFE_PHOTO_COUNT = 4;
+  const MIN_TESTIMONIALS = 2;
+  const MAX_TESTIMONIALS = 8;
   const DEFAULT_CAFE_IMAGES = (window.JinisContent?.DEFAULT_CONTENT?.cafeImages || []).slice(
     0,
     CAFE_PHOTO_COUNT
@@ -204,6 +211,50 @@
     document.getElementById("stat-plans").textContent = String((draft.plans || []).length);
   };
 
+  const renderTestimonials = () => {
+    const root = document.getElementById("testimonials-fields");
+    if (!root) return;
+    const items = draft.testimonials || [];
+    const canDelete = items.length > MIN_TESTIMONIALS;
+    const countEl = document.getElementById("stat-testimonials");
+    if (countEl) countEl.textContent = String(items.length);
+    root.innerHTML = items
+      .map((item, i) => {
+        const src = resolveSrc(item.image || "assets/gallery_members_cyis7hte.jpg");
+        const rating = Math.min(5, Math.max(1, Number(item.rating) || 5));
+        return `<div class="subcard" data-testimonial-index="${i}">
+        <div class="subcard-head">
+          <strong>Testimonial ${i + 1}</strong>
+          ${
+            canDelete
+              ? `<button type="button" class="btn-ghost danger" data-testimonial-remove="${i}">Delete</button>`
+              : `<span class="hint">Min ${MIN_TESTIMONIALS}</span>`
+          }
+        </div>
+        <div class="upload-block">
+          <img class="upload-preview is-visible" src="${src}" alt="">
+          <input type="hidden" data-testimonial="image" value="${escapeAttr(item.image || "assets/gallery_members_cyis7hte.jpg")}">
+          <div class="upload-row">
+            <input data-testimonial-file="${i}" type="file" accept="image/*">
+          </div>
+        </div>
+        <label>Name<input data-testimonial="name" type="text" value="${escapeAttr(item.name || "")}"></label>
+        <label>Quote<textarea data-testimonial="quote" rows="4">${escapeHtml(item.quote || "")}</textarea></label>
+        <label>Stars
+          <select data-testimonial="rating">
+            ${[5, 4, 3, 2, 1]
+              .map(
+                (n) =>
+                  `<option value="${n}" ${rating === n ? "selected" : ""}>${n} star${n === 1 ? "" : "s"}</option>`
+              )
+              .join("")}
+          </select>
+        </label>
+      </div>`;
+      })
+      .join("");
+  };
+
   const renderGallery = () => {
     const root = document.getElementById("gallery-fields");
     let items = draft.gallery || [];
@@ -299,6 +350,15 @@
       };
     });
 
+    next.testimonials = [...document.querySelectorAll("[data-testimonial-index]")].map((row) => ({
+      name: row.querySelector('[data-testimonial="name"]').value.trim(),
+      quote: row.querySelector('[data-testimonial="quote"]').value.trim(),
+      rating: Number(row.querySelector('[data-testimonial="rating"]').value) || 5,
+      image:
+        row.querySelector('[data-testimonial="image"]')?.value.trim() ||
+        "assets/gallery_members_cyis7hte.jpg",
+    }));
+
     // Keep existing FAQs in storage (FAQ panel removed from CMS UI)
     next.faqs = Array.isArray(draft.faqs) ? draft.faqs : [];
 
@@ -322,6 +382,7 @@
     renderTrainers();
     renderCafeImages();
     renderPlans();
+    renderTestimonials();
     renderGallery();
   };
 
@@ -331,6 +392,7 @@
   const trainersRoot = document.getElementById("trainers-fields");
   const cafeImagesRoot = document.getElementById("cafe-images-fields");
   const plansRoot = document.getElementById("plans-fields");
+  const testimonialsRoot = document.getElementById("testimonials-fields");
 
   document.getElementById("class-add-btn")?.addEventListener("click", () => {
     collectDraft();
@@ -376,6 +438,24 @@
     setStatus("Plan added — edit details, then Save changes");
   });
 
+  document.getElementById("testimonial-add-btn")?.addEventListener("click", () => {
+    collectDraft();
+    draft.testimonials = draft.testimonials || [];
+    if (draft.testimonials.length >= MAX_TESTIMONIALS) {
+      alert(`Maximum ${MAX_TESTIMONIALS} testimonials reached — delete one to add another`);
+      setStatus(`Maximum ${MAX_TESTIMONIALS} testimonials reached — delete one to add another`);
+      return;
+    }
+    draft.testimonials.push({
+      name: "New member",
+      quote: "Share what you loved about the studio.",
+      image: "assets/gallery_members_cyis7hte.jpg",
+      rating: 5,
+    });
+    renderTestimonials();
+    setStatus("Testimonial added — edit details, then Save changes");
+  });
+
   classesRoot?.addEventListener("click", (event) => {
     const btn = event.target.closest("[data-class-remove]");
     if (!btn) return;
@@ -413,6 +493,21 @@
     setStatus("Plan deleted — click Save changes");
   });
 
+  testimonialsRoot?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-testimonial-remove]");
+    if (!btn) return;
+    const i = Number(btn.getAttribute("data-testimonial-remove"));
+    collectDraft();
+    if ((draft.testimonials || []).length <= MIN_TESTIMONIALS) {
+      setStatus(`Keep at least ${MIN_TESTIMONIALS} testimonials`);
+      return;
+    }
+    if (!confirm("Delete this testimonial?")) return;
+    draft.testimonials.splice(i, 1);
+    renderTestimonials();
+    setStatus("Testimonial deleted — click Save changes");
+  });
+
   classesRoot?.addEventListener("change", async (event) => {
     const input = event.target.closest("[data-class-file]");
     if (!input || !input.files?.[0]) return;
@@ -440,6 +535,21 @@
       setStatus("Trainer photo ready — Save changes");
     } catch {
       setStatus("Trainer photo upload failed");
+    }
+  });
+
+  testimonialsRoot?.addEventListener("change", async (event) => {
+    const input = event.target.closest("[data-testimonial-file]");
+    if (!input || !input.files?.[0]) return;
+    const i = Number(input.getAttribute("data-testimonial-file"));
+    try {
+      setStatus("Processing testimonial photo…");
+      collectDraft();
+      draft.testimonials[i].image = await compressImage(input.files[0], 800, 0.8);
+      renderTestimonials();
+      setStatus("Testimonial photo ready — Save changes");
+    } catch {
+      setStatus("Testimonial photo upload failed");
     }
   });
 
@@ -537,6 +647,15 @@
     }
     if ((data.gallery || []).length > MAX_GALLERY) {
       data.gallery = data.gallery.slice(0, MAX_GALLERY);
+    }
+    if ((data.testimonials || []).length < MIN_TESTIMONIALS) {
+      setStatus(`Keep at least ${MIN_TESTIMONIALS} testimonials`);
+      return;
+    }
+    if ((data.testimonials || []).length > MAX_TESTIMONIALS) {
+      alert(`Maximum ${MAX_TESTIMONIALS} testimonials reached — delete one to add another`);
+      setStatus(`Maximum ${MAX_TESTIMONIALS} testimonials reached — delete one to add another`);
+      return;
     }
     const saved = window.JinisContent.saveContent(data);
     if (!saved) {
