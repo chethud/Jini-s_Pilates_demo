@@ -106,12 +106,21 @@ svg {
     object-fit: cover;
     object-position: center 30%;
   }
+
+  #hero .bg-gradient-to-b {
+    background-image: linear-gradient(
+      to bottom,
+      rgba(247, 244, 239, 0.38),
+      rgba(247, 244, 239, 0.22) 50%,
+      #eef7f4 100%
+    );
+  }
 }
 
 @media (max-width: 720px) {
   #hero .mx-auto.flex {
     padding-top: 6.25rem;
-    padding-bottom: 2.25rem;
+    padding-bottom: 0.35rem !important;
     justify-content: flex-start;
   }
 
@@ -135,6 +144,10 @@ svg {
   main > section:not(#hero) {
     padding-top: 2.5rem !important;
     padding-bottom: 2.5rem !important;
+  }
+
+  #about {
+    padding-top: 1.15rem !important;
   }
 
   .cafe-showcase-stage {
