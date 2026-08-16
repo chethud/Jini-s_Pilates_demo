@@ -8,11 +8,12 @@
 
 .site-footer-inner {
   width: min(1200px, 90vw);
-  margin: 0 auto;
+  margin-inline: auto;
   padding: 64px 0 40px;
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: 3rem;
+  align-items: start;
 }
 
 .site-footer-brand {
@@ -118,9 +119,9 @@
 }
 
 html.dark .site-footer {
-  background: linear-gradient(180deg, #1a2421, #121917);
-  border-top-color: rgba(255, 255, 255, 0.08);
-  color: #f4f8f6;
+  background: linear-gradient(180deg, #2a3633, #24302c);
+  border-top-color: rgba(255, 255, 255, 0.1);
+  color: #eef3f1;
 }
 
 html.dark .site-footer-copy,

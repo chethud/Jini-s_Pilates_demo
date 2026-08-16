@@ -233,6 +233,14 @@
   background: rgba(28, 25, 23, 0.06);
 }
 
+html.dark .pkg-modal-close {
+  color: #eef3f1;
+}
+
+html.dark .pkg-modal-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 .pkg-options {
   display: grid;
   gap: 0;

@@ -13,7 +13,7 @@ a{color:inherit;text-decoration:none}
 .btn,.btn-primary,.outline{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:9px 14px;font-size:.85rem;font-weight:600;border:1px solid var(--line);background:#fff}
 .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
 .outline{border-color:var(--primary);color:var(--ink)}
-.page{width:min(1200px,94vw);margin:0 auto;padding:32px 0 48px}
+.page{width:min(1200px,90vw);margin:0 auto;padding:32px 0 48px}
 .page-hero{text-align:center;max-width:760px;margin:0 auto 22px}
 body.has-fixed-nav .page{padding-top:96px}
 .eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:.75rem;font-weight:600;color:var(--primary);margin:0}
@@ -26,7 +26,9 @@ body.has-fixed-nav .page{padding-top:96px}
 .card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
 .card-body{padding:18px;display:grid;gap:10px}
 .card h3{font-family:var(--display);margin:0;font-size:1.4rem}
-.badge,.role{display:inline-block;background:rgba(47,157,138,.14);color:#0f4f45;border-radius:999px;padding:8px 12px;font-size:.82rem}
+.badge{margin:0;color:var(--muted);font-size:.9rem;line-height:1.55}
+.role{display:inline-block;background:rgba(47,157,138,.14);color:#0f4f45;border-radius:999px;padding:8px 12px;font-size:.82rem}
+html.dark .badge{color:#c9d6d1}
 .plan{padding:22px;position:relative}
 .plan.popular{border-color:rgba(47,157,138,.45);box-shadow:0 18px 40px rgba(47,157,138,.16)}
 .pill{position:absolute;top:14px;right:14px;background:var(--primary);color:#fff;border-radius:999px;padding:6px 10px;font-size:.72rem;font-weight:700}

@@ -34,6 +34,26 @@
   color: #12221e;
 }
 
+html.dark #hero .bg-gradient-to-b {
+  background-image: linear-gradient(
+    to right,
+    rgb(36 48 44 / 0.28) 0%,
+    rgb(36 48 44 / 0.1) 36%,
+    transparent 52%
+  ) !important;
+}
+
+html.dark #hero [data-cms="heroSubtitle"],
+html.dark #hero [data-cms="heroBody"],
+html.dark #hero p:has(> [data-cms="heroBody"]) {
+  color: #eef3f1;
+}
+
+html.dark #hero [data-cms="heroSubtitle"]::before,
+html.dark #hero p:has(> [data-cms="heroBody"])::before {
+  background: radial-gradient(closest-side, rgb(36 48 44 / 0.55), transparent 72%);
+}
+
 html {
   overflow-x: clip;
 }
@@ -90,8 +110,8 @@ svg {
   }
 
   html.dark #site-header .nav-shell {
-    background-color: rgba(18, 25, 23, 0.94);
-    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(42, 54, 51, 0.96);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   #site-header .nav-brand {
