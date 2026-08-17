@@ -21,6 +21,87 @@
   position: relative;
 }
 
+.pkg-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #f7f4ef;
+  color: #1c1917;
+  box-shadow: 0 16px 36px rgba(28, 25, 23, 0.1);
+}
+
+.pkg-detail-media {
+  position: relative;
+  min-height: 28rem;
+}
+
+.pkg-detail-media img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pkg-detail-panel {
+  padding: 1.75rem 1.6rem 1.5rem;
+}
+
+.pkg-detail-back {
+  margin: 0 0 1.1rem;
+}
+
+.pkg-detail-back a {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #6b635c;
+  text-decoration: none;
+}
+
+.pkg-detail-back a:hover {
+  color: #1c1917;
+}
+
+.pkg-detail .pkg-modal-title {
+  font-size: 2rem;
+}
+
+html.dark .pkg-detail {
+  background: #1c2623;
+  color: #eef3f1;
+}
+
+html.dark .pkg-detail-back a {
+  color: #b4c2bc;
+}
+
+html.dark .pkg-detail-back a:hover {
+  color: #eef3f1;
+}
+
+@media (max-width: 800px) {
+  .pkg-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .pkg-detail-media {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  .pkg-detail-panel {
+    padding: 1.25rem 1.15rem 1.35rem;
+  }
+
+  .pkg-detail .pkg-modal-title {
+    font-size: 1.55rem;
+  }
+}
+
 .pkg-card {
   position: relative;
   display: block;

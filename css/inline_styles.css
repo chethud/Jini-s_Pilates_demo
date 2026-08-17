@@ -394,20 +394,46 @@ html.dark #hero p:has(> [data-cms="heroBody"])::before {
 }
 
 @media (max-width: 720px) {
+  /* Section overflow + backdrop-filter on a transformed track paints black
+     gaps on iOS. Clip only the strip; cards use a solid fill while they move. */
+  #testimonials {
+    overflow: visible;
+  }
+
+  #testimonials .testimonials-grid-wrap {
+    overflow: hidden;
+    background: var(--background, #f7f4ef);
+  }
+
+  html.dark #testimonials .testimonials-grid-wrap {
+    background: #24302c;
+  }
+
   #testimonials .testimonials-track {
-    --testimonial-gap: 0.75rem;
     display: flex;
     width: max-content;
-    gap: var(--testimonial-gap);
-    animation: testimonial-marquee 48s linear infinite;
+    gap: 0;
+    animation: testimonial-marquee 36s linear infinite;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   #testimonials .testimonials-slide {
-    flex: 0 0 min(78vw, 17.5rem);
+    flex: 0 0 16rem;
+    width: 16rem;
+    min-width: 16rem;
+    margin-right: 0.75rem;
   }
 
   #testimonials .testimonials-slide article {
     padding: 1rem !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  html.dark #testimonials .testimonials-slide article {
+    background: rgba(45, 59, 55, 0.96);
   }
 
   #testimonials .testimonials-slide article > svg {
@@ -437,15 +463,11 @@ html.dark #hero p:has(> [data-cms="heroBody"])::before {
   #testimonials .testimonials-slide .mt-5 p {
     font-size: 0.92rem !important;
   }
-
-  #testimonials .testimonials-grid-wrap {
-    overflow: hidden;
-  }
 }
 
 @keyframes testimonial-marquee {
   to {
-    transform: translateX(calc(-50% - var(--testimonial-gap) / 2));
+    transform: translate3d(-50%, 0, 0);
   }
 }
 

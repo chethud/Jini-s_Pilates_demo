@@ -22,6 +22,7 @@
       contactHref: '/#contact',
       classes: c.classes || [],
       resolveSrc: (src) => window.JinisContent.assetUrl(src, prefix),
+      detailTab: new URLSearchParams(location.search).get('class'),
     });
   }
 

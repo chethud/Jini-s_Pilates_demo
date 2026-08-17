@@ -16,6 +16,22 @@
   const asset = (src) =>
     window.JinisContent ? window.JinisContent.assetUrl(src || "", "") : src || "";
 
+  const phoneMarquee = window.matchMedia("(max-width: 720px)");
+  const syncTestimonialMarquee = () => {
+    const track = qs("#testimonials .testimonials-track");
+    if (!track) return;
+    qsa("[data-marquee-clone]", track).forEach((el) => el.remove());
+    delete track.dataset.marquee;
+    if (!phoneMarquee.matches) return;
+    track.dataset.marquee = "1";
+    [...track.children].forEach((item) => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      clone.dataset.marqueeClone = "1";
+      track.appendChild(clone);
+    });
+  };
+
   const parseClassBlurb = (blurb) => {
     const text = String(blurb || "").trim();
     const m = text.match(/^(.+?)\s*[·•]\s*(.+?)\s*[—–-]\s*(.+)$/);
@@ -99,6 +115,7 @@
         </article></div>`;
       })
       .join("");
+    syncTestimonialMarquee();
   };
 
   const renderPlansGrid = (plans, classes) => {
@@ -108,7 +125,7 @@
       contactHref: "#contact",
       classes,
       resolveSrc: asset,
-      cardHref: "/plans",
+      cardHref: (tab) => `/plans?class=${encodeURIComponent(tab)}`,
     });
   };
 
@@ -475,27 +492,5 @@
   setText(qs("#membership .pkg-section-head .eyebrow"), "Plan");
 
   applyContent(content);
-
-  /* Testimonials scroll continuously on phones only. The duplicate copy that makes
-     the loop seamless would show as repeated cards in the desktop grid, so it is
-     added and removed with the phone breakpoint. */
-  const phone = window.matchMedia("(max-width: 720px)");
-  const syncTestimonialMarquee = () => {
-    const track = qs("#testimonials .testimonials-track");
-    if (!track) return;
-    if (phone.matches && !track.dataset.marquee) {
-      track.dataset.marquee = "1";
-      [...track.children].forEach((item) => {
-        const clone = item.cloneNode(true);
-        clone.setAttribute("aria-hidden", "true");
-        clone.dataset.marqueeClone = "1";
-        track.appendChild(clone);
-      });
-    } else if (!phone.matches && track.dataset.marquee) {
-      qsa("[data-marquee-clone]", track).forEach((clone) => clone.remove());
-      delete track.dataset.marquee;
-    }
-  };
-  syncTestimonialMarquee();
-  phone.addEventListener("change", syncTestimonialMarquee);
+  phoneMarquee.addEventListener("change", syncTestimonialMarquee);
 })();

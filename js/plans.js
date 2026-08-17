@@ -70,6 +70,36 @@
     return resolveSrc(meta.image);
   };
 
+  const hrefFor = (tab, options) => {
+    if (typeof options.cardHref === "function") return options.cardHref(tab) || "";
+    return options.cardHref || "";
+  };
+
+  const matchTab = (raw, tabs) => {
+    const q = decodeURIComponent(String(raw || "")).trim().toLowerCase();
+    if (!q) return "";
+    return (
+      tabs.find((tab) => tab.toLowerCase() === q) ||
+      tabs.find((tab) => tab.toLowerCase().includes(q) || q.includes(tab.toLowerCase())) ||
+      ""
+    );
+  };
+
+  const optionMarkup = (packages) =>
+    packages
+      .map((plan, i) => {
+        const metaLine = validityCopy(plan);
+        return `<button type="button" class="pkg-option${i === 0 ? " is-selected" : ""}" data-pkg-index="${i}">
+          <span class="pkg-radio" aria-hidden="true"></span>
+          <span>
+            <span class="pkg-option-name">${escapeHtml(plan.name || "")}</span>
+            ${metaLine ? `<span class="pkg-option-meta">${escapeHtml(metaLine)}</span>` : ""}
+          </span>
+          <span class="pkg-option-price">${escapeHtml(plan.price || "")}</span>
+        </button>`;
+      })
+      .join("");
+
   const cardMarkup = (tab, packages, options) => {
     const meta = classMeta(tab, options.classes);
     const featured = !!meta.featured;
@@ -77,10 +107,9 @@
     const price = startingPrice(packages);
     const cta = packages.length > 1 ? "Explore packages" : "Explore package";
     const role = featured ? "pkg-card pkg-hero" : "pkg-card pkg-side";
-    // Where there is a page dedicated to packages, the card links to it instead
-    // of opening the picker in place.
-    const open = options.cardHref
-      ? `<a class="${role}" href="${escapeHtml(options.cardHref)}">`
+    const href = hrefFor(tab, options);
+    const open = href
+      ? `<a class="${role}" href="${escapeHtml(href)}">`
       : `<button type="button" class="${role}" data-open-packages="${escapeHtml(tab)}">`;
     return `<div class="pkg-card-wrap">${open}
       <div class="pkg-card-media">
@@ -92,7 +121,7 @@
         <p class="pkg-price">${escapeHtml(price)}</p>
         <p class="pkg-cta">${escapeHtml(cta)} <span aria-hidden="true">→</span></p>
       </div>
-    ${options.cardHref ? "</a>" : "</button>"}</div>`;
+    ${href ? "</a>" : "</button>"}</div>`;
   };
 
   const panelOf = (root) => root.querySelector(".pkg-modal-panel");
@@ -126,19 +155,7 @@
     titleEl.textContent = `${meta.title} Packages`;
     const lineEl = root.querySelector("[data-pkg-modal-line]");
     if (lineEl) lineEl.textContent = meta.line || "";
-    list.innerHTML = packages
-      .map((plan, i) => {
-        const metaLine = validityCopy(plan);
-        return `<button type="button" class="pkg-option${i === 0 ? " is-selected" : ""}" data-pkg-index="${i}">
-          <span class="pkg-radio" aria-hidden="true"></span>
-          <span>
-            <span class="pkg-option-name">${escapeHtml(plan.name || "")}</span>
-            ${metaLine ? `<span class="pkg-option-meta">${escapeHtml(metaLine)}</span>` : ""}
-          </span>
-          <span class="pkg-option-price">${escapeHtml(plan.price || "")}</span>
-        </button>`;
-      })
-      .join("");
+    list.innerHTML = optionMarkup(packages);
     root.querySelectorAll(".pkg-card-wrap.is-pkg-host").forEach((el) => {
       el.classList.remove("is-pkg-open", "is-pkg-host");
     });
@@ -158,13 +175,14 @@
       });
     });
     modal.setAttribute("data-active-tab", tab);
+    root.dataset.activeTab = tab;
     document.body.style.overflow = "hidden";
     list.querySelector(".pkg-option")?.focus({ preventScroll: true });
   };
 
   const continueBooking = (root, groups, options) => {
     const modal = root.querySelector("[data-pkg-modal]");
-    const tab = modal?.getAttribute("data-active-tab");
+    const tab = root.dataset.activeTab || modal?.getAttribute("data-active-tab");
     const selected = root.querySelector(".pkg-option.is-selected");
     const index = Number(selected?.getAttribute("data-pkg-index") || 0);
     const plan = (groups[tab] || [])[index];
@@ -194,6 +212,40 @@
     return src.replace(/^\//, "");
   };
 
+  const bindPicker = (root, groups, opts) => {
+    root.querySelector("[data-pkg-options]")?.addEventListener("click", (event) => {
+      const option = event.target.closest(".pkg-option");
+      if (!option) return;
+      root.querySelectorAll(".pkg-option").forEach((el) => el.classList.remove("is-selected"));
+      option.classList.add("is-selected");
+    });
+    root.querySelector("[data-pkg-continue]")?.addEventListener("click", () => continueBooking(root, groups, opts));
+  };
+
+  const renderDetail = (root, tab, groups, opts) => {
+    const meta = classMeta(tab, opts.classes);
+    const img = classImage(tab, opts.classes, opts.resolveSrc);
+    const packages = groups[tab] || [];
+    root.dataset.activeTab = tab;
+    root.innerHTML = `<article class="pkg-detail">
+      <div class="pkg-detail-media">
+        <img src="${escapeHtml(img)}" alt="${escapeHtml(meta.title)}" width="1200" height="800">
+      </div>
+      <div class="pkg-detail-panel">
+        <p class="pkg-detail-back"><a href="/plans">← All classes</a></p>
+        <p class="pkg-modal-kicker">Choose a package</p>
+        <h1 class="pkg-modal-title">${escapeHtml(meta.title)}</h1>
+        ${meta.line ? `<p class="pkg-modal-line">${escapeHtml(meta.line)}</p>` : ""}
+        <div class="pkg-options" data-pkg-options>${optionMarkup(packages)}</div>
+        <button type="button" class="pkg-continue" data-pkg-continue>Continue to Booking →</button>
+      </div>
+    </article>`;
+    bindPicker(root, groups, opts);
+    const hero = document.querySelector(".page-hero");
+    if (hero) hero.hidden = true;
+    document.title = `${meta.title} · Jini's Pilates Studio`;
+  };
+
   const render = (root, plans, options = {}) => {
     if (!root) return;
     const opts = {
@@ -205,6 +257,12 @@
     const { tabs, groups } = groupByTab(plans);
     if (!tabs.length) {
       root.innerHTML = "";
+      return;
+    }
+
+    const detailTab = matchTab(options.detailTab, tabs);
+    if (detailTab) {
+      renderDetail(root, detailTab, groups, opts);
       return;
     }
 
@@ -238,13 +296,7 @@
     root.querySelectorAll("[data-pkg-close]").forEach((el) => {
       el.addEventListener("click", () => closeModal(root));
     });
-    root.querySelector("[data-pkg-options]")?.addEventListener("click", (event) => {
-      const option = event.target.closest(".pkg-option");
-      if (!option) return;
-      root.querySelectorAll(".pkg-option").forEach((el) => el.classList.remove("is-selected"));
-      option.classList.add("is-selected");
-    });
-    root.querySelector("[data-pkg-continue]")?.addEventListener("click", () => continueBooking(root, groups, opts));
+    bindPicker(root, groups, opts);
     if (!root.dataset.escBound) {
       root.dataset.escBound = "1";
       document.addEventListener("keydown", (event) => {
