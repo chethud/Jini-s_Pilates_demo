@@ -346,15 +346,6 @@ svg {
     bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
-  .pkg-hero .pkg-card-media,
-  .pkg-hero img,
-  .pkg-side .pkg-card-media,
-  .pkg-solo .pkg-card-media,
-  .pkg-card img {
-    min-height: 25rem;
-    height: 25rem;
-  }
-
   .pkg-modal {
     padding: 0.75rem;
     align-items: end;
