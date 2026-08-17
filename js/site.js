@@ -108,6 +108,7 @@
       contactHref: "#contact",
       classes,
       resolveSrc: asset,
+      cardHref: "/plans",
     });
   };
 

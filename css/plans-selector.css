@@ -31,6 +31,7 @@
   overflow: hidden;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   color: #f7f4ef;
   background: #1c1917;
   box-shadow: 0 16px 36px rgba(28, 25, 23, 0.12);
@@ -181,10 +182,21 @@
 }
 
 .pkg-modal-title {
-  margin: 0.4rem 0 1.1rem;
+  margin: 0.4rem 0 0.35rem;
   font-family: "Playfair Display", Georgia, serif;
   font-size: 1.7rem;
   font-weight: 500;
+}
+
+.pkg-modal-line {
+  margin: 0 0 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #6b635c;
+}
+
+html.dark .pkg-modal-line {
+  color: #b4c2bc;
 }
 
 .pkg-modal-close {

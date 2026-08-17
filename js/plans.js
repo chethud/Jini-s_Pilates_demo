@@ -77,18 +77,22 @@
     const price = startingPrice(packages);
     const cta = packages.length > 1 ? "Explore packages" : "Explore package";
     const role = featured ? "pkg-card pkg-hero" : "pkg-card pkg-side";
-    return `<div class="pkg-card-wrap"><button type="button" class="${role}" data-open-packages="${escapeHtml(tab)}">
+    // Where there is a page dedicated to packages, the card links to it instead
+    // of opening the picker in place.
+    const open = options.cardHref
+      ? `<a class="${role}" href="${escapeHtml(options.cardHref)}">`
+      : `<button type="button" class="${role}" data-open-packages="${escapeHtml(tab)}">`;
+    return `<div class="pkg-card-wrap">${open}
       <div class="pkg-card-media">
         <img src="${escapeHtml(img)}" alt="${escapeHtml(meta.title)}" width="1200" height="800" loading="lazy">
       </div>
       <div class="pkg-card-body">
         <p class="pkg-kicker">${featured ? "Signature class" : "Class"}</p>
         <h3 class="pkg-title">${escapeHtml(meta.title)}</h3>
-        <p class="pkg-line">${escapeHtml(meta.line)}</p>
         <p class="pkg-price">${escapeHtml(price)}</p>
         <p class="pkg-cta">${escapeHtml(cta)} <span aria-hidden="true">→</span></p>
       </div>
-    </button></div>`;
+    ${options.cardHref ? "</a>" : "</button>"}</div>`;
   };
 
   const panelOf = (root) => root.querySelector(".pkg-modal-panel");
@@ -120,6 +124,8 @@
     const packages = groups[tab] || [];
     const meta = classMeta(tab, options.classes);
     titleEl.textContent = `${meta.title} Packages`;
+    const lineEl = root.querySelector("[data-pkg-modal-line]");
+    if (lineEl) lineEl.textContent = meta.line || "";
     list.innerHTML = packages
       .map((plan, i) => {
         const metaLine = validityCopy(plan);
@@ -194,6 +200,7 @@
       contactHref: options.contactHref || "/#contact",
       classes: options.classes || window.JinisContent?.getContent?.().classes || [],
       resolveSrc: options.resolveSrc || defaultResolve,
+      cardHref: options.cardHref || "",
     };
     const { tabs, groups } = groupByTab(plans);
     if (!tabs.length) {
@@ -217,6 +224,7 @@
         <button type="button" class="pkg-modal-close" data-pkg-close aria-label="Close">×</button>
         <p class="pkg-modal-kicker">Choose a package</p>
         <h3 class="pkg-modal-title" id="pkg-modal-title" data-pkg-modal-title></h3>
+        <p class="pkg-modal-line" data-pkg-modal-line></p>
         <div class="pkg-options" data-pkg-options></div>
         <button type="button" class="pkg-continue" data-pkg-continue>Continue to Booking →</button>
       </div>
