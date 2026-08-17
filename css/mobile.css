@@ -339,6 +339,7 @@ svg {
 
   #contact iframe {
     height: 16rem;
+    min-height: 16rem;
   }
 
   .fixed.bottom-5.right-5 {
@@ -563,6 +564,7 @@ svg {
 
   #contact iframe {
     height: 12rem;
+    min-height: 12rem;
   }
 
   #contact .glass.rounded-3xl {

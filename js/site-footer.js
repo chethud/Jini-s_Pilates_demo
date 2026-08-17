@@ -17,15 +17,6 @@
         </a>
       </div>
     </div>
-    <nav aria-label="Quick links">
-      <h2>Quick Links</h2>
-      <ul>
-        <li><a href="/classes">Classes</a></li>
-        <li><a href="/cafe">Cafe</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/#contact">Contact</a></li>
-      </ul>
-    </nav>
     <div>
       <h2>Reach Us</h2>
       <ul class="site-footer-reach">
@@ -49,7 +40,7 @@
     </div>
   </div>
   <div class="site-footer-bottom">
-    <p>© ${year} Jini's Pilates Studio & Wellness Cafe. All rights reserved.</p>
+    <p>© ${year} Admark Digitals</p>
   </div>
 </footer>`;
 
