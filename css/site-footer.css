@@ -1,18 +1,22 @@
 .site-footer {
   margin-top: 0;
-  background: linear-gradient(180deg, #f7f4ef, #eef7f4);
-  border-top: 1px solid rgba(28, 25, 23, 0.1);
+  background:
+    radial-gradient(1100px 520px at 8% 0%, rgba(47, 157, 138, 0.18), transparent 58%),
+    radial-gradient(900px 460px at 92% 100%, rgba(196, 162, 101, 0.14), transparent 55%),
+    linear-gradient(180deg, #f7fbf9, #e3f4ef 45%, #dcefe8);
+  border-top: 1px solid rgba(47, 157, 138, 0.12);
   color: #1c1917;
   font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
 .site-footer-inner {
-  width: min(1200px, 90vw);
+  width: var(--site-width, min(1200px, 90vw));
+  max-width: var(--site-max, 1200px);
   margin-inline: auto;
-  padding: 64px 0 40px;
+  padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(1.75rem, 3vw, 2.5rem);
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 3rem;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: var(--content-gap, 1.5rem);
   align-items: start;
 }
 
@@ -68,6 +72,9 @@
 
 .site-footer h2 {
   margin: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
   font-family: "Playfair Display", Georgia, serif;
   font-size: 1rem;
   font-weight: 500;
@@ -110,7 +117,8 @@
 }
 
 .site-footer-bottom p {
-  width: min(1200px, 90vw);
+  width: var(--site-width, min(1200px, 90vw));
+  max-width: var(--site-max, 1200px);
   margin: 0 auto;
   padding: 1.5rem 0;
   text-align: center;
@@ -119,8 +127,11 @@
 }
 
 html.dark .site-footer {
-  background: linear-gradient(180deg, #2a3633, #24302c);
-  border-top-color: rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(1100px 520px at 8% 0%, rgba(47, 157, 138, 0.2), transparent 58%),
+    radial-gradient(900px 460px at 92% 100%, rgba(125, 206, 191, 0.1), transparent 55%),
+    linear-gradient(180deg, #1e3530, #24302c);
+  border-top-color: rgba(125, 206, 191, 0.12);
   color: #eef3f1;
 }
 
@@ -152,7 +163,6 @@ html.dark .site-footer-bottom {
 @media (max-width: 800px) {
   .site-footer-inner {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 48px 0 28px;
+    gap: 1.75rem;
   }
 }

@@ -235,34 +235,25 @@ svg {
     padding-top: 0.75rem !important;
   }
 
-  #about .lg\:grid-cols-2,
+  #about .about-photos {
+    grid-template-columns: 1fr !important;
+  }
+
+  #about .about-photo {
+    min-height: 12.5rem !important;
+  }
+
+  #about .about-cards,
+  #about [class*="lg:grid-cols-4"],
+  #about .sm\:grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
   #why-pilates [data-cms-trainers-grid],
   #classes [data-cms-classes-grid],
   #contact .lg\:grid-cols-\[1\.05fr_1fr\],
   #contact form .sm\:grid-cols-2 {
     grid-template-columns: 1fr !important;
-  }
-
-  #about .grid.grid-cols-2 {
-    grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
-  }
-
-  #about .grid.grid-cols-2 > img,
-  #about .grid.grid-cols-2 > .col-span-2 img {
-    height: 12.5rem !important;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  #about .grid.grid-cols-2 > .glass {
-    height: auto !important;
-    min-height: 0;
-  }
-
-  #about [class*="lg:grid-cols-4"],
-  #about .sm\:grid-cols-2 {
-    grid-template-columns: 1fr 1fr !important;
   }
 
   #why-pilates ul {
@@ -459,26 +450,26 @@ svg {
     gap: 0.6rem !important;
   }
 
-  #about .grid.gap-4 > article.glass {
+  #about .about-cards > article.glass {
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: 0.75rem;
     padding: 0.9rem 1rem !important;
   }
 
-  #about .grid.gap-4 > article.glass > div:first-child {
+  #about .about-cards > article.glass > div:first-child {
     grid-row: span 2;
     width: 2.25rem !important;
     height: 2.25rem !important;
     border-radius: 0.9rem !important;
   }
 
-  #about .grid.gap-4 > article.glass h3 {
+  #about .about-cards > article.glass h3 {
     margin-top: 0 !important;
     font-size: 1rem !important;
   }
 
-  #about .grid.gap-4 > article.glass p {
+  #about .about-cards > article.glass p {
     margin-top: 0.25rem !important;
     font-size: 0.78rem !important;
   }

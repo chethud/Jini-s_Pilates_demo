@@ -6,6 +6,15 @@
   --nav-primary: #2f9d8a;
   --nav-font: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --nav-display: "Playfair Display", Georgia, serif;
+  --gradient-warm: linear-gradient(135deg, #f0faf6 0%, #dff3ec 40%, #f5ecd8 72%, #dcefe8 100%);
+  --gradient-gold: linear-gradient(120deg, #5ecfb5 0%, #2f9d8a 38%, #d4b06a 100%);
+  --gradient-sage: linear-gradient(135deg, #1f8f7a 0%, #3db89f 45%, #9de8d8 100%);
+  --gradient-primary: linear-gradient(135deg, #5ecfb5 0%, #2f9d8a 50%, #1a7a6a 100%);
+  --gradient-page:
+    radial-gradient(1200px 640px at 0% 0%, rgba(47, 157, 138, 0.24), transparent 52%),
+    radial-gradient(1000px 560px at 100% 12%, rgba(196, 162, 101, 0.16), transparent 50%),
+    radial-gradient(900px 520px at 50% 100%, rgba(125, 206, 191, 0.14), transparent 54%),
+    linear-gradient(165deg, #f7fbf9 0%, #e3f4ef 32%, #f2ebe0 62%, #dcefe8 100%);
 }
 
 #site-header {
@@ -155,7 +164,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
-  background: var(--nav-primary);
+  background: var(--gradient-primary, var(--nav-primary));
   color: #fff;
   white-space: nowrap;
 }
@@ -251,7 +260,7 @@
   border: 0;
   border-radius: 999px;
   text-align: center;
-  background: var(--nav-primary);
+  background: var(--gradient-primary, var(--nav-primary));
   color: #fff;
   padding: 14px 18px;
 }
@@ -276,12 +285,22 @@ html.dark {
   --nav-muted: #b4c2bc;
   --background: #24302c;
   --foreground: #eef3f1;
+  --gradient-warm: linear-gradient(135deg, #2a3633 0%, #1e3530 50%, #24302c 100%);
+  --gradient-gold: linear-gradient(120deg, #9de8d8 0%, #2f9d8a 45%, #d4b06a 100%);
+  --gradient-sage: linear-gradient(135deg, #2f9d8a 0%, #5aab9a 55%, #7dcebf 100%);
+  --gradient-primary: linear-gradient(135deg, #5ecfb5 0%, #2f9d8a 55%, #1a7a6a 100%);
+  --gradient-page:
+    radial-gradient(1200px 640px at 0% 0%, rgba(47, 157, 138, 0.2), transparent 52%),
+    radial-gradient(1000px 560px at 100% 12%, rgba(125, 206, 191, 0.12), transparent 50%),
+    radial-gradient(900px 520px at 50% 100%, rgba(196, 162, 101, 0.08), transparent 54%),
+    linear-gradient(165deg, #1a2421 0%, #1e3530 40%, #24302c 100%);
   color-scheme: dark;
 }
 
 html.dark body,
 html.dark .bg-background {
-  background-color: #24302c;
+  background: var(--gradient-page) !important;
+  background-color: transparent !important;
   color: #eef3f1;
 }
 
@@ -302,11 +321,11 @@ html.dark .text-muted-foreground {
 }
 
 html.dark .surface-warm {
-  background-color: #2a3633;
+  background: transparent !important;
 }
 
 html.dark .glass {
-  background-color: rgba(45, 59, 55, 0.92);
+  background: linear-gradient(145deg, rgba(45, 59, 55, 0.94), rgba(36, 48, 44, 0.88));
   color: #eef3f1;
 }
 
@@ -364,7 +383,10 @@ html.dark .pkg-option.is-selected .pkg-option-name {
 }
 
 html.dark .eyebrow {
-  color: #7dcebf;
+  background-image: var(--gradient-sage);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @media (max-width: 1080px) {
@@ -376,4 +398,98 @@ html.dark .eyebrow {
   #site-header .site-menu-toggle {
     display: grid;
   }
+}
+
+/* Site-wide gradient atmosphere — one continuous canvas, sections stay transparent */
+html,
+body,
+.min-h-dvh.bg-background,
+main {
+  background: var(--gradient-page) !important;
+  background-attachment: fixed;
+}
+
+main > section {
+  background: transparent !important;
+}
+
+.surface-warm {
+  background: transparent !important;
+  isolation: isolate;
+}
+
+.surface-warm::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 520px at 12% 28%, rgba(47, 157, 138, 0.18), transparent 55%),
+    radial-gradient(950px 460px at 88% 72%, rgba(196, 162, 101, 0.14), transparent 52%);
+}
+
+html.dark .surface-warm::before {
+  background:
+    radial-gradient(1100px 520px at 12% 28%, rgba(47, 157, 138, 0.22), transparent 55%),
+    radial-gradient(950px 460px at 88% 72%, rgba(125, 206, 191, 0.12), transparent 52%);
+}
+
+/* Keep blobs off section edges so gradients don't clip into hard lines */
+main > section:not(#hero) .blob {
+  top: 18% !important;
+  opacity: 0.85;
+}
+
+#testimonials .blob {
+  display: none;
+}
+
+.text-gold {
+  background-image: var(--gradient-gold) !important;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.eyebrow {
+  background-image: var(--gradient-sage);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-primary {
+  background-image: var(--gradient-primary) !important;
+  background-color: transparent !important;
+}
+
+.glass,
+.card,
+.stat-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(214, 241, 234, 0.82)) !important;
+  border-color: rgba(47, 157, 138, 0.14) !important;
+}
+
+html.dark .glass,
+html.dark .card,
+html.dark .stat-card {
+  background: linear-gradient(145deg, rgba(50, 66, 62, 0.96), rgba(36, 48, 44, 0.9)) !important;
+  border-color: rgba(125, 206, 191, 0.12) !important;
+}
+
+#site-header.is-scrolled .nav-shell {
+  background: linear-gradient(135deg, rgba(244, 248, 246, 0.94), rgba(228, 245, 240, 0.9)) !important;
+}
+
+html.dark #site-header.is-scrolled .nav-shell {
+  background: linear-gradient(135deg, rgba(42, 54, 51, 0.94), rgba(30, 53, 48, 0.92)) !important;
+}
+
+.blob[class*="bg-primary"] {
+  background: radial-gradient(circle at 35% 35%, rgba(94, 207, 181, 0.65), rgba(47, 157, 138, 0.28), transparent 72%) !important;
+}
+
+.blob[class*="bg-sage"] {
+  background: radial-gradient(circle at 65% 35%, rgba(157, 232, 216, 0.55), rgba(47, 157, 138, 0.22), transparent 72%) !important;
 }

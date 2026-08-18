@@ -5,10 +5,10 @@ Static marketing site for Jini's Pilates Studio & Wellness Cafe (Mysuru).
 ## Local
 
 ```bash
-python -m http.server 8080
+python serve.py
 ```
 
-Open http://localhost:8080
+Open http://127.0.0.1:8080 — the browser auto-refreshes when you save HTML, CSS, or JS changes.
 
 ## CMS
 

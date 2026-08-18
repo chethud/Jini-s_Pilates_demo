@@ -163,6 +163,8 @@ html.dark .pkg-detail-back a:hover {
     rgba(28, 25, 23, 0.55) 70%,
     rgba(28, 25, 23, 0.88) 100%
   );
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
 .pkg-card-body {
@@ -172,6 +174,30 @@ html.dark .pkg-detail-back a:hover {
   bottom: 0;
   z-index: 1;
   padding: 1.35rem 1.5rem 1.4rem;
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+@media (hover: hover) {
+  .pkg-card:hover .pkg-card-media::after,
+  .pkg-card:focus-visible .pkg-card-media::after {
+    opacity: 1;
+  }
+
+  .pkg-card:hover .pkg-card-body,
+  .pkg-card:focus-visible .pkg-card-body {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (hover: none) {
+  .pkg-card-media::after,
+  .pkg-card-body {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .pkg-kicker {
