@@ -445,6 +445,133 @@
   }
 }
 
+/* Phone only — compact editorial list. Tablet/desktop rules above stay untouched. */
+@media (max-width: 720px) {
+  main > section#about.about-editorial {
+    padding-top: 1.45rem !important;
+    padding-bottom: 1.55rem !important;
+  }
+
+  #about .about-blob--tl,
+  #about .about-blob--br {
+    width: 9rem;
+    height: 9rem;
+    opacity: 0.7;
+  }
+
+  #about .about-editorial-grid {
+    gap: 1.15rem;
+  }
+
+  #about .about-visual {
+    display: none;
+  }
+
+  #about .about-copy {
+    order: 1;
+  }
+
+  #about .about-eyebrow::after {
+    margin-top: 0.4rem;
+  }
+
+  #about .about-headline {
+    margin-top: 0.55rem;
+    font-size: 1.7rem !important;
+    line-height: 1.12 !important;
+  }
+
+  #about .about-leaf {
+    margin-top: 0.45rem;
+  }
+
+  #about .about-leaf svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  #about .about-desc {
+    margin-top: 0.45rem;
+    max-width: none;
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  #about .about-principles {
+    order: 2;
+  }
+
+  #about .about-principle {
+    grid-template-columns: 1.7rem minmax(0, 1fr);
+    column-gap: 0.6rem;
+    row-gap: 0.12rem;
+    padding: 0.62rem 0;
+    align-items: start;
+  }
+
+  #about .about-principle-icon {
+    grid-row: 1 / span 2;
+    align-self: center;
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  #about .about-principle-icon svg {
+    width: 0.78rem;
+    height: 0.78rem;
+  }
+
+  #about .about-principle-title {
+    grid-column: 2;
+    padding-right: 0.15rem;
+    font-size: 0.92rem;
+    line-height: 1.25;
+  }
+
+  #about .about-principle-num {
+    font-size: 0.64rem;
+  }
+
+  #about .about-principle p {
+    grid-column: 2;
+    margin-top: 0.12rem;
+    font-size: 0.74rem;
+    line-height: 1.45;
+  }
+
+  #about .about-stats {
+    margin-top: 1.05rem;
+    padding: 0.85rem 0.25rem 0.8rem;
+    border-radius: 1.05rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #about .about-stat {
+    padding: 0.2rem 0.15rem;
+    gap: 0.28rem;
+  }
+
+  #about .about-stat-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  #about .about-stat-icon svg {
+    width: 0.62rem;
+    height: 0.62rem;
+  }
+
+  #about .about-stat-value {
+    font-size: clamp(0.95rem, 4.2vw, 1.25rem);
+  }
+
+  #about .about-stat-label {
+    font-size: clamp(0.36rem, 1.55vw, 0.46rem);
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+  }
+}
+
 html.dark #about {
   --about-bg: #1e2d2a;
   --about-surface: #243532;

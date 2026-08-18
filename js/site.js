@@ -114,11 +114,29 @@
       <div class="t-minis">
         ${minis}
         <article class="t-trust">
-          <p class="t-trust-score">${avg.toFixed(1)}</p>
-          ${starsHtml(Math.round(avg))}
-          <p class="t-trust-label">Average rating</p>
+          <div class="t-trust-avg">
+            <p class="t-trust-score">${avg.toFixed(1)}</p>
+            ${starsHtml(Math.round(avg))}
+            <p class="t-trust-label">Average rating</p>
+          </div>
+          <div class="t-trust-members">
+            <p class="t-trust-score">500+</p>
+            <p class="t-trust-label">Happy members</p>
+          </div>
         </article>
       </div>`;
+    if (grid.dataset.tBound !== "1") {
+      grid.dataset.tBound = "1";
+      grid.addEventListener("click", (e) => {
+        if (!window.matchMedia("(max-width: 720px)").matches) return;
+        const row = e.target.closest(".t-mini");
+        if (!row) return;
+        grid.querySelectorAll(".t-mini.is-open").forEach((el) => {
+          if (el !== row) el.classList.remove("is-open");
+        });
+        row.classList.toggle("is-open");
+      });
+    }
   };
 
   const renderPlansGrid = (plans, classes) => {

@@ -10,11 +10,7 @@
   --gradient-gold: linear-gradient(120deg, #5ecfb5 0%, #2f9d8a 38%, #d4b06a 100%);
   --gradient-sage: linear-gradient(135deg, #1f8f7a 0%, #3db89f 45%, #9de8d8 100%);
   --gradient-primary: linear-gradient(135deg, #5ecfb5 0%, #2f9d8a 50%, #1a7a6a 100%);
-  --gradient-page:
-    radial-gradient(1200px 640px at 0% 0%, rgba(47, 157, 138, 0.24), transparent 52%),
-    radial-gradient(1000px 560px at 100% 12%, rgba(196, 162, 101, 0.16), transparent 50%),
-    radial-gradient(900px 520px at 50% 100%, rgba(125, 206, 191, 0.14), transparent 54%),
-    linear-gradient(165deg, #f7fbf9 0%, #e3f4ef 32%, #f2ebe0 62%, #dcefe8 100%);
+  --gradient-page: #eaf7f4;
 }
 
 #site-header {
@@ -389,8 +385,8 @@ html,
 body,
 .min-h-dvh.bg-background,
 main {
-  background: var(--gradient-page) !important;
-  background-attachment: fixed;
+  background: #eaf7f4 !important;
+  background-attachment: scroll;
 }
 
 main > section {
