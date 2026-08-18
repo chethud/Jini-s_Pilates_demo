@@ -42,7 +42,7 @@
           <div class="s-body">
             <h3>${name}</h3>
             <p>${escapeHtml(item.blurb || "")}</p>
-            <a href="#membership" data-plan-class="${escapeHtml(window.JinisPlans ? window.JinisPlans.tabOf({ period: item.name }) : item.name)}">View Class <span aria-hidden="true">→</span></a>
+            <a href="/plans?class=${encodeURIComponent(window.JinisPlans ? window.JinisPlans.tabOf({ period: item.name }) : item.name)}">View Class <span aria-hidden="true">→</span></a>
           </div>
         </article>`;
       })
@@ -52,24 +52,26 @@
   const renderTrainersGrid = (trainers) => {
     const grid = qs("[data-cms-trainers-grid]");
     if (!grid || !Array.isArray(trainers)) return;
+    const icon = (d) =>
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+    const clock = icon('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
+    const mark = icon('<path d="M12 21s-7-4.4-7-10a7 7 0 0 1 14 0c0 5.6-7 10-7 10Z"/><circle cx="12" cy="11" r="2.2"/>');
     grid.innerHTML = trainers
       .map((item) => {
         const img = asset(item.image || "assets/trainer_1_cex1xk_w.jpg");
-        const parts = String(item.detail || "")
+        const [years, specialty] = String(item.detail || "")
           .split("·")
-          .map((s) => s.trim())
-          .filter(Boolean);
-        const detailHtml = parts.length
-          ? parts.map((p) => `<p class="mt-3 text-sm text-muted-foreground">${escapeHtml(p)}</p>`).join("")
-          : "";
-        return `<div><article class="group glass h-full overflow-hidden rounded-3xl">
-          <div class="overflow-hidden"><img src="${img}" alt="${escapeHtml(item.name)}" width="700" height="900" loading="lazy" class="h-80 w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"></div>
-          <div class="p-6">
-            <h3 class="text-xl text-foreground">${escapeHtml(item.name)}</h3>
-            <p class="mt-1 text-xs tracking-[0.16em] uppercase text-primary">${escapeHtml(item.role || "")}</p>
-            ${detailHtml}
+          .map((s) => s.trim());
+        const name = escapeHtml(item.name || "Instructor");
+        return `<article class="why-coach">
+          <div class="why-coach-photo"><img src="${img}" alt="${name}" width="700" height="900" loading="lazy"></div>
+          <div class="why-coach-info">
+            <h4>${name}</h4>
+            <p class="why-coach-role">${escapeHtml(item.role || "")}</p>
+            ${years ? `<p class="why-coach-meta">${clock}<span>${escapeHtml(years)}</span></p>` : ""}
+            ${specialty ? `<p class="why-coach-meta">${mark}<span>${escapeHtml(specialty)}</span></p>` : ""}
           </div>
-        </article></div>`;
+        </article>`;
       })
       .join("");
   };
@@ -120,29 +122,14 @@
       </div>`;
   };
 
-  const renderPlansGrid = (plans, classes, tab) => {
+  const renderPlansGrid = (plans, classes) => {
     const grid = qs("[data-cms-plans-grid]");
     if (!grid || !window.JinisPlans) return;
     window.JinisPlans.render(grid, plans, {
       contactHref: "#contact",
       classes,
       resolveSrc: asset,
-      detailTab: tab || "Reformer Pilates",
-      backHref: "#classes",
-      keepTitle: true,
-    });
-  };
-
-  const bindPlanJump = () => {
-    if (document.body.dataset.planJump === "1") return;
-    document.body.dataset.planJump = "1";
-    document.addEventListener("click", (event) => {
-      const link = event.target.closest("[data-plan-class]");
-      if (!link) return;
-      event.preventDefault();
-      const data = window.JinisContent ? window.JinisContent.getContent() : content;
-      renderPlansGrid(data?.plans, data?.classes, link.getAttribute("data-plan-class"));
-      qs("#membership")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      cardHref: (tab) => `/plans?class=${encodeURIComponent(tab)}`,
     });
   };
 
@@ -222,7 +209,6 @@
     renderTrainersGrid(data.trainers);
     renderTestimonialsGrid(data.testimonials);
     renderPlansGrid(data.plans, data.classes);
-    bindPlanJump();
     renderCafeStage(data.cafeImages);
     renderFaqs(data.faqs);
     renderContactClasses(data.classes);

@@ -41,6 +41,14 @@
   height: 9rem;
 }
 
+#why-pilates .why-botany--br {
+  right: -1.25rem;
+  bottom: 1.25rem;
+  width: 8.5rem;
+  height: 8.5rem;
+  transform: rotate(-16deg);
+}
+
 #why-pilates .why-inner {
   position: relative;
   z-index: 1;
@@ -172,8 +180,8 @@
 }
 
 #why-pilates .why-trainers {
-  margin-top: 3.25rem;
-  padding-top: 2rem;
+  margin-top: 4rem;
+  padding-top: 3rem;
   border-top: 1px solid rgba(59, 184, 164, 0.18);
 }
 
@@ -202,27 +210,147 @@
   color: var(--why-muted);
 }
 
+#why-pilates .why-coaches {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  margin-top: 2.75rem;
+  align-items: start;
+}
+
+#why-pilates .why-coach {
+  transition: transform 0.3s ease;
+}
+
+#why-pilates .why-coach-photo {
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #efeae0;
+  box-shadow: 0 8px 22px rgba(36, 51, 50, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+#why-pilates .why-coach-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.3s ease;
+}
+
+#why-pilates .why-coach-info {
+  margin-top: 0.65rem;
+  padding: 0.75rem 1rem 0.8rem;
+  border-radius: 1.1rem;
+  background: var(--why-card);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#why-pilates .why-coach-info h4 {
+  margin: 0;
+  font-family: var(--nav-display, "Playfair Display", Georgia, serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--why-text);
+}
+
+#why-pilates .why-coach-role {
+  margin: 0.25rem 0 0;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(59, 184, 164, 0.18);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--why-accent);
+}
+
+#why-pilates .why-coach-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--why-muted);
+}
+
+#why-pilates .why-coach-meta + .why-coach-meta {
+  margin-top: 0.2rem;
+}
+
+#why-pilates .why-coach-meta svg {
+  flex-shrink: 0;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-top: 0.1rem;
+  color: var(--why-accent);
+}
+
+@media (hover: hover) {
+  #why-pilates .why-coach:hover {
+    transform: translateY(-6px);
+  }
+
+  #why-pilates .why-coach:hover .why-coach-photo {
+    box-shadow: 0 16px 32px rgba(59, 184, 164, 0.16);
+  }
+
+  #why-pilates .why-coach:hover .why-coach-photo img {
+    transform: scale(1.03);
+  }
+
+  #why-pilates .why-coach:hover .why-coach-info {
+    background: var(--why-mint);
+  }
+}
+
 @media (min-width: 900px) {
   #why-pilates .why-layout {
     grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.15fr);
     gap: 2.75rem 3.25rem;
-    align-items: start;
   }
 
   #why-pilates .why-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
     gap: 0.95rem;
+  }
+
+  #why-pilates .why-coaches {
+    grid-template-columns: 1fr 1.08fr 1fr;
+    gap: 1.35rem;
+    align-items: end;
+  }
+
+  #why-pilates .why-coach:nth-child(2) {
+    transform: translateY(-0.7rem) scale(1.03);
+    transform-origin: center bottom;
+  }
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  #why-pilates .why-coach:nth-child(2):hover {
+    transform: translateY(calc(-0.7rem - 6px)) scale(1.03);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #why-pilates .why-card,
   #why-pilates .why-card-icon,
-  #why-pilates .why-card-bar {
+  #why-pilates .why-card-bar,
+  #why-pilates .why-coach,
+  #why-pilates .why-coach-photo,
+  #why-pilates .why-coach-photo img,
+  #why-pilates .why-coach-info {
     transition: none;
   }
 
-  #why-pilates .why-card:hover {
+  #why-pilates .why-card:hover,
+  #why-pilates .why-coach:hover,
+  #why-pilates .why-coach:hover .why-coach-photo img {
     transform: none;
   }
 }
@@ -233,4 +361,8 @@ html.dark #why-pilates {
   --why-mint: #2c403b;
   --why-text: #eef3f1;
   --why-muted: #9eb5b0;
+}
+
+html.dark #why-pilates .why-coach-photo {
+  background: #2a3834;
 }

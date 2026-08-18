@@ -273,15 +273,10 @@ svg {
     font-size: 1.85rem !important;
   }
 
-  #why-pilates [data-cms-trainers-grid],
   #classes [data-cms-classes-grid],
   #contact .lg\:grid-cols-\[1\.05fr_1fr\],
   #contact form .sm\:grid-cols-2 {
     grid-template-columns: 1fr !important;
-  }
-
-  #why-pilates [data-cms-trainers-grid] img.h-80 {
-    height: 14rem !important;
   }
 
   #cafe ul.sm\:grid-cols-2 {
@@ -406,28 +401,6 @@ svg {
   main > section:not(#hero) [class*="mt-12"],
   main > section:not(#hero) [class*="mt-10"] {
     margin-top: 1.1rem !important;
-  }
-
-  #why-pilates [data-cms-trainers-grid] {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 0.6rem !important;
-  }
-
-  #why-pilates [data-cms-trainers-grid] img.h-80 {
-    height: 9.5rem !important;
-  }
-
-  #why-pilates [data-cms-trainers-grid] .p-6 {
-    padding: 0.7rem 0.8rem !important;
-  }
-
-  #why-pilates [data-cms-trainers-grid] h3 {
-    font-size: 1rem !important;
-  }
-
-  #why-pilates [data-cms-trainers-grid] p {
-    margin-top: 0.3rem !important;
-    font-size: 0.72rem !important;
   }
 
   #gallery [data-cms-gallery-grid] {
