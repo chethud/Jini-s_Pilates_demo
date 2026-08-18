@@ -33,7 +33,7 @@
     ],
     classes: [
       { name: "Reformer Pilates", blurb: "All levels — Spring-loaded reformer sessions for full-body strength, posture and control.", image: "assets/class-reformer.png" },
-      { name: "Mat Pilates", blurb: "All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class-mat.png" },
+      { name: "Mat Pilates", blurb: "All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class-mat.png?v=2" },
       { name: "Strength Training", blurb: "All levels — Focused strength training to build power, stability and everyday fitness.", image: "assets/class-strength.png" },
       { name: "Zumba", blurb: "All levels — High-energy dance fitness for cardio, coordination and fun.", image: "assets/about-group.png" },
     ],
@@ -168,12 +168,8 @@
       let image = item.image;
       if (!custom && /class_reformer_cbidz7_n/i.test(String(image || ""))) {
         image = "assets/class-reformer.png";
-      } else if (
-        !custom &&
-        /^Mat Pilates$/i.test(String(item.name || "")) &&
-        /class_mat_dkcnn3u_/i.test(String(image || ""))
-      ) {
-        image = "assets/class-mat.png";
+      } else if (!custom && /^Mat Pilates$/i.test(String(item.name || ""))) {
+        image = "assets/class-mat.png?v=2";
       } else if (!custom && /^Strength Training$/i.test(String(item.name || ""))) {
         image = "assets/class-strength.png";
       } else if (

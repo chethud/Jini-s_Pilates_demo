@@ -106,11 +106,13 @@
         const name = escapeHtml(item.name || "Member");
         return `<div class="testimonials-slide"><article class="glass flex h-full flex-col rounded-3xl p-7">
           ${quoteIcon}
-          <p class="mt-4 grow text-sm leading-relaxed text-muted-foreground">${escapeHtml(item.quote || "")}</p>
-          <div class="mt-6 flex items-center gap-1" aria-label="${rating} out of 5 stars">${stars}</div>
-          <div class="mt-5 flex min-w-0 items-center gap-3">
-            <img src="${img}" alt="${name}" width="80" height="80" loading="lazy" class="h-11 w-11 shrink-0 rounded-full object-cover object-top">
-            <p class="truncate font-display text-base text-foreground">${name}</p>
+          <p class="t-quote mt-4 grow text-sm leading-relaxed text-muted-foreground">${escapeHtml(item.quote || "")}</p>
+          <div class="t-meta">
+            <div class="t-stars" aria-label="${rating} out of 5 stars">${stars}</div>
+            <div class="t-person">
+              <img src="${img}" alt="${name}" width="80" height="80" loading="lazy" class="t-photo">
+              <p class="t-name font-display text-base text-foreground">${name}</p>
+            </div>
           </div>
         </article></div>`;
       })

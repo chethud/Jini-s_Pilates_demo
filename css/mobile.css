@@ -194,10 +194,36 @@ svg {
 }
 
 @media (max-width: 720px) {
+  #hero.min-h-dvh,
+  #hero .min-h-dvh,
+  #hero .mx-auto.flex,
+  #hero {
+    min-height: 100svh !important;
+    height: auto;
+  }
+
+  #hero .bg-gradient-to-b {
+    background-image: linear-gradient(
+      to bottom,
+      rgb(247 244 239 / 0.22) 0%,
+      rgb(247 244 239 / 0.08) 42%,
+      rgb(247 244 239 / 0.62) 100%
+    ) !important;
+  }
+
+  html.dark #hero .bg-gradient-to-b {
+    background-image: linear-gradient(
+      to bottom,
+      rgb(36 48 44 / 0.28) 0%,
+      rgb(36 48 44 / 0.1) 42%,
+      rgb(36 48 44 / 0.72) 100%
+    ) !important;
+  }
+
   #hero .mx-auto.flex {
     padding-top: 5.5rem;
     padding-bottom: 1rem !important;
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
 
   #hero h1,
