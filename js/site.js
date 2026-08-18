@@ -54,8 +54,7 @@
     if (!grid || !Array.isArray(trainers)) return;
     const icon = (d) =>
       `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-    const clock = icon('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
-    const mark = icon('<path d="M12 21s-7-4.4-7-10a7 7 0 0 1 14 0c0 5.6-7 10-7 10Z"/><circle cx="12" cy="11" r="2.2"/>');
+    const pip = icon('<circle cx="12" cy="12" r="5.5"/>');
     grid.innerHTML = trainers
       .map((item) => {
         const img = asset(item.image || "assets/trainer_1_cex1xk_w.jpg");
@@ -68,8 +67,8 @@
           <div class="why-coach-info">
             <h4>${name}</h4>
             <p class="why-coach-role">${escapeHtml(item.role || "")}</p>
-            ${years ? `<p class="why-coach-meta">${clock}<span>${escapeHtml(years)}</span></p>` : ""}
-            ${specialty ? `<p class="why-coach-meta">${mark}<span>${escapeHtml(specialty)}</span></p>` : ""}
+            ${years ? `<p class="why-coach-meta">${pip}<span>${escapeHtml(years)}</span></p>` : ""}
+            ${specialty ? `<p class="why-coach-meta">${pip}<span>${escapeHtml(specialty)}</span></p>` : ""}
           </div>
         </article>`;
       })
@@ -251,37 +250,28 @@
     if (current && classes.some((c) => c.name === current)) select.value = current;
   };
 
-  const chevronSvg =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
+  const plusIcon = '<span class="faq-icon" aria-hidden="true"></span>';
+
+  const setFaqOpen = (item, open) => {
+    const btn = qs("[data-faq-q]", item);
+    const panel = qs("[data-faq-a]", item);
+    item.setAttribute("data-state", open ? "open" : "closed");
+    if (btn) {
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.setAttribute("data-state", open ? "open" : "closed");
+    }
+    if (panel) panel.setAttribute("data-state", open ? "open" : "closed");
+  };
 
   const bindFaqAccordion = () => {
     qsa("#faq [data-faq-item]").forEach((item) => {
-      const btn = qs("button", item);
-      const panel = qs("[data-faq-a]", item);
-      if (!btn || !panel || btn.dataset.faqBound === "1") return;
+      const btn = qs("[data-faq-q]", item);
+      if (!btn || btn.dataset.faqBound === "1") return;
       btn.dataset.faqBound = "1";
       btn.addEventListener("click", () => {
         const open = item.getAttribute("data-state") === "open";
-        qsa("#faq [data-faq-item]").forEach((other) => {
-          other.setAttribute("data-state", "closed");
-          const ob = qs("button", other);
-          const op = qs("[data-faq-a]", other);
-          if (ob) {
-            ob.setAttribute("aria-expanded", "false");
-            ob.setAttribute("data-state", "closed");
-          }
-          if (op) {
-            op.hidden = true;
-            op.setAttribute("data-state", "closed");
-          }
-        });
-        if (!open) {
-          item.setAttribute("data-state", "open");
-          btn.setAttribute("aria-expanded", "true");
-          btn.setAttribute("data-state", "open");
-          panel.hidden = false;
-          panel.setAttribute("data-state", "open");
-        }
+        qsa("#faq [data-faq-item]").forEach((other) => setFaqOpen(other, false));
+        if (!open) setFaqOpen(item, true);
       });
     });
   };
@@ -290,18 +280,18 @@
     const list = qs("[data-cms-faq-list]");
     if (!list || !Array.isArray(faqs)) return;
     list.innerHTML = faqs
-      .map(
-        (faq) => `<div data-faq-item data-state="closed" data-orientation="vertical" class="border-b glass rounded-3xl border-none px-6">
-<h3 data-orientation="vertical" data-state="closed" class="flex">
-<button type="button" aria-expanded="false" data-state="closed" data-faq-q class="flex flex-1 items-center justify-between font-medium cursor-pointer transition-all py-5 text-left font-display text-base text-foreground hover:no-underline sm:text-lg">${escapeHtml(
-          faq.q || ""
-        )}${chevronSvg}</button>
-</h3>
-<div data-faq-a data-state="closed" hidden role="region" class="overflow-hidden text-sm"><p class="pb-5 text-muted-foreground leading-relaxed">${escapeHtml(
-          faq.a || ""
-        )}</p></div>
-</div>`
-      )
+      .map((faq) => `<article class="faq-item" data-faq-item data-state="closed">
+          <h3>
+            <button type="button" data-faq-q aria-expanded="false" data-state="closed">
+              <span class="faq-num"></span>
+              <span class="faq-q">${escapeHtml(faq.q || "")}</span>
+              ${plusIcon}
+            </button>
+          </h3>
+          <div data-faq-a data-state="closed" role="region">
+            <p>${escapeHtml(faq.a || "")}</p>
+          </div>
+        </article>`)
       .join("");
     bindFaqAccordion();
   };
@@ -396,8 +386,8 @@
 
       if (phoneInput) phoneInput.value = phone;
 
-      if (!name || !email || !phone || !preferredClass || !message) {
-        alert("Please fill all fields before submitting.");
+      if (!name || !email || !phone || !preferredClass) {
+        alert("Please fill your name, email, phone and preferred class.");
         form.reportValidity();
         return;
       }

@@ -11,7 +11,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-PAGE_SLUGS = {"about", "classes", "cafe", "plans", "trainers"}
+PAGE_SLUGS = {"about", "classes", "cafe", "plans", "trainers", "privacy", "terms"}
 GALLERY_PAGES = {"studio", "classes", "equipment", "cafe", "members", "events"}
 WATCH_EXTS = {".html", ".css", ".js", ".json", ".svg", ".png", ".jpg", ".jpeg", ".webp", ".gif"}
 SKIP_DIRS = {".git", ".cursor", "__pycache__", "node_modules"}

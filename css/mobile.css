@@ -10,7 +10,7 @@
 #site-header .nav-wrap,
 .page,
 .site-footer-inner,
-.site-footer-bottom p,
+.site-footer-bottom-inner,
 main > section > .mx-auto {
   width: var(--site-width);
   max-width: var(--site-max);
@@ -19,11 +19,6 @@ main > section > .mx-auto {
 
 main > section:not(#hero) {
   padding-block: var(--section-space) !important;
-}
-
-#faq > .mx-auto {
-  width: min(900px, calc(100% - (2 * var(--site-gutter))));
-  max-width: 900px;
 }
 
 .card-grid,
@@ -261,6 +256,11 @@ svg {
     padding-top: 0.75rem !important;
   }
 
+  #contact {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.75rem !important;
+  }
+
   #about .about-headline {
     font-size: 1.85rem !important;
   }
@@ -273,10 +273,12 @@ svg {
     font-size: 1.85rem !important;
   }
 
-  #classes [data-cms-classes-grid],
-  #contact .lg\:grid-cols-\[1\.05fr_1fr\],
-  #contact form .sm\:grid-cols-2 {
+  #classes [data-cms-classes-grid] {
     grid-template-columns: 1fr !important;
+  }
+
+  #contact .c-headline {
+    font-size: 1.85rem !important;
   }
 
   #cafe ul.sm\:grid-cols-2 {
@@ -297,15 +299,6 @@ svg {
     padding: 0.55rem 0.9rem !important;
   }
 
-  #faq [data-faq-item] {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  #faq [data-faq-q] {
-    font-size: 0.98rem !important;
-  }
-
   #gallery [data-cms-gallery-grid] {
     columns: 1 !important;
   }
@@ -320,7 +313,7 @@ svg {
     min-height: 0;
   }
 
-  #contact iframe {
+  #contact .c-map {
     height: 16rem;
     min-height: 16rem;
   }
@@ -413,13 +406,14 @@ svg {
     margin-bottom: 0.6rem !important;
   }
 
-  #contact iframe {
-    height: 12rem;
-    min-height: 12rem;
+  #contact {
+    padding-top: 2.35rem !important;
+    padding-bottom: 2.5rem !important;
   }
 
-  #contact .glass.rounded-3xl {
-    padding: 1rem !important;
+  #contact .c-map {
+    height: 15.5rem;
+    min-height: 15.5rem;
   }
 
   /* Subpages (about, classes, cafe, plans, gallery) */

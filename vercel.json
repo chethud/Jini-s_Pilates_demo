@@ -19,7 +19,9 @@
     { "source": "/classes", "destination": "/classes.html" },
     { "source": "/trainers", "destination": "/trainers.html" },
     { "source": "/cafe", "destination": "/cafe.html" },
-    { "source": "/plans", "destination": "/plans.html" }
+    { "source": "/plans", "destination": "/plans.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" }
   ],
   "headers": [
     {
