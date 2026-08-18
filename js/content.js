@@ -24,18 +24,18 @@
     heroImage: "assets/hero-home.jpg?v=2",
     aboutTitle: "About Jini's Pilates Studio",
     aboutBody:
-      "Nestled in vibrant Mysuru, Jini's Pilates Studio is the ultimate haven for fitness enthusiasts. This trendy studio blends the best of traditional Pilates with modern fitness vibes, creating a dynamic space where strength, flexibility and wellness take centre stage.",
+      "A calm space to build strength, mobility and confidence — one intentional movement at a time.",
     stats: [
       { value: "1000+", label: "Happy Members" },
-      { value: "10+", label: "Years Experience" },
-      { value: "12", label: "Certified Trainers" },
+      { value: "10+", label: "Years of Care" },
+      { value: "12", label: "Certified Team" },
       { value: "100%", label: "Personal Guidance" },
     ],
     classes: [
-      { name: "Reformer Pilates", blurb: "All levels — Spring-loaded reformer sessions for full-body strength, posture and control.", image: "assets/class-reformer.png" },
-      { name: "Mat Pilates", blurb: "All levels — Classical mat flow that builds core control and long, lean strength.", image: "assets/class-mat.png?v=2" },
-      { name: "Strength Training", blurb: "All levels — Focused strength training to build power, stability and everyday fitness.", image: "assets/class-strength.png" },
-      { name: "Zumba", blurb: "All levels — High-energy dance fitness for cardio, coordination and fun.", image: "assets/about-group.png" },
+      { name: "Reformer Pilates", blurb: "All levels — Spring-loaded sessions for strength, posture and control.", image: "assets/class-reformer.png" },
+      { name: "Mat Pilates", blurb: "All levels — Classical mat flow for core control and long, lean strength.", image: "assets/class-mat.png?v=2" },
+      { name: "Strength Training", blurb: "All levels — Focused training for power, stability and everyday fitness.", image: "assets/class-strength.png" },
+      { name: "Zumba", blurb: "All levels — High-energy dance for cardio, coordination and fun.", image: "assets/about-group.png" },
     ],
     trainers: [
       { name: "Jini Menon", role: "BASI Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer_1_cex1xk_w.jpg" },
@@ -179,7 +179,12 @@
       ) {
         image = "assets/about-group.png";
       }
-      return { ...item, blurb: withoutClassPrice(item.blurb), image };
+      let blurb = withoutClassPrice(item.blurb);
+      const fresh = DEFAULT_CONTENT.classes.find((c) => c.name === item.name);
+      if (fresh && /full-body strength|that builds core|to build power|dance fitness for cardio/i.test(blurb)) {
+        blurb = fresh.blurb;
+      }
+      return { ...item, blurb, image };
     });
     const aboutTitle = (() => {
       const title = String(saved.aboutTitle || DEFAULT_CONTENT.aboutTitle);

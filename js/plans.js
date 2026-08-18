@@ -7,11 +7,17 @@
       if (tab === "Strength") return /strength/i.test(name);
       return name.toLowerCase() === tab.toLowerCase();
     });
+    const blurb = String(match?.blurb || "");
+    const split = blurb.match(/^(.*?)\s+[—–]\s+([\s\S]+)$/);
+    const level = (split ? split[1] : "All levels").trim();
+    const line = (split ? split[2] : blurb).trim();
     return {
       title: match?.name || tab,
-      line: String(match?.blurb || "").replace(/^[^-—]+[—–-]\s*/, ""),
-      image: match?.image || (tab === "Reformer Pilates" ? "assets/hero-home.jpg" : tab === "Strength" ? "assets/class-strength.png" : ""),
-      featured: tab === "Reformer Pilates",
+      level,
+      line,
+      image:
+        match?.image ||
+        (tab === "Reformer Pilates" ? "assets/hero-home.jpg" : tab === "Strength" ? "assets/class-strength.png" : ""),
     };
   };
 
@@ -42,15 +48,6 @@
     return raw;
   };
 
-  const rupees = (price) => Number(String(price || "").replace(/[^\d]/g, "")) || 0;
-
-  const startingPrice = (packages) => {
-    if (!packages?.length) return "";
-    const cheapest = packages.slice().sort((a, b) => rupees(a.price) - rupees(b.price))[0];
-    const label = String(cheapest.price || "").replace(/\s+/g, "");
-    return packages.length > 1 ? `From ${label}` : label;
-  };
-
   const groupByTab = (plans) => {
     const groups = {};
     (plans || []).forEach((plan) => {
@@ -65,14 +62,11 @@
     return { tabs, groups };
   };
 
-  const classImage = (tab, classes, resolveSrc) => {
-    const meta = classMeta(tab, classes);
-    return resolveSrc(meta.image);
-  };
+  const classImage = (tab, classes, resolveSrc) => resolveSrc(classMeta(tab, classes).image);
 
   const hrefFor = (tab, options) => {
     if (typeof options.cardHref === "function") return options.cardHref(tab) || "";
-    return options.cardHref || "";
+    return options.cardHref || `/plans?class=${encodeURIComponent(tab)}`;
   };
 
   const matchTab = (raw, tabs) => {
@@ -85,165 +79,79 @@
     );
   };
 
-  const optionMarkup = (packages) =>
-    packages
-      .map((plan, i) => {
-        const metaLine = validityCopy(plan);
-        return `<button type="button" class="pkg-option${i === 0 ? " is-selected" : ""}" data-pkg-index="${i}">
-          <span class="pkg-radio" aria-hidden="true"></span>
-          <span>
-            <span class="pkg-option-name">${escapeHtml(plan.name || "")}</span>
-            ${metaLine ? `<span class="pkg-option-meta">${escapeHtml(metaLine)}</span>` : ""}
-          </span>
-          <span class="pkg-option-price">${escapeHtml(plan.price || "")}</span>
-        </button>`;
-      })
-      .join("");
+  const defaultResolve = (src) => {
+    if (!src) return "";
+    if (src.startsWith("data:") || src.startsWith("http") || src.startsWith("/") || src.startsWith("../")) return src;
+    return src.replace(/^\//, "");
+  };
 
-  const cardMarkup = (tab, packages, options) => {
+  const cardMarkup = (tab, options) => {
     const meta = classMeta(tab, options.classes);
-    const featured = !!meta.featured;
     const img = classImage(tab, options.classes, options.resolveSrc);
-    const price = startingPrice(packages);
-    const cta = packages.length > 1 ? "Explore packages" : "Explore package";
-    const role = featured ? "pkg-card pkg-hero" : "pkg-card pkg-side";
     const href = hrefFor(tab, options);
-    const open = href
-      ? `<a class="${role}" href="${escapeHtml(href)}">`
-      : `<button type="button" class="${role}" data-open-packages="${escapeHtml(tab)}">`;
-    return `<div class="pkg-card-wrap">${open}
+    return `<a class="pkg-card" href="${escapeHtml(href)}">
       <div class="pkg-card-media">
         <img src="${escapeHtml(img)}" alt="${escapeHtml(meta.title)}" width="1200" height="800" loading="lazy">
       </div>
       <div class="pkg-card-body">
-        <p class="pkg-kicker">${featured ? "Signature class" : "Class"}</p>
+        <p class="pkg-kicker">${escapeHtml(meta.level)}</p>
         <h3 class="pkg-title">${escapeHtml(meta.title)}</h3>
-        <p class="pkg-price">${escapeHtml(price)}</p>
-        <p class="pkg-cta">${escapeHtml(cta)} <span aria-hidden="true">→</span></p>
+        ${meta.line ? `<p class="pkg-line">${escapeHtml(meta.line)}</p>` : ""}
+        <p class="pkg-cta">
+          <span class="pkg-cta-rest">View Class <span aria-hidden="true">→</span></span>
+          <span class="pkg-cta-more">View Class Details <span aria-hidden="true">→</span></span>
+        </p>
       </div>
-    ${href ? "</a>" : "</button>"}</div>`;
+    </a>`;
   };
 
-  const panelOf = (root) => root.querySelector(".pkg-modal-panel");
-
-  const closeModal = (root) => {
-    const modal = root.querySelector("[data-pkg-modal]");
-    const panel = panelOf(root);
-    if (!modal) return;
-    const wrap = root.querySelector(".pkg-card-wrap.is-pkg-host");
-    wrap?.classList.remove("is-pkg-open");
-    modal.classList.remove("is-open");
-    const hide = () => {
-      wrap?.classList.remove("is-pkg-host");
-      if (panel && panel.parentElement !== modal) modal.appendChild(panel);
-      modal.hidden = true;
-      modal.removeEventListener("transitionend", hide);
-    };
-    modal.addEventListener("transitionend", hide);
-    setTimeout(hide, 340);
-    document.body.style.overflow = "";
-  };
-
-  const openModal = (root, tab, groups, options, card) => {
-    const modal = root.querySelector("[data-pkg-modal]");
-    const panel = panelOf(root);
-    const titleEl = root.querySelector("[data-pkg-modal-title]");
-    const list = root.querySelector("[data-pkg-options]");
-    if (!modal || !panel || !list) return;
-    const packages = groups[tab] || [];
-    const meta = classMeta(tab, options.classes);
-    titleEl.textContent = `${meta.title} Packages`;
-    const lineEl = root.querySelector("[data-pkg-modal-line]");
-    if (lineEl) lineEl.textContent = meta.line || "";
-    list.innerHTML = optionMarkup(packages);
-    root.querySelectorAll(".pkg-card-wrap.is-pkg-host").forEach((el) => {
-      el.classList.remove("is-pkg-open", "is-pkg-host");
-    });
-    const mobile = window.matchMedia("(max-width: 800px)").matches;
-    const wrap = card?.closest(".pkg-card-wrap");
-    if (mobile && wrap) {
-      wrap.appendChild(panel);
-      wrap.classList.add("is-pkg-host");
-    } else if (panel.parentElement !== modal) {
-      modal.appendChild(panel);
-    }
-    modal.hidden = false;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (mobile && wrap) wrap.classList.add("is-pkg-open");
-        modal.classList.add("is-open");
-      });
-    });
-    modal.setAttribute("data-active-tab", tab);
-    root.dataset.activeTab = tab;
-    document.body.style.overflow = "hidden";
-    list.querySelector(".pkg-option")?.focus({ preventScroll: true });
-  };
-
-  const continueBooking = (root, groups, options) => {
-    const modal = root.querySelector("[data-pkg-modal]");
-    const tab = root.dataset.activeTab || modal?.getAttribute("data-active-tab");
-    const selected = root.querySelector(".pkg-option.is-selected");
-    const index = Number(selected?.getAttribute("data-pkg-index") || 0);
-    const plan = (groups[tab] || [])[index];
-    if (!plan) return;
+  const bookPlan = (plan, tab, options) => {
     const className = plan.period || classMeta(tab, options.classes).title || tab;
     try {
       sessionStorage.setItem(
         "jinis_pending_package",
-        JSON.stringify({
-          className,
-          package: plan.name,
-          price: plan.price,
-        })
+        JSON.stringify({ className, package: plan.name, price: plan.price })
       );
     } catch {
       /* ignore */
     }
-    closeModal(root);
     window.location.href = options.contactHref || "/#contact";
   };
 
-  const defaultResolve = (src) => {
-    if (!src) return "";
-    if (src.startsWith("data:") || src.startsWith("http") || src.startsWith("/") || src.startsWith("../")) {
-      return src;
-    }
-    return src.replace(/^\//, "");
-  };
-
-  const bindPicker = (root, groups, opts) => {
-    root.querySelector("[data-pkg-options]")?.addEventListener("click", (event) => {
-      const option = event.target.closest(".pkg-option");
-      if (!option) return;
-      root.querySelectorAll(".pkg-option").forEach((el) => el.classList.remove("is-selected"));
-      option.classList.add("is-selected");
-    });
-    root.querySelector("[data-pkg-continue]")?.addEventListener("click", () => continueBooking(root, groups, opts));
-  };
+  const planCta = (plan) => (/session/i.test(String(plan.name || "")) ? "Book Session" : "Choose Plan");
 
   const renderDetail = (root, tab, groups, opts) => {
     const meta = classMeta(tab, opts.classes);
-    const img = classImage(tab, opts.classes, opts.resolveSrc);
     const packages = groups[tab] || [];
     root.dataset.activeTab = tab;
-    root.innerHTML = `<article class="pkg-detail">
-      <div class="pkg-detail-media">
-        <img src="${escapeHtml(img)}" alt="${escapeHtml(meta.title)}" width="1200" height="800">
+    root.innerHTML = `<section class="pkg-choose">
+      <p class="pkg-choose-back"><a href="/plans">← All classes</a></p>
+      <p class="pkg-choose-kicker">Choose your plan</p>
+      <h1 class="pkg-choose-title">${escapeHtml(meta.title)}</h1>
+      ${meta.line ? `<p class="pkg-choose-line">${escapeHtml(meta.line)}</p>` : ""}
+      <div class="pkg-plan-grid">
+        ${packages
+          .map((plan, i) => {
+            const metaLine = validityCopy(plan);
+            return `<article class="pkg-plan">
+              <h2 class="pkg-plan-name">${escapeHtml(plan.name || "")}</h2>
+              <p class="pkg-plan-price">${escapeHtml(plan.price || "")}</p>
+              ${metaLine ? `<p class="pkg-plan-meta">${escapeHtml(metaLine)}</p>` : ""}
+              <button type="button" class="pkg-plan-book" data-pkg-book="${i}">${planCta(plan)} <span aria-hidden="true">→</span></button>
+            </article>`;
+          })
+          .join("")}
       </div>
-      <div class="pkg-detail-panel">
-        <p class="pkg-detail-back"><a href="/plans">← All classes</a></p>
-        <p class="pkg-modal-kicker">Choose a package</p>
-        <h1 class="pkg-modal-title">${escapeHtml(meta.title)}</h1>
-        ${meta.line ? `<p class="pkg-modal-line">${escapeHtml(meta.line)}</p>` : ""}
-        <div class="pkg-options" data-pkg-options>${optionMarkup(packages)}</div>
-        <button type="button" class="pkg-continue" data-pkg-continue>Continue to Booking →</button>
-      </div>
-    </article>`;
-    bindPicker(root, groups, opts);
+    </section>`;
+    root.querySelectorAll("[data-pkg-book]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const plan = packages[Number(btn.getAttribute("data-pkg-book"))];
+        if (plan) bookPlan(plan, tab, opts);
+      });
+    });
     const hero = document.querySelector(".page-hero");
     if (hero) hero.hidden = true;
-    document.title = `${meta.title} · Jini's Pilates Studio`;
+    document.title = `Choose a plan · ${meta.title} · Jini's Pilates Studio`;
   };
 
   const render = (root, plans, options = {}) => {
@@ -252,57 +160,19 @@
       contactHref: options.contactHref || "/#contact",
       classes: options.classes || window.JinisContent?.getContent?.().classes || [],
       resolveSrc: options.resolveSrc || defaultResolve,
-      cardHref: options.cardHref || "",
+      cardHref: options.cardHref,
     };
     const { tabs, groups } = groupByTab(plans);
     if (!tabs.length) {
       root.innerHTML = "";
       return;
     }
-
     const detailTab = matchTab(options.detailTab, tabs);
     if (detailTab) {
       renderDetail(root, detailTab, groups, opts);
       return;
     }
-
-    const hero = tabs.includes("Reformer Pilates") ? "Reformer Pilates" : tabs[0];
-    const rest = tabs.filter((tab) => tab !== hero);
-    const pair = rest.slice(0, 2);
-    const solo = rest.slice(2);
-
-    root.innerHTML = `<div class="pkg-layout">
-      ${cardMarkup(hero, groups[hero], opts)}
-      ${pair.length ? `<div class="pkg-pair">${pair.map((tab) => cardMarkup(tab, groups[tab], opts)).join("")}</div>` : ""}
-      ${solo.map((tab) => `<div class="pkg-solo">${cardMarkup(tab, groups[tab], opts)}</div>`).join("")}
-    </div>
-    <div class="pkg-modal" data-pkg-modal hidden>
-      <div class="pkg-modal-backdrop" data-pkg-close></div>
-      <div class="pkg-modal-panel" role="dialog" aria-modal="true" aria-labelledby="pkg-modal-title">
-        <button type="button" class="pkg-modal-close" data-pkg-close aria-label="Close">×</button>
-        <p class="pkg-modal-kicker">Choose a package</p>
-        <h3 class="pkg-modal-title" id="pkg-modal-title" data-pkg-modal-title></h3>
-        <p class="pkg-modal-line" data-pkg-modal-line></p>
-        <div class="pkg-options" data-pkg-options></div>
-        <button type="button" class="pkg-continue" data-pkg-continue>Continue to Booking →</button>
-      </div>
-    </div>`;
-
-    root.querySelectorAll("[data-open-packages]").forEach((btn) => {
-      btn.addEventListener("click", () =>
-        openModal(root, btn.getAttribute("data-open-packages"), groups, opts, btn)
-      );
-    });
-    root.querySelectorAll("[data-pkg-close]").forEach((el) => {
-      el.addEventListener("click", () => closeModal(root));
-    });
-    bindPicker(root, groups, opts);
-    if (!root.dataset.escBound) {
-      root.dataset.escBound = "1";
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeModal(root);
-      });
-    }
+    root.innerHTML = `<div class="pkg-layout">${tabs.map((tab) => cardMarkup(tab, opts)).join("")}</div>`;
   };
 
   window.JinisPlans = { render, tabOf, TAB_ORDER };

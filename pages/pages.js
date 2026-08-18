@@ -12,7 +12,7 @@
         <div class="card-body">
           <h3>${item.name}</h3>
           <p class="badge">${item.blurb}</p>
-          <a class="btn outline" href="/#contact">Book Now</a>
+          <a class="btn outline" href="/plans?class=${encodeURIComponent(window.JinisPlans ? window.JinisPlans.tabOf({ period: item.name }) : item.name)}">View Class →</a>
         </div>
       </article>`).join('')}</div>`;
   }

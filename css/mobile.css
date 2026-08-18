@@ -261,18 +261,12 @@ svg {
     padding-top: 0.75rem !important;
   }
 
-  #about .about-photos {
-    grid-template-columns: 1fr !important;
+  #about .about-headline {
+    font-size: 1.85rem !important;
   }
 
-  #about .about-photo {
-    min-height: 12.5rem !important;
-  }
-
-  #about .about-cards,
-  #about [class*="lg:grid-cols-4"],
-  #about .sm\:grid-cols-2 {
-    grid-template-columns: 1fr 1fr !important;
+  #classes .s-headline {
+    font-size: 1.85rem !important;
   }
 
   #why-pilates [data-cms-trainers-grid],
@@ -364,36 +358,6 @@ svg {
     bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
-  .pkg-modal {
-    padding: 0.75rem;
-    align-items: end;
-  }
-
-  .pkg-modal-panel {
-    width: 100%;
-    max-height: min(90dvh, 40rem);
-    border-radius: 1.25rem 1.25rem 0.75rem 0.75rem;
-    padding: 1.25rem 1rem 1.15rem;
-  }
-
-  .pkg-card-wrap.is-pkg-host .pkg-modal-panel {
-    max-height: none;
-    height: 100%;
-    border-radius: 1.35rem;
-  }
-
-  .pkg-option {
-    grid-template-columns: auto 1fr;
-    gap: 0.7rem;
-  }
-
-  .pkg-option-price {
-    grid-column: 2;
-    justify-self: start;
-    white-space: normal;
-    font-size: 1.15rem;
-  }
-
   .site-footer-inner {
     padding-top: 2.25rem;
     padding-bottom: 1.5rem;
@@ -465,86 +429,6 @@ svg {
   main > section:not(#hero) [class*="mt-12"],
   main > section:not(#hero) [class*="mt-10"] {
     margin-top: 1.1rem !important;
-  }
-
-  /* Mission / Vision / Why-us: icon beside the text instead of above it */
-  #about [class*="gap-10"] {
-    gap: 1rem !important;
-  }
-
-  #about .grid.gap-4 {
-    gap: 0.6rem !important;
-  }
-
-  #about .about-cards > article.glass {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 0.75rem;
-    padding: 0.9rem 1rem !important;
-  }
-
-  #about .about-cards > article.glass > div:first-child {
-    grid-row: span 2;
-    width: 2.25rem !important;
-    height: 2.25rem !important;
-    border-radius: 0.9rem !important;
-  }
-
-  #about .about-cards > article.glass h3 {
-    margin-top: 0 !important;
-    font-size: 1rem !important;
-  }
-
-  #about .about-cards > article.glass p {
-    margin-top: 0.25rem !important;
-    font-size: 0.78rem !important;
-  }
-
-  /* Class cards: photo beside the text instead of stacked above it */
-  #classes [data-cms-classes-grid] {
-    gap: 0.6rem !important;
-  }
-
-  #classes [data-cms-classes-grid] article {
-    display: grid;
-    grid-template-columns: 38% 1fr;
-  }
-
-  /* Fill the photo column without a percentage height: iOS Safari resolves
-     height:100% against an indefinite row and blows the card up. */
-  #classes [data-cms-classes-grid] article > div:first-child {
-    position: relative;
-    min-height: 9rem;
-  }
-
-  #classes [data-cms-classes-grid] img {
-    position: absolute;
-    inset: 0;
-    height: 100% !important;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  #classes [data-cms-classes-grid] .p-6 {
-    padding: 0.8rem 0.9rem !important;
-  }
-
-  #classes [data-cms-classes-grid] h3 {
-    font-size: 1rem !important;
-  }
-
-  #classes [data-cms-classes-grid] .mt-3 {
-    margin-top: 0.4rem !important;
-  }
-
-  #classes [data-cms-classes-grid] p.mt-4 {
-    margin-top: 0.4rem !important;
-    font-size: 0.78rem !important;
-  }
-
-  #classes [data-cms-classes-grid] a.mt-6 {
-    margin-top: 0.6rem !important;
-    padding: 0.5rem 0.9rem !important;
   }
 
   #why-pilates [data-cms-trainers-grid] {

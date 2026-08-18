@@ -16,27 +16,15 @@
   const asset = (src) =>
     window.JinisContent ? window.JinisContent.assetUrl(src || "", "") : src || "";
 
-  const phoneMarquee = window.matchMedia("(max-width: 720px)");
-  const syncTestimonialMarquee = () => {
-    const track = qs("#testimonials .testimonials-track");
-    if (!track) return;
-    qsa("[data-marquee-clone]", track).forEach((el) => el.remove());
-    delete track.dataset.marquee;
-    if (!phoneMarquee.matches) return;
-    track.dataset.marquee = "1";
-    [...track.children].forEach((item) => {
-      const clone = item.cloneNode(true);
-      clone.setAttribute("aria-hidden", "true");
-      clone.dataset.marqueeClone = "1";
-      track.appendChild(clone);
-    });
-  };
-
-  const parseClassBlurb = (blurb) => {
-    const text = String(blurb || "").trim();
-    const m = text.match(/^(.+?)\s*[·•]\s*(.+?)\s*[—–-]\s*(.+)$/);
-    if (m) return { duration: m[1].trim(), level: m[2].trim(), desc: m[3].trim() };
-    return { duration: "", level: "", desc: text };
+  const classIcon = (name) => {
+    const n = String(name || "").toLowerCase();
+    const svg = (d) =>
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+    if (n.includes("reformer")) return svg('<rect x="3" y="7" width="18" height="11" rx="1.5"/><path d="M8 7v11M16 7v11"/>');
+    if (n.includes("strength")) return svg('<path d="M6 12h12"/><rect x="2" y="8" width="4" height="8" rx="1"/><rect x="18" y="8" width="4" height="8" rx="1"/>');
+    if (n.includes("zumba")) return svg('<path d="M9 18V5l10-2v13"/><circle cx="7" cy="18" r="2.4"/><circle cx="17" cy="16" r="2.4"/>');
+    if (n.includes("mat")) return svg('<rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10h8"/>');
+    return svg('<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>');
   };
 
   const renderClassesGrid = (classes) => {
@@ -44,24 +32,19 @@
     if (!grid || !Array.isArray(classes)) return;
     grid.innerHTML = classes
       .map((item) => {
-        const { duration, level, desc } = parseClassBlurb(item.blurb);
         const img = asset(item.image || "assets/class_mat_dkcnn3u_.jpg");
-        const badges =
-          duration || level
-            ? `<div class="mt-3 flex flex-wrap items-center gap-2">
-            ${duration ? `<span class="inline-flex items-center gap-1.5 rounded-full bg-primary/12 px-3 py-1 text-[11px] font-medium text-primary">${escapeHtml(duration)}</span>` : ""}
-            ${level ? `<span class="inline-flex items-center gap-1.5 rounded-full bg-sage/12 px-3 py-1 text-[11px] font-medium text-sage">${escapeHtml(level)}</span>` : ""}
-          </div>`
-            : "";
-        return `<div><article class="group glass h-full overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-lift">
-          <div class="overflow-hidden"><img src="${img}" alt="${escapeHtml(item.name)}" width="900" height="700" loading="lazy" class="h-52 w-full object-cover transition-transform duration-700 group-hover:scale-110"></div>
-          <div class="p-6">
-            <h3 class="text-xl text-foreground">${escapeHtml(item.name)}</h3>
-            ${badges}
-            <p class="mt-4 text-sm leading-relaxed text-muted-foreground">${escapeHtml(desc)}</p>
-            <a href="#contact" class="mt-6 inline-flex w-full items-center justify-center rounded-full border border-primary/40 px-5 py-3 text-xs font-medium text-foreground transition-colors hover:bg-primary hover:text-primary-foreground">Book Now</a>
+        const name = escapeHtml(item.name || "Session");
+        return `<article class="s-card">
+          <div class="s-photo">
+            <img src="${img}" alt="${name}" width="900" height="700" loading="lazy">
+            <span class="s-icon" aria-hidden="true">${classIcon(item.name)}</span>
           </div>
-        </article></div>`;
+          <div class="s-body">
+            <h3>${name}</h3>
+            <p>${escapeHtml(item.blurb || "")}</p>
+            <a href="/plans?class=${encodeURIComponent(window.JinisPlans ? window.JinisPlans.tabOf({ period: item.name }) : item.name)}">View Class <span aria-hidden="true">→</span></a>
+          </div>
+        </article>`;
       })
       .join("");
   };
@@ -91,33 +74,50 @@
       .join("");
   };
 
+  const starsHtml = (n) => {
+    const rating = Math.min(5, Math.max(1, Number(n) || 5));
+    return `<span class="t-stars" aria-label="${rating} out of 5 stars">${"★".repeat(rating)}</span>`;
+  };
+
+  const personHtml = (item) => {
+    const img = asset(item.image || "assets/gallery_members_cyis7hte.jpg");
+    const name = escapeHtml(item.name || "Member");
+    return `<div class="t-person">
+      <img src="${img}" alt="" width="80" height="80" loading="lazy" class="t-photo">
+      <div>
+        <p class="t-name">${name}</p>
+        <p class="t-role">Pilates Member</p>
+      </div>
+    </div>`;
+  };
+
   const renderTestimonialsGrid = (items) => {
     const grid = qs("[data-cms-testimonials-grid]");
-    if (!grid || !Array.isArray(items)) return;
-    const quoteIcon =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote text-primary/60" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>';
-    const star =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star fill-primary text-primary" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>';
-    grid.innerHTML = items
-      .map((item) => {
-        const rating = Math.min(5, Math.max(1, Number(item.rating) || 5));
-        const stars = Array.from({ length: rating }, () => `<span>${star}</span>`).join("");
-        const img = asset(item.image || "assets/gallery_members_cyis7hte.jpg");
-        const name = escapeHtml(item.name || "Member");
-        return `<div class="testimonials-slide"><article class="glass flex h-full flex-col rounded-3xl p-7">
-          ${quoteIcon}
-          <p class="t-quote mt-4 grow text-sm leading-relaxed text-muted-foreground">${escapeHtml(item.quote || "")}</p>
-          <div class="t-meta">
-            <div class="t-stars" aria-label="${rating} out of 5 stars">${stars}</div>
-            <div class="t-person">
-              <img src="${img}" alt="${name}" width="80" height="80" loading="lazy" class="t-photo">
-              <p class="t-name font-display text-base text-foreground">${name}</p>
-            </div>
-          </div>
-        </article></div>`;
-      })
+    if (!grid || !Array.isArray(items) || !items.length) return;
+    const [hero, ...rest] = items;
+    const avg = items.reduce((sum, item) => sum + (Number(item.rating) || 5), 0) / items.length;
+    const minis = rest
+      .map(
+        (item) => `<article class="t-mini">
+        <p class="t-quote">${escapeHtml(item.quote || "")}</p>
+        ${starsHtml(item.rating)}
+        ${personHtml(item)}
+      </article>`
+      )
       .join("");
-    syncTestimonialMarquee();
+    grid.innerHTML = `<article class="t-hero">
+        <p class="t-quote">${escapeHtml(hero.quote || "")}</p>
+        ${starsHtml(hero.rating)}
+        ${personHtml(hero)}
+      </article>
+      <div class="t-minis">
+        ${minis}
+        <article class="t-trust">
+          <p class="t-trust-score">${avg.toFixed(1)}</p>
+          ${starsHtml(Math.round(avg))}
+          <p class="t-trust-label">Average rating</p>
+        </article>
+      </div>`;
   };
 
   const renderPlansGrid = (plans, classes) => {
@@ -491,8 +491,5 @@
   const why = qs("#why-pilates");
   const testimonials = qs("#testimonials");
   if (why && testimonials) why.insertAdjacentElement("afterend", testimonials);
-  setText(qs("#membership .pkg-section-head .eyebrow"), "Plan");
-
   applyContent(content);
-  phoneMarquee.addEventListener("change", syncTestimonialMarquee);
 })();

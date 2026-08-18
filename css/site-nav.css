@@ -366,22 +366,6 @@ html.dark .mobile-nav a {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-html.dark .pkg-modal-panel {
-  background: #2f3d39;
-  color: #eef3f1;
-}
-
-html.dark .pkg-modal-kicker,
-html.dark .pkg-option-meta {
-  color: #b4c2bc;
-}
-
-html.dark .pkg-option-name,
-html.dark .pkg-option-price,
-html.dark .pkg-option.is-selected .pkg-option-name {
-  color: #eef3f1;
-}
-
 html.dark .eyebrow {
   background-image: var(--gradient-sage);
   -webkit-background-clip: text;
@@ -415,34 +399,12 @@ main > section {
 
 .surface-warm {
   background: transparent !important;
-  isolation: isolate;
-}
-
-.surface-warm::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(1100px 520px at 12% 28%, rgba(47, 157, 138, 0.18), transparent 55%),
-    radial-gradient(950px 460px at 88% 72%, rgba(196, 162, 101, 0.14), transparent 52%);
-}
-
-html.dark .surface-warm::before {
-  background:
-    radial-gradient(1100px 520px at 12% 28%, rgba(47, 157, 138, 0.22), transparent 55%),
-    radial-gradient(950px 460px at 88% 72%, rgba(125, 206, 191, 0.12), transparent 52%);
 }
 
 /* Keep blobs off section edges so gradients don't clip into hard lines */
 main > section:not(#hero) .blob {
   top: 18% !important;
   opacity: 0.85;
-}
-
-#testimonials .blob {
-  display: none;
 }
 
 .text-gold {
