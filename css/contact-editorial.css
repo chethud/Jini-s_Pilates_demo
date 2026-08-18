@@ -1,8 +1,8 @@
 /* Contact — boutique consultation + studio location */
 main > section#contact {
   --c-bg: #eaf7f4;
-  --c-card: #fffcf8;
-  --c-mint: #f3faf8;
+  --c-card: #fff;
+  --c-mint: #e7f6f2;
   --c-line: rgba(59, 184, 164, 0.22);
   --c-accent: #2f9d8a;
   --c-accent-hover: #278576;
@@ -95,17 +95,7 @@ main > section#contact {
 
 #contact .c-form-panel {
   padding: 1.6rem 1.45rem 1.45rem;
-}
-
-#contact .c-perk {
-  margin: 0 0 1.1rem;
-  padding: 0.7rem 0.85rem;
-  border-radius: 0.85rem;
-  background: var(--c-mint);
-  border: 1px solid var(--c-line);
-  color: var(--c-text);
-  font-size: 0.78rem;
-  line-height: 1.45;
+  background: linear-gradient(145deg, #f7fcfa 0%, #e7f6f2 48%, #dff3ec 100%);
 }
 
 #contact .c-panel-title {
@@ -185,8 +175,13 @@ main > section#contact {
   margin: 0;
   border: 1px solid var(--c-line);
   border-radius: 0.95rem;
-  background: var(--c-mint);
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--c-mint);
+  background-image: none;
   color: var(--c-text);
+  accent-color: var(--c-accent);
+  color-scheme: light;
   font-family: var(--nav-font, "Poppins", ui-sans-serif, system-ui, sans-serif);
   font-size: 0.92rem;
   line-height: 1.4;
@@ -198,8 +193,6 @@ main > section#contact {
 #contact .c-form select {
   height: 3.05rem;
   padding: 0 0.95rem 0 2.45rem;
-  appearance: none;
-  -webkit-appearance: none;
 }
 
 #contact .c-form textarea {
@@ -226,7 +219,23 @@ main > section#contact {
 #contact .c-form textarea:focus {
   border-color: var(--c-accent);
   box-shadow: 0 0 0 3px rgba(47, 157, 138, 0.12);
+  background-color: var(--c-mint);
+}
+
+#contact .c-form option {
   background: #fff;
+  color: var(--c-text);
+}
+
+#contact .c-form option:checked {
+  background: rgba(47, 157, 138, 0.16);
+  color: var(--c-text);
+}
+
+#contact .c-form input:-webkit-autofill,
+#contact .c-form textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--c-mint) inset;
+  -webkit-text-fill-color: var(--c-text);
 }
 
 #contact .c-submit {
@@ -443,8 +452,27 @@ html.dark #contact .c-studio-head {
   background: #2a3a36;
 }
 
+html.dark #contact .c-form-panel {
+  background: linear-gradient(145deg, #2a3a36 0%, #243532 52%, #1e2c29 100%);
+}
+
+html.dark #contact .c-form input,
+html.dark #contact .c-form select,
+html.dark #contact .c-form textarea {
+  color-scheme: dark;
+}
+
 html.dark #contact .c-form input:focus,
 html.dark #contact .c-form select:focus,
 html.dark #contact .c-form textarea:focus {
-  background: #1e2c29;
+  background-color: var(--c-mint);
+}
+
+html.dark #contact .c-form option {
+  background: #243532;
+  color: #eef3f1;
+}
+
+html.dark #contact .c-form option:checked {
+  background: rgba(59, 184, 164, 0.22);
 }
