@@ -257,15 +257,24 @@
     const select = qs("#class");
     if (!select || !Array.isArray(classes) || !classes.length) return;
     const current = select.value;
+    const extras = [
+      "Wellness Cafe",
+      "Cafe events",
+      "Healthy meal prep",
+      "Nutritional plans",
+    ];
     select.innerHTML =
-      '<option value="" disabled selected>Select a class</option>' +
+      '<option value="" disabled selected>Select an option</option>' +
       classes
         .map(
           (item) =>
             `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>`
         )
-        .join("");
-    if (current && classes.some((c) => c.name === current)) select.value = current;
+        .join("") +
+      extras.map((item) => `<option value="${item}">${item}</option>`).join("");
+    if (current && (classes.some((c) => c.name === current) || extras.includes(current))) {
+      select.value = current;
+    }
   };
 
   const plusIcon = '<span class="faq-icon" aria-hidden="true"></span>';
@@ -430,7 +439,7 @@
         `Name: ${name}`,
         `Email: ${email}`,
         `Phone: ${phone}`,
-        preferredClass ? `Preferred class: ${preferredClass}` : "",
+        preferredClass ? `Interest: ${preferredClass}` : "",
         message ? `Message: ${message}` : "",
       ].filter(Boolean);
       const body = lines.join("\n");

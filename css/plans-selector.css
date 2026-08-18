@@ -392,16 +392,21 @@
   width: fit-content;
   margin-top: auto;
   padding: 0.58rem 1.05rem;
-  border: 1px solid rgba(59, 184, 164, 0.4);
+  border: 1px solid transparent;
   border-radius: 999px;
-  background: transparent;
+  background: var(--cta, #165c54);
   font-family: inherit;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: none;
-  color: #243332;
+  color: #fff;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pkg-plan-book:hover {
+  background: var(--cta-hover, #114a44);
 }
 
 .pkg-plan-book span[aria-hidden="true"] {
@@ -429,7 +434,6 @@
 html.dark .pkg-choose-title,
 html.dark .pkg-plan-name,
 html.dark .pkg-plan-price,
-html.dark .pkg-plan-book,
 html.dark .pkg-choose-back a:hover {
   color: #eef3f1;
 }

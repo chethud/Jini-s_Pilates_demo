@@ -585,3 +585,7 @@ html.dark #about .about-stats {
   background: linear-gradient(180deg, #2a3a36 0%, #243532 100%);
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
 }
+
+html.dark #about .about-blob {
+  display: none;
+}

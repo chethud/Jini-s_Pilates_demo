@@ -10,8 +10,8 @@ main > section#contact {
   --c-muted: #667572;
   position: relative;
   overflow: hidden;
-  padding-top: 4rem !important;
-  padding-bottom: 4.25rem !important;
+  padding-top: var(--section-y, 4rem) !important;
+  padding-bottom: var(--section-y, 4rem) !important;
   background: var(--c-bg) !important;
   color: var(--c-text);
 }
@@ -95,6 +95,17 @@ main > section#contact {
 
 #contact .c-form-panel {
   padding: 1.6rem 1.45rem 1.45rem;
+}
+
+#contact .c-perk {
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.85rem;
+  background: var(--c-mint);
+  border: 1px solid var(--c-line);
+  color: var(--c-text);
+  font-size: 0.78rem;
+  line-height: 1.45;
 }
 
 #contact .c-panel-title {
@@ -227,7 +238,7 @@ main > section#contact {
   height: 3.15rem;
   border: 0;
   border-radius: 0.95rem;
-  background: var(--c-accent);
+  background: var(--cta, #165c54);
   color: #fff;
   font-family: var(--nav-font, "Poppins", ui-sans-serif, system-ui, sans-serif);
   font-size: 0.86rem;
@@ -249,7 +260,7 @@ main > section#contact {
 }
 
 #contact .c-submit:hover {
-  background: var(--c-accent-hover);
+  background: var(--cta-hover, #114a44);
 }
 
 #contact .c-submit:hover::after {
