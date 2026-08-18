@@ -42,7 +42,7 @@
           <div class="s-body">
             <h3>${name}</h3>
             <p>${escapeHtml(item.blurb || "")}</p>
-            <a href="/plans?class=${encodeURIComponent(window.JinisPlans ? window.JinisPlans.tabOf({ period: item.name }) : item.name)}">View Class <span aria-hidden="true">→</span></a>
+            <a href="#membership" data-plan-class="${escapeHtml(window.JinisPlans ? window.JinisPlans.tabOf({ period: item.name }) : item.name)}">View Class <span aria-hidden="true">→</span></a>
           </div>
         </article>`;
       })
@@ -120,14 +120,29 @@
       </div>`;
   };
 
-  const renderPlansGrid = (plans, classes) => {
+  const renderPlansGrid = (plans, classes, tab) => {
     const grid = qs("[data-cms-plans-grid]");
     if (!grid || !window.JinisPlans) return;
     window.JinisPlans.render(grid, plans, {
       contactHref: "#contact",
       classes,
       resolveSrc: asset,
-      cardHref: (tab) => `/plans?class=${encodeURIComponent(tab)}`,
+      detailTab: tab || "Reformer Pilates",
+      backHref: "#classes",
+      keepTitle: true,
+    });
+  };
+
+  const bindPlanJump = () => {
+    if (document.body.dataset.planJump === "1") return;
+    document.body.dataset.planJump = "1";
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest("[data-plan-class]");
+      if (!link) return;
+      event.preventDefault();
+      const data = window.JinisContent ? window.JinisContent.getContent() : content;
+      renderPlansGrid(data?.plans, data?.classes, link.getAttribute("data-plan-class"));
+      qs("#membership")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   };
 
@@ -207,6 +222,7 @@
     renderTrainersGrid(data.trainers);
     renderTestimonialsGrid(data.testimonials);
     renderPlansGrid(data.plans, data.classes);
+    bindPlanJump();
     renderCafeStage(data.cafeImages);
     renderFaqs(data.faqs);
     renderContactClasses(data.classes);
@@ -468,25 +484,6 @@
       window.scrollTo({ top, behavior: "smooth" });
     });
   });
-
-  /* ---------- Why Pilates: seamless horizontal marquee ---------- */
-  const setupWhyMarquee = () => {
-    const list = qs("#why-pilates ul");
-    if (!list || list.dataset.marquee) return;
-    list.dataset.marquee = "1";
-    list.className = "why-marquee-track";
-    // A second copy is what makes the -50% loop seamless.
-    [...list.children].forEach((item) => {
-      const clone = item.cloneNode(true);
-      clone.setAttribute("aria-hidden", "true");
-      list.appendChild(clone);
-    });
-    const wrap = document.createElement("div");
-    wrap.className = "why-marquee";
-    list.parentNode.insertBefore(wrap, list);
-    wrap.appendChild(list);
-  };
-  setupWhyMarquee();
 
   const why = qs("#why-pilates");
   const testimonials = qs("#testimonials");

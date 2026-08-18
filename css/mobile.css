@@ -269,38 +269,15 @@ svg {
     font-size: 1.85rem !important;
   }
 
+  #why-pilates .why-headline {
+    font-size: 1.85rem !important;
+  }
+
   #why-pilates [data-cms-trainers-grid],
   #classes [data-cms-classes-grid],
   #contact .lg\:grid-cols-\[1\.05fr_1fr\],
   #contact form .sm\:grid-cols-2 {
     grid-template-columns: 1fr !important;
-  }
-
-  #why-pilates ul {
-    --gap: 0.7rem;
-  }
-
-  .why-marquee {
-    margin-top: 1.1rem;
-  }
-
-  #why-pilates ul article {
-    padding: 1rem !important;
-  }
-
-  #why-pilates ul article > div {
-    width: 2.25rem !important;
-    height: 2.25rem !important;
-    border-radius: 0.9rem !important;
-  }
-
-  #why-pilates ul h3 {
-    margin-top: 0.6rem !important;
-    font-size: 0.95rem !important;
-  }
-
-  #why-pilates ul p {
-    margin-top: 0.3rem !important;
   }
 
   #why-pilates [data-cms-trainers-grid] img.h-80 {

@@ -58,8 +58,14 @@
       { tab: "Mat Pilates", period: "Mat Pilates", name: "3 Months", price: "₹11,097", validity: "3 months" },
       { tab: "Mat Pilates", period: "Mat Pilates", name: "6 Months", price: "₹22,194", validity: "6 months" },
       { tab: "Mat Pilates", period: "Mat Pilates", name: "12 Months", price: "₹44,388", validity: "12 months" },
-      { tab: "Strength", period: "Strength Training", name: "12 Sessions", price: "₹7,899", validity: "—" },
-      { tab: "Zumba", period: "Zumba", name: "12 Sessions", price: "₹3,500", validity: "—" },
+      { tab: "Strength", period: "Strength Training", name: "12 Sessions", price: "₹7,899", validity: "45 days" },
+      { tab: "Strength", period: "Strength Training", name: "36 Sessions", price: "₹23,697", validity: "105 days" },
+      { tab: "Strength", period: "Strength Training", name: "6 Months", price: "₹47,394", validity: "6 months" },
+      { tab: "Strength", period: "Strength Training", name: "12 Months", price: "₹94,788", validity: "12 months" },
+      { tab: "Zumba", period: "Zumba", name: "12 Sessions", price: "₹3,500", validity: "45 days" },
+      { tab: "Zumba", period: "Zumba", name: "36 Sessions", price: "₹9,500", validity: "105 days" },
+      { tab: "Zumba", period: "Zumba", name: "6 Months", price: "₹18,900", validity: "6 months" },
+      { tab: "Zumba", period: "Zumba", name: "12 Months", price: "₹35,800", validity: "12 months" },
     ],
     testimonials: [
       {
@@ -203,7 +209,33 @@
       cafeImages: Array.isArray(saved.cafeImages)
         ? saved.cafeImages
         : DEFAULT_CONTENT.cafeImages.slice(),
-      plans: Array.isArray(saved.plans) ? saved.plans : DEFAULT_CONTENT.plans.slice(),
+      plans: (() => {
+        const list = Array.isArray(saved.plans) ? saved.plans.slice() : DEFAULT_CONTENT.plans.slice();
+        const tabKey = (p) => {
+          const t = String(p.tab || p.period || "");
+          if (/strength/i.test(t)) return "Strength";
+          if (/zumba/i.test(t)) return "Zumba";
+          if (/mat/i.test(t)) return "Mat Pilates";
+          if (/reformer/i.test(t)) return "Reformer Pilates";
+          return t;
+        };
+        const demoPack = list.some(
+          (p) => tabKey(p) === "Reformer Pilates" && /Single Session|8 Session Pack/i.test(String(p.name || ""))
+        );
+        const source = demoPack
+          ? DEFAULT_CONTENT.plans.filter((p) => p.tab === "Reformer Pilates").concat(list.filter((p) => tabKey(p) !== "Reformer Pilates"))
+          : list;
+        const tabs = ["Reformer Pilates", "Mat Pilates", "Strength", "Zumba"];
+        let next = source.slice();
+        tabs.forEach((tab) => {
+          const have = next.filter((p) => tabKey(p) === tab);
+          const want = DEFAULT_CONTENT.plans.filter((p) => p.tab === tab);
+          if (have.length < want.length) {
+            next = next.filter((p) => tabKey(p) !== tab).concat(want);
+          }
+        });
+        return next;
+      })(),
       gallery: (Array.isArray(saved.gallery) ? saved.gallery : DEFAULT_CONTENT.gallery.slice()).map((item) => {
         const custom = String(item.src || "").startsWith("data:");
         if (custom) return item;

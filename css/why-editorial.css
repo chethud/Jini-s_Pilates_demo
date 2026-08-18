@@ -1,0 +1,236 @@
+/* Why Pilates — static editorial benefits */
+#why-pilates {
+  --why-bg: #f6f3ec;
+  --why-card: #fbfcfb;
+  --why-mint: #e7f6f2;
+  --why-accent: #3bb8a4;
+  --why-text: #243332;
+  --why-muted: #667572;
+  position: relative;
+  overflow: hidden;
+  padding-top: 4rem !important;
+  padding-bottom: 4.25rem !important;
+  background: var(--why-bg) !important;
+  color: var(--why-text);
+}
+
+#why-pilates .why-botany {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--why-accent);
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.16;
+}
+
+#why-pilates .why-botany--tl {
+  top: -1.25rem;
+  right: -1.5rem;
+  width: 10rem;
+  height: 10rem;
+  transform: rotate(28deg);
+}
+
+#why-pilates .why-botany--bl {
+  left: -1.5rem;
+  bottom: 6rem;
+  width: 9rem;
+  height: 9rem;
+}
+
+#why-pilates .why-inner {
+  position: relative;
+  z-index: 1;
+}
+
+#why-pilates .why-layout {
+  display: grid;
+  gap: 2.25rem;
+}
+
+#why-pilates .why-eyebrow {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--why-accent);
+}
+
+#why-pilates .why-eyebrow::after {
+  content: "";
+  display: block;
+  width: 2.75rem;
+  height: 2px;
+  margin-top: 0.65rem;
+  background: var(--why-accent);
+  opacity: 0.55;
+}
+
+#why-pilates .why-headline {
+  margin: 1.15rem 0 0;
+  font-family: var(--nav-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(2.15rem, 4.4vw, 3.2rem) !important;
+  font-weight: 500;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em;
+  color: var(--why-text);
+}
+
+#why-pilates .why-lede {
+  margin: 0.95rem 0 0;
+  max-width: 26rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--why-muted);
+}
+
+#why-pilates .why-visual {
+  display: block;
+  width: 100%;
+  max-width: 26rem;
+  margin-top: 1.75rem;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 3.25rem 1.5rem 1.5rem 1.5rem;
+}
+
+#why-pilates .why-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+#why-pilates .why-card {
+  padding: 1.1rem 1.05rem 1rem;
+  border-radius: 1.35rem;
+  background: var(--why-card);
+  box-shadow: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+#why-pilates .why-card-icon {
+  display: grid;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 184, 164, 0.35);
+  color: var(--why-accent);
+  transition: transform 0.3s ease;
+}
+
+#why-pilates .why-card-icon svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+#why-pilates .why-card h3 {
+  margin: 0.7rem 0 0;
+  font-family: var(--nav-display, "Playfair Display", Georgia, serif);
+  font-size: 1.12rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--why-text);
+}
+
+#why-pilates .why-card p {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--why-muted);
+}
+
+#why-pilates .why-card-bar {
+  display: block;
+  width: 1.35rem;
+  height: 1px;
+  margin-top: 0.85rem;
+  background: var(--why-accent);
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+@media (hover: hover) {
+  #why-pilates .why-card:hover {
+    transform: translateY(-4px);
+    background: var(--why-mint);
+  }
+
+  #why-pilates .why-card:hover .why-card-icon {
+    transform: scale(1.12);
+  }
+
+  #why-pilates .why-card:hover .why-card-bar {
+    width: 2rem;
+    opacity: 0.85;
+  }
+}
+
+#why-pilates .why-trainers {
+  margin-top: 3.25rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(59, 184, 164, 0.18);
+}
+
+#why-pilates .why-trainers-head {
+  max-width: 32rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#why-pilates .why-trainers-head .why-eyebrow::after {
+  margin-inline: auto;
+}
+
+#why-pilates .why-trainers-head h3 {
+  margin: 0.7rem 0 0;
+  font-family: var(--nav-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  color: var(--why-text);
+}
+
+#why-pilates .why-trainers-head p {
+  margin: 0.7rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--why-muted);
+}
+
+@media (min-width: 900px) {
+  #why-pilates .why-layout {
+    grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.15fr);
+    gap: 2.75rem 3.25rem;
+    align-items: start;
+  }
+
+  #why-pilates .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #why-pilates .why-card,
+  #why-pilates .why-card-icon,
+  #why-pilates .why-card-bar {
+    transition: none;
+  }
+
+  #why-pilates .why-card:hover {
+    transform: none;
+  }
+}
+
+html.dark #why-pilates {
+  --why-bg: #1c2623;
+  --why-card: #243532;
+  --why-mint: #2c403b;
+  --why-text: #eef3f1;
+  --why-muted: #9eb5b0;
+}
