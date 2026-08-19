@@ -50,22 +50,16 @@
       { src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter" },
     ],
     plans: [
-      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "12 Sessions", price: "₹7,899", validity: "45 days" },
-      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "36 Sessions", price: "₹23,697", validity: "105 days" },
-      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "6 Months", price: "₹47,394", validity: "6 months" },
-      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "12 Months", price: "₹94,788", validity: "12 months" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "1 Month", price: "₹7,899", sessions: "12 sessions", validity: "Within 45 days" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "3 Months", price: "₹23,697", sessions: "36 sessions", validity: "Within 105 days" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "6 Months", price: "₹47,394", sessions: "72 sessions", validity: "Within 195 days" },
+      { tab: "Reformer Pilates", period: "Reformer Pilates", name: "12 Months", price: "₹94,788", sessions: "144 sessions", validity: "Within 385 days" },
       { tab: "Mat Pilates", period: "Mat Pilates", name: "1 Month", price: "₹3,699", validity: "1 month" },
       { tab: "Mat Pilates", period: "Mat Pilates", name: "3 Months", price: "₹11,097", validity: "3 months" },
       { tab: "Mat Pilates", period: "Mat Pilates", name: "6 Months", price: "₹22,194", validity: "6 months" },
       { tab: "Mat Pilates", period: "Mat Pilates", name: "12 Months", price: "₹44,388", validity: "12 months" },
-      { tab: "Strength", period: "Strength Training", name: "12 Sessions", price: "₹7,899", validity: "45 days" },
-      { tab: "Strength", period: "Strength Training", name: "36 Sessions", price: "₹23,697", validity: "105 days" },
-      { tab: "Strength", period: "Strength Training", name: "6 Months", price: "₹47,394", validity: "6 months" },
-      { tab: "Strength", period: "Strength Training", name: "12 Months", price: "₹94,788", validity: "12 months" },
-      { tab: "Zumba", period: "Zumba", name: "12 Sessions", price: "₹3,500", validity: "45 days" },
-      { tab: "Zumba", period: "Zumba", name: "36 Sessions", price: "₹9,500", validity: "105 days" },
-      { tab: "Zumba", period: "Zumba", name: "6 Months", price: "₹18,900", validity: "6 months" },
-      { tab: "Zumba", period: "Zumba", name: "12 Months", price: "₹35,800", validity: "12 months" },
+      { tab: "Strength", period: "Strength Training", name: "1-on-1", price: "On request", benefit: "Personal Strength Training" },
+      { tab: "Zumba", period: "Zumba", name: "12 Sessions", price: "₹3,500", sessions: "12 sessions" },
     ],
     testimonials: [
       {
@@ -220,11 +214,14 @@
           return t;
         };
         const demoPack = list.some(
-          (p) => tabKey(p) === "Reformer Pilates" && /Single Session|8 Session Pack/i.test(String(p.name || ""))
+          (p) => tabKey(p) === "Reformer Pilates" && /Single Session|8 Session Pack|12 Sessions/i.test(String(p.name || ""))
         );
-        const source = demoPack
-          ? DEFAULT_CONTENT.plans.filter((p) => p.tab === "Reformer Pilates").concat(list.filter((p) => tabKey(p) !== "Reformer Pilates"))
-          : list;
+        const oldStrength = list.some(
+          (p) => tabKey(p) === "Strength" && /12 Sessions|36 Sessions/i.test(String(p.name || ""))
+        );
+        const oldZumba = list.filter((p) => tabKey(p) === "Zumba").length > 1;
+        const source =
+          demoPack || oldStrength || oldZumba ? DEFAULT_CONTENT.plans.slice() : list;
         const tabs = ["Reformer Pilates", "Mat Pilates", "Strength", "Zumba"];
         let next = source.slice();
         tabs.forEach((tab) => {

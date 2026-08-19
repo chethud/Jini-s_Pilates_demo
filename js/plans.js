@@ -43,6 +43,7 @@
   const validityCopy = (plan) => {
     const raw = validityOf(plan);
     if (!raw || raw === "—") return "";
+    if (/^within /i.test(raw)) return raw;
     if (/days/i.test(raw)) return `Valid for ${raw.replace(/^valid( for)?\s*/i, "")}`;
     if (/month/i.test(raw)) return `${raw.replace(/s$/i, "")} membership`;
     return raw;

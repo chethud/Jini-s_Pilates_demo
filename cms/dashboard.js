@@ -204,6 +204,7 @@
         <label>Class tab<input data-plan="tab" type="text" value="${escapeAttr(item.tab || item.period || "")}" placeholder="Reformer Pilates, Mat Pilates, Strength, Zumba"></label>
         <label>Package<input data-plan="name" type="text" value="${escapeAttr(item.name)}"></label>
         <label>Price<input data-plan="price" type="text" value="${escapeAttr(item.price)}"></label>
+        <label>Sessions<input data-plan="sessions" type="text" value="${escapeAttr(item.sessions || "")}"></label>
         <label>Validity<input data-plan="validity" type="text" value="${escapeAttr(item.validity || item.note || "")}"></label>
       </div>`
       )
@@ -346,6 +347,7 @@
         period: tab === "Strength" ? "Strength Training" : tab,
         name: row.querySelector('[data-plan="name"]').value.trim(),
         price: row.querySelector('[data-plan="price"]').value.trim(),
+        sessions: row.querySelector('[data-plan="sessions"]').value.trim(),
         validity: row.querySelector('[data-plan="validity"]').value.trim(),
       };
     });
@@ -432,6 +434,7 @@
       period: "Reformer Pilates",
       name: "New package",
       price: "₹0",
+      sessions: "",
       validity: "",
     });
     renderPlans();
