@@ -205,7 +205,7 @@
   const renderDetail = (root, tab, groups, opts, tabs) => {
     const meta = classMeta(tab, opts.classes);
     const packages = groups[tab] || [];
-    const backHref = opts.backHref || "/#classes";
+    const backHref = opts.backHref || "/classes";
     const tabList = Array.isArray(tabs) && tabs.length ? tabs : Object.keys(groups);
     root.dataset.activeTab = tab;
     root.innerHTML = `<section class="pkg-choose">

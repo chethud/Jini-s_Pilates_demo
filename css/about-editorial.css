@@ -21,8 +21,8 @@
 }
 
 #about .about-blob--tl {
-  top: -4rem;
-  right: -6rem;
+  top: 0;
+  right: 0;
   width: 22rem;
   height: 22rem;
   background: radial-gradient(circle, rgba(191, 239, 230, 0.55), transparent 68%);
@@ -30,7 +30,7 @@
 
 #about .about-blob--br {
   bottom: 8rem;
-  left: -5rem;
+  left: 0;
   width: 18rem;
   height: 18rem;
   background: radial-gradient(circle, rgba(191, 239, 230, 0.4), transparent 70%);

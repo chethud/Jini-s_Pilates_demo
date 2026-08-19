@@ -28,15 +28,15 @@
 }
 
 #faq .faq-botany--tl {
-  top: -1.25rem;
-  left: -1.5rem;
+  top: 0.65rem;
+  left: 0.45rem;
   width: 9.5rem;
   height: 9.5rem;
 }
 
 #faq .faq-botany--br {
-  right: -1.5rem;
-  bottom: -1rem;
+  right: 0.45rem;
+  bottom: 0.65rem;
   width: 10rem;
   height: 10rem;
   transform: rotate(155deg);
