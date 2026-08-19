@@ -321,6 +321,8 @@
         </article>`)
       .join("");
     bindFaqAccordion();
+    const first = qs("#faq [data-faq-item]");
+    if (first && window.matchMedia("(min-width: 900px)").matches) setFaqOpen(first, true);
   };
 
   /* ---------- scroll header + progress + reveals ---------- */
