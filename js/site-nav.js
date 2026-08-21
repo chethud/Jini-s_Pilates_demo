@@ -4,7 +4,7 @@
     { href: "/#why-pilates", label: "Why Pilates" },
     { href: "/classes", label: "Classes" },
     { href: "/cafe", label: "Cafe" },
-    { href: "/plans", label: "Plans" },
+    { href: "/#membership", label: "Plans" },
     { href: "/gallery", label: "Gallery" },
     { href: "/#contact", label: "Contact" },
   ];

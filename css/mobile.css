@@ -32,22 +32,20 @@ main > section:not(#hero) {
   gap: var(--content-gap);
 }
 
-#hero .hero-gallery-jump {
+.hero-gallery-jump {
   display: none;
 }
 
 @media (max-width: 720px) {
-  #hero .hero-gallery-jump {
+  .hero-gallery-jump {
     display: flex;
     gap: 0.65rem;
-    position: absolute;
-    z-index: 2;
-    left: max(1rem, env(safe-area-inset-left));
-    right: max(1rem, env(safe-area-inset-right));
-    bottom: max(1.1rem, env(safe-area-inset-bottom));
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0.85rem auto 0.35rem;
+    padding-inline: max(0px, env(safe-area-inset-left));
   }
 
-  #hero .hero-gallery-jump a {
+  .hero-gallery-jump a {
     flex: 1;
     display: inline-flex;
     align-items: center;
@@ -60,9 +58,9 @@ main > section:not(#hero) {
     letter-spacing: 0.04em;
     text-decoration: none;
     color: #1a2421;
-    background: rgba(255, 255, 255, 0.94);
+    background: #fff;
     border: 1px solid rgba(26, 36, 33, 0.14);
-    box-shadow: 0 8px 20px rgba(36, 51, 50, 0.1);
+    box-shadow: 0 8px 20px rgba(36, 51, 50, 0.08);
   }
 }
 
