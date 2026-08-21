@@ -32,6 +32,40 @@ main > section:not(#hero) {
   gap: var(--content-gap);
 }
 
+#hero .hero-gallery-jump {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  #hero .hero-gallery-jump {
+    display: flex;
+    gap: 0.65rem;
+    position: absolute;
+    z-index: 2;
+    left: max(1rem, env(safe-area-inset-left));
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1.1rem, env(safe-area-inset-bottom));
+  }
+
+  #hero .hero-gallery-jump a {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: #1a2421;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(26, 36, 33, 0.14);
+    box-shadow: 0 8px 20px rgba(36, 51, 50, 0.1);
+  }
+}
+
 /* Phone and small-tablet layout */
 #hero .bg-gradient-to-b {
   display: block;
@@ -174,15 +208,22 @@ svg {
 }
 
 @media (max-width: 900px) {
+  /* Fill the first screen; svh = visible viewport with mobile browser chrome */
   #hero.min-h-dvh,
   #hero .min-h-dvh,
   #hero .mx-auto.flex {
-    min-height: 0 !important;
+    min-height: 100svh !important;
     height: auto;
   }
 
   #hero {
-    min-height: unset !important;
+    min-height: 100svh !important;
+  }
+
+  #hero .absolute.inset-0.-z-10 {
+    inset: 0;
+    height: 100%;
+    min-height: 100%;
   }
 
   #hero .absolute.inset-0 img,
@@ -215,6 +256,12 @@ svg {
   #hero .mt-10 > a {
     justify-content: center;
     text-align: center;
+  }
+
+  #hero .hero-cta-ghost {
+    background: #fff;
+    color: #1a2421;
+    border-color: rgba(26, 36, 33, 0.2);
   }
 
   main > section:not(#hero) {

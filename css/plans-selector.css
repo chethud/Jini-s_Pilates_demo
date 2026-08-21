@@ -544,6 +544,35 @@ html.dark #membership {
 
   .pkg-card-body {
     padding: 1.15rem 1.2rem 1.25rem;
+    opacity: 1;
+    transform: none;
+  }
+
+  .pkg-card-media::after {
+    opacity: 1;
+    background: linear-gradient(
+      180deg,
+      transparent 35%,
+      rgba(28, 25, 23, 0.78) 100%
+    );
+  }
+
+  .pkg-line {
+    display: none;
+  }
+
+  .pkg-kicker,
+  .pkg-title,
+  .pkg-cta {
+    color: #f7f4ef;
+  }
+
+  .pkg-cta-rest {
+    display: none;
+  }
+
+  .pkg-cta-more {
+    display: inline;
   }
 
   .pkg-title {
