@@ -129,13 +129,15 @@
 }
 
 #testimonials .t-avatar-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
   border: 0;
   object-fit: cover;
-  object-position: center 38%;
+  object-position: center 14%;
   display: block;
 }
 
@@ -284,11 +286,32 @@
   border-radius: var(--t-radius-mini);
   padding: 1rem 1.05rem 1.15rem 0.9rem;
   min-height: 16.5rem;
+  cursor: pointer;
 }
 
 #testimonials .t-mini:hover {
   transform: translateY(-2px);
   box-shadow: 0 22px 44px -16px rgba(20, 40, 36, 0.12);
+}
+
+#testimonials .t-mini:focus-visible {
+  outline: 2px solid var(--t-accent);
+  outline-offset: 3px;
+}
+
+#testimonials .t-hero.t-hero-swap {
+  animation: t-hero-swap 0.45s ease;
+}
+
+@keyframes t-hero-swap {
+  from {
+    opacity: 0.55;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 #testimonials .t-mini .t-name {
@@ -392,6 +415,7 @@
   #testimonials {
     padding-top: 2.75rem !important;
     padding-bottom: 3rem !important;
+    background: #fff !important;
   }
 
   #testimonials .t-layout {

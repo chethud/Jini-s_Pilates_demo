@@ -328,19 +328,32 @@
   }
 
   #why-pilates .why-coaches {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, minmax(0, 22rem));
+    justify-content: center;
+    gap: 1.5rem;
     align-items: stretch;
+    max-width: 48rem;
+    margin-inline: auto;
   }
 
   #why-pilates .why-coach {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
+  }
+
+  #why-pilates .why-coach:only-child {
+    max-width: 22rem;
   }
 
   #why-pilates .why-coach-info {
     flex: 1;
+  }
+
+  #why-pilates .why-coach-photo img {
+    aspect-ratio: 1 / 1;
+    object-position: center 18%;
   }
 }
 

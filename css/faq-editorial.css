@@ -294,7 +294,7 @@
   main > section#faq {
     padding-top: 2.15rem !important;
     padding-bottom: 2.25rem !important;
-    background: #eaf7f4 !important;
+    background: #fff !important;
   }
 
   #faq .faq-intro {
@@ -329,7 +329,7 @@
   }
 
   #faq .faq-item {
-    border: 0;
+    border: 1px solid rgba(47, 157, 138, 0.18);
     border-radius: 1.4rem;
     background: #fff;
     box-shadow: 0 8px 20px rgba(36, 51, 50, 0.05);
@@ -337,6 +337,7 @@
 
   #faq .faq-item[data-state="open"] {
     background: #fff;
+    border-color: rgba(47, 157, 138, 0.38);
   }
 
   #faq .faq-num {

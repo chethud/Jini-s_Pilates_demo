@@ -417,6 +417,7 @@ main > section#contact {
   main > section#contact {
     padding-top: 1.75rem !important;
     padding-bottom: 2rem !important;
+    background: #fff !important;
   }
 
   #contact .c-headline {
@@ -436,7 +437,10 @@ main > section#contact {
   }
 
   #contact .c-form-panel {
-    padding: 1rem 1rem 1rem;
+    padding: 1.15rem 1.05rem 1.1rem;
+    background: #fff;
+    border: 1px solid rgba(47, 157, 138, 0.12);
+    box-shadow: 0 8px 22px rgba(36, 51, 50, 0.05);
   }
 
   #contact .c-panel-title {
@@ -461,6 +465,20 @@ main > section#contact {
   }
 
   #contact .c-form input,
+  #contact .c-form select,
+  #contact .c-form textarea {
+    background-color: #f4faf8;
+    border-color: rgba(47, 157, 138, 0.16);
+  }
+
+  #contact .c-form input:focus,
+  #contact .c-form select:focus,
+  #contact .c-form textarea:focus {
+    background-color: #fff;
+    border-color: var(--c-accent);
+  }
+
+  #contact .c-form input,
   #contact .c-form select {
     height: 2.55rem;
     font-size: 0.82rem;
@@ -480,6 +498,14 @@ main > section#contact {
   #contact .c-note {
     font-size: 0.72rem;
     margin-top: 0.5rem;
+  }
+
+  #contact .c-studio-head {
+    background: #fff;
+  }
+
+  #contact .c-action {
+    background: #f4faf8;
   }
 
   #contact .c-map {

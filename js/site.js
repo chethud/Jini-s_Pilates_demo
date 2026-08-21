@@ -34,39 +34,39 @@
 
   const parseFaceCrop = (item, img) => {
     const raw = item?.faceCrop ?? item?.faceFocus;
-    let preset = null;
+    // faceCrop: [cx, cy, w, h, zoom?, targetX?, targetY?]
+    // cx/cy = face focus in the source image; targetX/Y = where that point lands in the circular frame
+    // (frames hang off the top-left, so the visible arc is lower-right ≈ 60%, 52%)
     if (Array.isArray(raw)) {
-      if (raw.length >= 7) {
-        preset = { zoom: +raw[4] || 100, ox: +raw[5] || 50, oy: +raw[6] || 0 };
-      }
-      if (raw.length >= 4) {
+      if (raw.length >= 2) {
         return {
           cx: +raw[0] || 50,
-          cy: +raw[1] || 20,
+          cy: +raw[1] || 16,
           w: +raw[2] || 20,
           h: +raw[3] || 24,
-          preset,
+          zoom: +raw[4] || 0,
+          targetX: raw.length >= 6 ? +raw[5] : 70,
+          targetY: raw.length >= 7 ? +raw[6] : 64,
         };
-      }
-      if (raw.length >= 2) {
-        return { cx: +raw[0] || 50, cy: +raw[1] || 20, w: 20, h: 24, preset };
       }
     }
     if (raw && typeof raw === "object" && !Array.isArray(raw)) {
       return {
         cx: Number(raw.cx) || 50,
-        cy: Number(raw.cy) || 20,
+        cy: Number(raw.cy) || 16,
         w: Number(raw.w) || 20,
         h: Number(raw.h) || 24,
-        preset: raw.preset || null,
+        zoom: Number(raw.zoom) || 0,
+        targetX: Number(raw.targetX) || 70,
+        targetY: Number(raw.targetY) || 64,
       };
     }
     const { naturalWidth: w, naturalHeight: h } = img;
-    if (!w || !h) return { cx: 50, cy: 20, w: 20, h: 24 };
+    if (!w || !h) return { cx: 50, cy: 16, w: 20, h: 24, zoom: 0, targetX: 70, targetY: 64 };
     const ratio = h / w;
     return ratio > 1.1
-      ? { cx: 50, cy: 18, w: 22, h: 28 }
-      : { cx: 50, cy: 28, w: 20, h: 22 };
+      ? { cx: 50, cy: 14, w: 22, h: 28, zoom: 0, targetX: 70, targetY: 64 }
+      : { cx: 50, cy: 22, w: 20, h: 22, zoom: 0, targetX: 70, targetY: 64 };
   };
 
   const detectCardFace = async (img, item) => {
@@ -82,7 +82,7 @@
           return {
             ...base,
             cx: ((b.x + b.width / 2) / nw) * 100,
-            cy: ((b.y + b.height * 0.45) / nh) * 100,
+            cy: ((b.y + b.height * 0.42) / nh) * 100,
             w: Math.min(100, (b.width / nw) * 100 * 1.45),
             h: Math.min(100, (b.height / nh) * 100 * 1.6),
           };
@@ -94,55 +94,30 @@
 
   const fitCardFaceInArc = (img, face) => {
     const frame = img.parentElement;
-    const card = img.closest(".t-hero, .t-mini");
-    if (!frame || !card) return;
+    if (!frame) return;
 
-    if (face.preset) {
-      img.style.width = `${face.preset.zoom}%`;
-      img.style.height = `${face.preset.zoom}%`;
-      img.style.objectPosition = `${face.preset.ox}% ${face.preset.oy}%`;
-      return;
-    }
+    const fx = clampPct(face.cx);
+    const fy = clampPct(face.cy);
+    const targetX = clampPct(face.targetX ?? 70);
+    const targetY = clampPct(face.targetY ?? 64);
+    const zoom =
+      face.zoom > 0
+        ? Math.min(240, Math.max(120, face.zoom))
+        : Math.min(220, Math.max(150, Math.round(2800 / Math.max(face.w || 20, 10))));
 
-    const fr = frame.getBoundingClientRect();
-    const cx = fr.left + fr.width / 2;
-    const cy = fr.top + fr.height / 2;
-    const r = fr.width / 2;
-    const fx = face.cx / 100;
-    const fy = face.cy / 100;
-
-    img.style.width = "100%";
-    img.style.height = "100%";
-
-    let best = null;
-    for (let zoom = 100; zoom <= 220; zoom += 5) {
-      for (let oy = 0; oy <= 60; oy += 2) {
-        for (let ox = 18; ox <= 82; ox += 2) {
-          img.style.width = `${zoom}%`;
-          img.style.height = `${zoom}%`;
-          img.style.objectPosition = `${ox}% ${oy}%`;
-          const cr = card.getBoundingClientRect();
-          const ir = img.getBoundingClientRect();
-          if (!ir.width) continue;
-          const px = ir.left + ir.width * fx;
-          const py = ir.top + ir.height * fy;
-          const vis = (px - cx) ** 2 + (py - cy) ** 2 <= r * r * 0.9 && px >= cr.left && py >= cr.top;
-          if (!vis) continue;
-          const score = -zoom;
-          if (!best || score > best.score) best = { zoom, ox, oy, score };
-        }
-      }
-    }
-
-    if (best) {
-      img.style.width = `${best.zoom}%`;
-      img.style.height = `${best.zoom}%`;
-      img.style.objectPosition = `${best.ox}% ${best.oy}%`;
-    } else {
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectPosition = `${clampPct(face.cx)}% ${clampPct(face.cy)}%`;
-    }
+    // Pin the face point inside the img box, then shift the box so that point
+    // lands in the visible lower-right arc of the clipped circular frame.
+    img.style.position = "absolute";
+    img.style.inset = "auto";
+    img.style.margin = "0";
+    img.style.width = `${zoom}%`;
+    img.style.height = `${zoom}%`;
+    img.style.maxWidth = "none";
+    img.style.objectFit = "cover";
+    img.style.objectPosition = `${fx}% ${fy}%`;
+    img.style.left = `${targetX - (fx / 100) * zoom}%`;
+    img.style.top = `${targetY - (fy / 100) * zoom}%`;
+    img.style.transform = "none";
   };
 
   const alignTestimonialCardFace = (img, item) => {
@@ -270,12 +245,15 @@
 
   const testimonialDecoSvg = `<svg class="t-quote-deco-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>`;
 
-  const testimonialCardHtml = (item, { featured = false } = {}) => {
+  const testimonialCardHtml = (item, { featured = false, index = 0 } = {}) => {
     const itemImg = asset(item.image || "assets/gallery_members_cyis7hte.jpg");
     const itemName = escapeHtml(item.name || "Member");
     const tag = featured ? "h3" : "h4";
     const cls = featured ? "t-hero" : "t-mini";
-    return `<article class="${cls}">
+    const interactive = featured
+      ? ""
+      : ` tabindex="0" role="button" aria-label="Show ${itemName}'s review" onclick="window.JinisPromoteTestimonial&&window.JinisPromoteTestimonial(+this.dataset.tIndex)"`;
+    return `<article class="${cls}" data-t-index="${index}"${interactive}>
         <div class="t-avatar-frame">
           <img src="${itemImg}" alt="${itemName}" width="320" height="320" loading="lazy" class="t-avatar-img">
         </div>
@@ -293,32 +271,54 @@
       </article>`;
   };
 
+  let testimonialOrder = [];
+
+  const promoteTestimonial = (fromIndex) => {
+    if (!Array.isArray(testimonialOrder) || fromIndex <= 0 || fromIndex >= testimonialOrder.length) return false;
+    const next = testimonialOrder.slice();
+    const featured = next[0];
+    next[0] = next[fromIndex];
+    next[fromIndex] = featured;
+    renderTestimonialsGrid(next);
+    const hero = qs("#testimonials .t-hero");
+    hero?.classList.remove("t-hero-swap");
+    void hero?.offsetWidth;
+    hero?.classList.add("t-hero-swap");
+    return true;
+  };
+
+  const wireTestimonialPromote = (grid) => {
+    qsa(".t-mini", grid).forEach((row) => {
+      if (row.dataset.promoteWired === "1") return;
+      row.dataset.promoteWired = "1";
+      row.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        const idx = Number(row.dataset.tIndex);
+        if (!Number.isFinite(idx) || idx <= 0) return;
+        promoteTestimonial(idx);
+      });
+    });
+  };
+
   const renderTestimonialsGrid = (items) => {
     const grid = qs("[data-cms-testimonials-grid]");
     if (!grid || !Array.isArray(items) || !items.length) return;
-    const [hero, ...rest] = items;
+    testimonialOrder = items.slice();
+    const [hero, ...rest] = testimonialOrder;
 
-    const minis = rest.map((item) => testimonialCardHtml(item)).join("");
+    const minis = rest.map((item, i) => testimonialCardHtml(item, { index: i + 1 })).join("");
 
-    grid.innerHTML = `${testimonialCardHtml(hero, { featured: true })}
+    grid.innerHTML = `${testimonialCardHtml(hero, { featured: true, index: 0 })}
       <div class="t-minis">
         ${minis}
       </div>`;
-    alignTestimonialFaces(grid, items);
+    alignTestimonialFaces(grid, testimonialOrder);
     syncTestimonialMarquee(grid);
-    if (grid.dataset.tBound !== "1") {
-      grid.dataset.tBound = "1";
-      grid.addEventListener("click", (e) => {
-        if (!window.matchMedia("(max-width: 720px)").matches) return;
-        const row = e.target.closest(".t-mini");
-        if (!row) return;
-        grid.querySelectorAll(".t-mini.is-open").forEach((el) => {
-          if (el !== row) el.classList.remove("is-open");
-        });
-        row.classList.toggle("is-open");
-      });
-    }
+    wireTestimonialPromote(grid);
   };
+
+  window.JinisPromoteTestimonial = promoteTestimonial;
 
 
   const renderPlansGrid = (plans, classes) => {
@@ -478,6 +478,24 @@
     }
   };
 
+  let faqMqBound = false;
+
+  const closeAllFaqs = () => {
+    qsa("#faq [data-faq-item]").forEach((item) => setFaqOpen(item, false));
+  };
+
+  const applyFaqDefaults = () => {
+    // Never expand an FAQ by default on mobile/tablet. Desktop keeps the first open.
+    const desktop =
+      window.matchMedia("(min-width: 900px)").matches &&
+      Math.min(window.innerWidth, document.documentElement.clientWidth) >= 900;
+    if (desktop) {
+      qsa("#faq [data-faq-item]").forEach((item, i) => setFaqOpen(item, i === 0));
+    } else {
+      closeAllFaqs();
+    }
+  };
+
   const bindFaqAccordion = () => {
     qsa("#faq [data-faq-item]").forEach((item) => {
       const btn = qs("[data-faq-q]", item);
@@ -485,7 +503,7 @@
       btn.dataset.faqBound = "1";
       btn.addEventListener("click", () => {
         const open = item.getAttribute("data-state") === "open";
-        qsa("#faq [data-faq-item]").forEach((other) => setFaqOpen(other, false));
+        closeAllFaqs();
         if (!open) setFaqOpen(item, true);
       });
     });
@@ -509,11 +527,13 @@
         </article>`)
       .join("");
     bindFaqAccordion();
-    const first = qs("#faq [data-faq-item]");
-    if (first && window.matchMedia("(min-width: 900px)").matches) {
-      setFaqOpen(first, true);
-    } else {
-      qsa("#faq [data-faq-item]").forEach((item) => setFaqOpen(item, false));
+    applyFaqDefaults();
+    if (!faqMqBound) {
+      faqMqBound = true;
+      const mq = window.matchMedia("(min-width: 900px)");
+      const onFaqMq = () => applyFaqDefaults();
+      if (mq.addEventListener) mq.addEventListener("change", onFaqMq);
+      else mq.addListener(onFaqMq);
     }
   };
 

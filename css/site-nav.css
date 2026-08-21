@@ -456,6 +456,22 @@ main > section {
   background: transparent !important;
 }
 
+/* Mobile — white canvas for every section (hero keeps its photo) */
+@media (max-width: 720px) {
+  html:not(.dark),
+  html:not(.dark) body,
+  html:not(.dark) .min-h-dvh.bg-background,
+  html:not(.dark) main {
+    background: #fff !important;
+  }
+
+  html:not(.dark) main > section:not(#hero),
+  html:not(.dark) main > section:not(#hero).surface-warm,
+  html:not(.dark) .site-footer {
+    background: #fff !important;
+  }
+}
+
 /* Keep blobs off section edges so gradients don't clip into hard lines */
 main > section:not(#hero) .blob {
   top: 18% !important;
