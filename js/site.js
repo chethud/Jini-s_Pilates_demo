@@ -16,6 +16,181 @@
   const asset = (src) =>
     window.JinisContent ? window.JinisContent.assetUrl(src || "", "") : src || "";
 
+  const phoneMarquee = window.matchMedia("(max-width: 720px)");
+
+  const cloneWhyMarquee = () => {
+    const grid = qs("#why-pilates .why-grid");
+    if (!grid || grid.dataset.marquee === "1") return;
+    grid.dataset.marquee = "1";
+    [...grid.children].forEach((card) => {
+      const clone = card.cloneNode(true);
+      clone.classList.add("why-card-clone");
+      clone.setAttribute("aria-hidden", "true");
+      grid.appendChild(clone);
+    });
+  };
+
+  const clampPct = (n) => Math.min(100, Math.max(0, n));
+
+  const parseFaceCrop = (item, img) => {
+    const raw = item?.faceCrop ?? item?.faceFocus;
+    let preset = null;
+    if (Array.isArray(raw)) {
+      if (raw.length >= 7) {
+        preset = { zoom: +raw[4] || 100, ox: +raw[5] || 50, oy: +raw[6] || 0 };
+      }
+      if (raw.length >= 4) {
+        return {
+          cx: +raw[0] || 50,
+          cy: +raw[1] || 20,
+          w: +raw[2] || 20,
+          h: +raw[3] || 24,
+          preset,
+        };
+      }
+      if (raw.length >= 2) {
+        return { cx: +raw[0] || 50, cy: +raw[1] || 20, w: 20, h: 24, preset };
+      }
+    }
+    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+      return {
+        cx: Number(raw.cx) || 50,
+        cy: Number(raw.cy) || 20,
+        w: Number(raw.w) || 20,
+        h: Number(raw.h) || 24,
+        preset: raw.preset || null,
+      };
+    }
+    const { naturalWidth: w, naturalHeight: h } = img;
+    if (!w || !h) return { cx: 50, cy: 20, w: 20, h: 24 };
+    const ratio = h / w;
+    return ratio > 1.1
+      ? { cx: 50, cy: 18, w: 22, h: 28 }
+      : { cx: 50, cy: 28, w: 20, h: 22 };
+  };
+
+  const detectCardFace = async (img, item) => {
+    const base = parseFaceCrop(item, img);
+    if ("FaceDetector" in window) {
+      try {
+        const faces = await new FaceDetector({ fastMode: true, maxDetectedFaces: 1 }).detect(img);
+        const face = faces[0];
+        if (face) {
+          const b = face.boundingBox;
+          const nw = img.naturalWidth;
+          const nh = img.naturalHeight;
+          return {
+            ...base,
+            cx: ((b.x + b.width / 2) / nw) * 100,
+            cy: ((b.y + b.height * 0.45) / nh) * 100,
+            w: Math.min(100, (b.width / nw) * 100 * 1.45),
+            h: Math.min(100, (b.height / nh) * 100 * 1.6),
+          };
+        }
+      } catch (_) {}
+    }
+    return base;
+  };
+
+  const fitCardFaceInArc = (img, face) => {
+    const frame = img.parentElement;
+    const card = img.closest(".t-hero, .t-mini");
+    if (!frame || !card) return;
+
+    if (face.preset) {
+      img.style.width = `${face.preset.zoom}%`;
+      img.style.height = `${face.preset.zoom}%`;
+      img.style.objectPosition = `${face.preset.ox}% ${face.preset.oy}%`;
+      return;
+    }
+
+    const fr = frame.getBoundingClientRect();
+    const cx = fr.left + fr.width / 2;
+    const cy = fr.top + fr.height / 2;
+    const r = fr.width / 2;
+    const fx = face.cx / 100;
+    const fy = face.cy / 100;
+
+    img.style.width = "100%";
+    img.style.height = "100%";
+
+    let best = null;
+    for (let zoom = 100; zoom <= 220; zoom += 5) {
+      for (let oy = 0; oy <= 60; oy += 2) {
+        for (let ox = 18; ox <= 82; ox += 2) {
+          img.style.width = `${zoom}%`;
+          img.style.height = `${zoom}%`;
+          img.style.objectPosition = `${ox}% ${oy}%`;
+          const cr = card.getBoundingClientRect();
+          const ir = img.getBoundingClientRect();
+          if (!ir.width) continue;
+          const px = ir.left + ir.width * fx;
+          const py = ir.top + ir.height * fy;
+          const vis = (px - cx) ** 2 + (py - cy) ** 2 <= r * r * 0.9 && px >= cr.left && py >= cr.top;
+          if (!vis) continue;
+          const score = -zoom;
+          if (!best || score > best.score) best = { zoom, ox, oy, score };
+        }
+      }
+    }
+
+    if (best) {
+      img.style.width = `${best.zoom}%`;
+      img.style.height = `${best.zoom}%`;
+      img.style.objectPosition = `${best.ox}% ${best.oy}%`;
+    } else {
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectPosition = `${clampPct(face.cx)}% ${clampPct(face.cy)}%`;
+    }
+  };
+
+  const alignTestimonialCardFace = (img, item) => {
+    if (!img || img.dataset.faceAligned === "1") return;
+    const apply = async () => {
+      const face = await detectCardFace(img, item);
+      const frame = img.parentElement;
+      if (!frame) return;
+      const runFit = () => {
+        if (!frame.clientWidth) {
+          requestAnimationFrame(runFit);
+          return;
+        }
+        fitCardFaceInArc(img, face);
+        img.dataset.faceAligned = "1";
+      };
+      runFit();
+    };
+    if (img.complete && img.naturalWidth) apply();
+    else img.addEventListener("load", () => apply(), { once: true });
+  };
+
+  const alignTestimonialFaces = (grid, items) => {
+    if (!grid || !Array.isArray(items)) return;
+    qsa(".t-hero .t-avatar-img, .t-mini .t-avatar-img", grid).forEach((img, i) => {
+      alignTestimonialCardFace(img, items[i]);
+    });
+  };
+
+  const syncTestimonialMarquee = (grid) => {
+    const track = grid || qs("[data-cms-testimonials-grid]");
+    if (!track) return;
+    qsa("[data-marquee-clone]", track).forEach((el) => el.remove());
+    delete track.dataset.marquee;
+    if (!phoneMarquee.matches) return;
+    track.dataset.marquee = "1";
+    const slides = [
+      track.querySelector(":scope > .t-hero"),
+      ...track.querySelectorAll(":scope > .t-minis > .t-mini"),
+    ].filter(Boolean);
+    slides.forEach((slide) => {
+      const clone = slide.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      clone.dataset.marqueeClone = "1";
+      track.appendChild(clone);
+    });
+  };
+
   const classIcon = (name) => {
     const n = String(name || "").toLowerCase();
     const svg = (d) =>
@@ -77,54 +252,60 @@
 
   const starsHtml = (n) => {
     const rating = Math.min(5, Math.max(1, Number(n) || 5));
-    return `<span class="t-stars" aria-label="${rating} out of 5 stars">${"★".repeat(rating)}</span>`;
+    const starSvg = `<svg class="t-star-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+    return `<div class="t-stars" aria-label="${rating} out of 5 stars">${starSvg.repeat(rating)}</div>`;
   };
 
   const personHtml = (item) => {
     const img = asset(item.image || "assets/gallery_members_cyis7hte.jpg");
     const name = escapeHtml(item.name || "Member");
     return `<div class="t-person">
-      <img src="${img}" alt="" width="80" height="80" loading="lazy" class="t-photo">
+      <img src="${img}" alt="${name}" width="80" height="80" loading="lazy" class="t-photo">
       <div>
         <p class="t-name">${name}</p>
-        <p class="t-role">Pilates Member</p>
+        <p class="t-role">PILATES MEMBER</p>
       </div>
     </div>`;
+  };
+
+  const testimonialDecoSvg = `<svg class="t-quote-deco-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>`;
+
+  const testimonialCardHtml = (item, { featured = false } = {}) => {
+    const itemImg = asset(item.image || "assets/gallery_members_cyis7hte.jpg");
+    const itemName = escapeHtml(item.name || "Member");
+    const tag = featured ? "h3" : "h4";
+    const cls = featured ? "t-hero" : "t-mini";
+    return `<article class="${cls}">
+        <div class="t-avatar-frame">
+          <img src="${itemImg}" alt="${itemName}" width="320" height="320" loading="lazy" class="t-avatar-img">
+        </div>
+        <div class="t-author-box">
+          <${tag} class="t-name">${itemName}</${tag}>
+          <p class="t-role">PILATES MEMBER</p>
+        </div>
+        <div class="t-top-row">
+          <div class="t-rating-box">
+            ${starsHtml(item.rating)}
+          </div>
+        </div>
+        <p class="t-quote">${escapeHtml(item.quote || "")}</p>
+        <div class="t-quote-deco" aria-hidden="true">${testimonialDecoSvg}</div>
+      </article>`;
   };
 
   const renderTestimonialsGrid = (items) => {
     const grid = qs("[data-cms-testimonials-grid]");
     if (!grid || !Array.isArray(items) || !items.length) return;
     const [hero, ...rest] = items;
-    const avg = items.reduce((sum, item) => sum + (Number(item.rating) || 5), 0) / items.length;
-    const minis = rest
-      .map(
-        (item) => `<article class="t-mini">
-        <p class="t-quote">${escapeHtml(item.quote || "")}</p>
-        ${starsHtml(item.rating)}
-        ${personHtml(item)}
-      </article>`
-      )
-      .join("");
-    grid.innerHTML = `<article class="t-hero">
-        <p class="t-quote">${escapeHtml(hero.quote || "")}</p>
-        ${starsHtml(hero.rating)}
-        ${personHtml(hero)}
-      </article>
+
+    const minis = rest.map((item) => testimonialCardHtml(item)).join("");
+
+    grid.innerHTML = `${testimonialCardHtml(hero, { featured: true })}
       <div class="t-minis">
         ${minis}
-        <article class="t-trust">
-          <div class="t-trust-avg">
-            <p class="t-trust-score">${avg.toFixed(1)}</p>
-            ${starsHtml(Math.round(avg))}
-            <p class="t-trust-label">Average rating</p>
-          </div>
-          <div class="t-trust-members">
-            <p class="t-trust-score">500+</p>
-            <p class="t-trust-label">Happy members</p>
-          </div>
-        </article>
       </div>`;
+    alignTestimonialFaces(grid, items);
+    syncTestimonialMarquee(grid);
     if (grid.dataset.tBound !== "1") {
       grid.dataset.tBound = "1";
       grid.addEventListener("click", (e) => {
@@ -138,6 +319,7 @@
       });
     }
   };
+
 
   const renderPlansGrid = (plans, classes) => {
     const grid = qs("[data-cms-plans-grid]");
@@ -230,7 +412,10 @@
     renderFaqs(data.faqs);
     renderContactClasses(data.classes);
     applyPendingPackage();
+    cloneWhyMarquee();
   };
+
+  cloneWhyMarquee();
 
   const applyPendingPackage = () => {
     try {
@@ -287,7 +472,10 @@
       btn.setAttribute("aria-expanded", open ? "true" : "false");
       btn.setAttribute("data-state", open ? "open" : "closed");
     }
-    if (panel) panel.setAttribute("data-state", open ? "open" : "closed");
+    if (panel) {
+      panel.hidden = !open;
+      panel.setAttribute("data-state", open ? "open" : "closed");
+    }
   };
 
   const bindFaqAccordion = () => {
@@ -315,14 +503,18 @@
               ${plusIcon}
             </button>
           </h3>
-          <div data-faq-a data-state="closed" role="region">
+          <div data-faq-a data-state="closed" hidden role="region">
             <p>${escapeHtml(faq.a || "")}</p>
           </div>
         </article>`)
       .join("");
     bindFaqAccordion();
     const first = qs("#faq [data-faq-item]");
-    if (first && window.matchMedia("(min-width: 900px)").matches) setFaqOpen(first, true);
+    if (first && window.matchMedia("(min-width: 900px)").matches) {
+      setFaqOpen(first, true);
+    } else {
+      qsa("#faq [data-faq-item]").forEach((item) => setFaqOpen(item, false));
+    }
   };
 
   /* ---------- scroll header + progress + reveals ---------- */
@@ -493,5 +685,6 @@
   const why = qs("#why-pilates");
   const testimonials = qs("#testimonials");
   if (why && testimonials) why.insertAdjacentElement("afterend", testimonials);
+  phoneMarquee.addEventListener("change", () => syncTestimonialMarquee());
   applyContent(content);
 })();

@@ -415,17 +415,76 @@ main > section#contact {
 
 @media (max-width: 720px) {
   main > section#contact {
-    padding-top: 2.5rem !important;
-    padding-bottom: 2.75rem !important;
+    padding-top: 1.75rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  #contact .c-headline {
+    font-size: clamp(1.45rem, 6.5vw, 1.75rem) !important;
+    line-height: 1.15 !important;
+  }
+
+  #contact .c-lede {
+    margin-top: 0.55rem;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  #contact .c-grid {
+    margin-top: 1.35rem;
+    gap: 1rem;
   }
 
   #contact .c-form-panel {
-    padding: 1.35rem 1.2rem 1.25rem;
+    padding: 1rem 1rem 1rem;
+  }
+
+  #contact .c-panel-title {
+    margin-bottom: 0.85rem;
+    font-size: 0.65rem;
+  }
+
+  #contact .c-form {
+    gap: 0.65rem;
+  }
+
+  #contact .c-row {
+    gap: 0.65rem;
+  }
+
+  #contact .c-field {
+    gap: 0.25rem;
+  }
+
+  #contact .c-label {
+    font-size: 0.6rem;
+  }
+
+  #contact .c-form input,
+  #contact .c-form select {
+    height: 2.55rem;
+    font-size: 0.82rem;
+  }
+
+  #contact .c-form textarea {
+    min-height: 5rem;
+    font-size: 0.82rem;
+  }
+
+  #contact .c-submit {
+    height: 2.65rem;
+    font-size: 0.78rem;
+    margin-top: 0.35rem;
+  }
+
+  #contact .c-note {
+    font-size: 0.72rem;
+    margin-top: 0.5rem;
   }
 
   #contact .c-map {
-    min-height: 15.5rem;
-    height: 15.5rem;
+    min-height: 12rem;
+    height: 12rem;
   }
 }
 

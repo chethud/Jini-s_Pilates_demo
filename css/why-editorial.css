@@ -100,10 +100,8 @@
   display: block;
   width: 100%;
   max-width: 26rem;
+  height: auto;
   margin-top: 1.75rem;
-  aspect-ratio: 5 / 4;
-  object-fit: cover;
-  object-position: center 30%;
   border-radius: 3.25rem 1.5rem 1.5rem 1.5rem;
 }
 
@@ -161,6 +159,10 @@
   display: none;
 }
 
+#why-pilates .why-card-clone {
+  display: none;
+}
+
 @media (hover: hover) {
   #why-pilates .why-card:hover {
     transform: translateY(-4px);
@@ -210,7 +212,6 @@
   max-width: none;
   margin: 2.25rem 0 0;
   align-items: start;
-  counter-reset: coach;
 }
 
 #why-pilates .why-coach {
@@ -221,29 +222,17 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+#why-pilates .why-coach:only-child {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 20rem;
+  justify-self: center;
+}
+
 #why-pilates .why-coach-photo {
   position: relative;
   overflow: hidden;
   background: #efeae0;
-}
-
-#why-pilates .why-coach-photo::after {
-  counter-increment: coach;
-  content: counter(coach, decimal-leading-zero);
-  position: absolute;
-  right: 0.85rem;
-  bottom: 0.85rem;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  background: rgba(251, 252, 251, 0.94);
-  color: var(--why-accent);
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
 }
 
 #why-pilates .why-coach-photo img {
@@ -317,7 +306,7 @@
   #why-pilates .why-layout {
     grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.15fr);
     gap: 2.75rem 3.25rem;
-    align-items: start;
+    align-items: stretch;
   }
 
   #why-pilates .why-visual {
@@ -325,36 +314,33 @@
     max-width: none;
     max-height: 13.5rem;
     aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center 30%;
   }
 
   #why-pilates .why-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-rows: 1fr;
     align-items: stretch;
+    align-content: stretch;
+    height: 100%;
     gap: 0.95rem;
   }
 
   #why-pilates .why-coaches {
-    grid-template-columns: 1fr 1.06fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.25rem;
-    align-items: end;
+    align-items: stretch;
   }
 
-  #why-pilates .why-coach:nth-child(2) {
-    transform: translateY(-0.55rem);
-    outline: 1px solid rgba(59, 184, 164, 0.42);
-    box-shadow: 0 12px 28px rgba(59, 184, 164, 0.12);
+  #why-pilates .why-coach {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
-  #why-pilates .why-coach:nth-child(2) .why-coach-photo img {
-    aspect-ratio: 4 / 3.08;
-  }
-}
-
-@media (min-width: 900px) and (hover: hover) {
-  #why-pilates .why-coach:nth-child(2):hover {
-    transform: translateY(calc(-0.55rem - 4px));
-    box-shadow: 0 16px 32px rgba(59, 184, 164, 0.16);
+  #why-pilates .why-coach-info {
+    flex: 1;
   }
 }
 
@@ -374,13 +360,24 @@
   #why-pilates .why-coach:hover .why-coach-photo img {
     transform: none;
   }
+
+  #why-pilates .why-grid {
+    animation: none;
+  }
 }
 
-/* Phone only — compact 2-col benefits. Desktop/tablet rules above stay untouched. */
+@keyframes why-marquee {
+  to {
+    transform: translateX(calc(-50% - var(--gap, 0.7rem) / 2));
+  }
+}
+
+/* Phone only — old mobile card language. Tablet/desktop rules above stay untouched. */
 @media (max-width: 720px) {
   main > section#why-pilates {
-    padding-top: 1.5rem !important;
-    padding-bottom: 1.65rem !important;
+    padding-top: 2.15rem !important;
+    padding-bottom: 2.25rem !important;
+    background: #fff !important;
   }
 
   #why-pilates .why-botany--bl,
@@ -396,73 +393,102 @@
     opacity: 0.12;
   }
 
+  #why-pilates .why-inner {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
   #why-pilates .why-layout {
-    gap: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    gap: 1.25rem;
+  }
+
+  #why-pilates .why-copy {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    text-align: center;
   }
 
   #why-pilates .why-eyebrow::after {
-    margin-top: 0.4rem;
+    margin: 0.45rem auto 0;
   }
 
   #why-pilates .why-headline {
-    margin-top: 0.55rem;
-    font-size: 1.7rem !important;
+    margin-top: 0.7rem;
+    font-size: clamp(1.85rem, 8vw, 2.2rem) !important;
   }
 
   #why-pilates .why-lede {
-    margin-top: 0.5rem;
-    max-width: none;
-    font-size: 0.82rem;
-    line-height: 1.55;
+    margin: 0.7rem auto 0;
+    max-width: 34rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
   }
 
   #why-pilates .why-visual {
-    max-width: none;
-    margin-top: 1.1rem;
-    aspect-ratio: 16 / 9;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 340px;
+    margin: 1rem auto 0;
     border-radius: 1.25rem;
-    box-shadow: 0 8px 20px rgba(36, 51, 50, 0.06);
+    box-shadow: 0 8px 20px rgba(36, 51, 50, 0.1);
   }
 
   #why-pilates .why-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.8rem;
+    --gap: 0.7rem;
+    display: flex;
+    grid-template-columns: none;
+    gap: var(--gap);
+    width: max-content;
+    overflow: visible;
+    padding: 0.15rem 0 0.4rem;
+    animation: why-marquee 22s linear infinite;
+  }
+
+  #why-pilates .why-card-clone {
+    display: flex;
   }
 
   #why-pilates .why-card {
-    padding: 0.75rem 0.7rem 0.7rem;
-    border-radius: 1.05rem;
-    border: 1px solid rgba(59, 184, 164, 0.2);
-    background: var(--why-card);
-    box-shadow: none;
-    transition:
-      transform 0.28s ease,
-      border-color 0.28s ease,
-      background-color 0.28s ease;
+    flex: 0 0 15rem;
+    height: auto;
+    padding: 1rem;
+    border: 0;
+    border-radius: 1.5rem;
+    background: #f4faf8;
+    box-shadow: 0 10px 24px rgba(36, 51, 50, 0.05);
   }
 
   #why-pilates .why-card-icon {
-    width: 1.55rem;
-    height: 1.55rem;
-    background: var(--why-mint);
-    transition: background-color 0.28s ease;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.9rem;
+    background: #dff3ec;
+    border-color: transparent;
   }
 
   #why-pilates .why-card-icon svg {
-    width: 0.72rem;
-    height: 0.72rem;
+    width: 0.95rem;
+    height: 0.95rem;
   }
 
   #why-pilates .why-card h3 {
-    margin-top: 0.5rem;
-    font-size: 0.92rem;
+    margin-top: 0.75rem;
+    font-size: 1.12rem;
     line-height: 1.2;
   }
 
   #why-pilates .why-card p {
-    margin-top: 0.22rem;
-    font-size: 0.7rem;
-    line-height: 1.4;
+    margin-top: 0.4rem;
+    font-size: 0.82rem;
+    line-height: 1.55;
   }
 
   #why-pilates .why-card-bar {
@@ -471,77 +497,67 @@
 
   #why-pilates .why-card:hover,
   #why-pilates .why-card:active {
-    transform: translateY(-3px);
-    background: var(--why-card);
-    border-color: rgba(59, 184, 164, 0.5);
+    transform: none;
+    background: #f4faf8;
+    border-color: transparent;
   }
 
   #why-pilates .why-card:hover .why-card-icon,
   #why-pilates .why-card:active .why-card-icon {
     transform: none;
-    background: #d8f3ec;
-  }
-
-  #why-pilates .why-botany--bl {
-    display: block;
-    left: 0.25rem;
-    bottom: 0.35rem;
-    width: 4.4rem;
-    height: 4.4rem;
-    opacity: 0.12;
+    background: #dff3ec;
   }
 
   #why-pilates .why-trainers {
-    margin-top: 1.7rem;
-    padding-top: 1.35rem;
+    margin-top: 2.15rem;
+    padding-top: 1.85rem;
   }
 
   #why-pilates .why-trainers-head h3 {
-    margin-top: 0.45rem;
-    max-width: 12ch;
+    margin-top: 0.65rem;
+    max-width: 16ch;
     margin-left: auto;
     margin-right: auto;
-    font-size: 1.65rem;
+    font-size: clamp(1.7rem, 7vw, 2rem);
     line-height: 1.15;
   }
 
+  #why-pilates .why-trainers-head p {
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
   #why-pilates .why-coaches {
-    gap: 0.8rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
     max-width: none;
     margin-top: 1.5rem;
+    align-items: stretch;
   }
 
   #why-pilates .why-coach {
-    display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
-    align-items: stretch;
-    min-height: 9.25rem;
-    height: 9.5rem;
-    gap: 0.7rem;
-    padding: 0.55rem;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    gap: 0;
+    padding: 0;
     overflow: hidden;
-    border-radius: 1.2rem;
-    border: 1px solid rgba(59, 184, 164, 0.2);
-    background: var(--why-card);
-    box-shadow: 0 6px 16px rgba(36, 51, 50, 0.04);
-    transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease,
-      border-color 0.25s ease;
+    border: 0;
+    border-radius: 1.35rem;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(36, 51, 50, 0.06);
   }
 
   #why-pilates .why-coach-photo {
-    height: 100%;
-    border-radius: 1.05rem;
-  }
-
-  #why-pilates .why-coach-photo::after {
-    display: none;
+    height: auto;
+    border-radius: 1.35rem 1.35rem 0 0;
   }
 
   #why-pilates .why-coach-photo img {
     width: 100%;
-    height: 100%;
+    height: 9.5rem;
     aspect-ratio: auto;
     object-fit: cover;
     object-position: top center;
@@ -550,44 +566,43 @@
   #why-pilates .why-coach-info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0.1rem 0.2rem 0.1rem 0;
+    justify-content: flex-start;
+    padding: 0.7rem 0.8rem 0.85rem;
     min-width: 0;
   }
 
   #why-pilates .why-coach-info h4 {
-    font-size: 1.02rem;
+    font-size: 0.98rem;
+    line-height: 1.2;
   }
 
   #why-pilates .why-coach-role {
-    margin-top: 0.18rem;
-    padding-bottom: 0.38rem;
-    font-size: 0.54rem;
-    letter-spacing: 0.12em;
+    margin-top: 0.28rem;
+    padding-bottom: 0.4rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
     line-height: 1.35;
   }
 
   #why-pilates .why-coach-meta {
     margin-top: 0.32rem;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     line-height: 1.35;
   }
 
   #why-pilates .why-coach-meta + .why-coach-meta {
-    margin-top: 0.18rem;
+    margin-top: 0.16rem;
   }
 
   #why-pilates .why-coach-meta svg {
-    width: 0.68rem;
-    height: 0.68rem;
-    margin-top: 0.16rem;
+    display: none;
   }
 
   #why-pilates .why-coach:hover,
   #why-pilates .why-coach:active {
-    transform: translateY(-2px);
-    border-color: rgba(59, 184, 164, 0.5);
-    box-shadow: 0 10px 20px rgba(36, 51, 50, 0.07);
+    transform: none;
+    border-color: transparent;
+    box-shadow: 0 10px 24px rgba(36, 51, 50, 0.06);
   }
 
   #why-pilates .why-coach:hover .why-coach-photo img,
@@ -606,4 +621,11 @@ html.dark #why-pilates {
 
 html.dark #why-pilates .why-coach-photo {
   background: #2a3834;
+}
+
+@media (max-width: 720px) {
+  html.dark #why-pilates .why-card,
+  html.dark #why-pilates .why-coach {
+    background: var(--why-card);
+  }
 }

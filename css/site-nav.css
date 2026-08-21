@@ -391,6 +391,54 @@ html.dark .eyebrow {
   }
 }
 
+/* Phone only — floating pill header. Desktop nav rules above stay untouched. */
+@media (max-width: 720px) {
+  #site-header {
+    padding: 0.7rem 0;
+  }
+
+  #site-header.is-scrolled {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+
+  #site-header .nav-wrap {
+    width: 92vw;
+  }
+
+  #site-header .nav-shell {
+    gap: 0.45rem;
+    padding: 0.42rem 0.65rem;
+    background-color: rgba(255, 255, 255, 0.94);
+    border-color: transparent;
+    box-shadow: 0 10px 28px rgba(28, 25, 23, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  #site-header.is-scrolled .nav-shell {
+    background-color: rgba(255, 255, 255, 0.96);
+  }
+
+  #site-header .nav-brand {
+    gap: 0.55rem;
+  }
+
+  #site-header .nav-brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  #site-header .nav-brand span {
+    font-size: 0.82rem;
+  }
+
+  html.dark #site-header .nav-shell,
+  html.dark #site-header.is-scrolled .nav-shell {
+    background-color: rgba(42, 54, 51, 0.94);
+  }
+}
+
 /* Site-wide gradient atmosphere — one continuous canvas, sections stay transparent */
 html,
 body,
@@ -532,5 +580,20 @@ html.dark #site-header.is-scrolled .nav-shell {
   #contact .c-grid,
   #membership .pkg-layout {
     margin-top: var(--block-gap);
+  }
+}
+
+@media (max-width: 720px) {
+  #site-header .nav-shell {
+    background: rgba(255, 255, 255, 0.94) !important;
+  }
+
+  #site-header.is-scrolled .nav-shell {
+    background: rgba(255, 255, 255, 0.96) !important;
+  }
+
+  html.dark #site-header .nav-shell,
+  html.dark #site-header.is-scrolled .nav-shell {
+    background: rgba(42, 54, 51, 0.94) !important;
   }
 }

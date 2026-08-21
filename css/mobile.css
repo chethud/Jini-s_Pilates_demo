@@ -10,7 +10,7 @@
 #site-header .nav-wrap,
 .page,
 .site-footer-inner,
-.site-footer-bottom-inner,
+.site-footer-bottom p,
 main > section > .mx-auto {
   width: var(--site-width);
   max-width: var(--site-max);
@@ -19,6 +19,11 @@ main > section > .mx-auto {
 
 main > section:not(#hero) {
   padding-block: var(--section-space) !important;
+}
+
+#faq > .mx-auto {
+  width: min(900px, calc(100% - (2 * var(--site-gutter))));
+  max-width: 900px;
 }
 
 .card-grid,
@@ -189,36 +194,10 @@ svg {
 }
 
 @media (max-width: 720px) {
-  #hero.min-h-dvh,
-  #hero .min-h-dvh,
-  #hero .mx-auto.flex,
-  #hero {
-    min-height: 100svh !important;
-    height: auto;
-  }
-
-  #hero .bg-gradient-to-b {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(247 244 239 / 0.22) 0%,
-      rgb(247 244 239 / 0.08) 42%,
-      rgb(247 244 239 / 0.62) 100%
-    ) !important;
-  }
-
-  html.dark #hero .bg-gradient-to-b {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(36 48 44 / 0.28) 0%,
-      rgb(36 48 44 / 0.1) 42%,
-      rgb(36 48 44 / 0.72) 100%
-    ) !important;
-  }
-
   #hero .mx-auto.flex {
     padding-top: 5.5rem;
     padding-bottom: 1rem !important;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   #hero h1,
@@ -256,29 +235,65 @@ svg {
     padding-top: 0.75rem !important;
   }
 
-  #contact {
-    padding-top: 2.5rem !important;
-    padding-bottom: 2.75rem !important;
-  }
-
-  #about .about-headline {
-    font-size: 1.7rem !important;
-  }
-
-  #classes .s-headline {
-    font-size: 1.85rem !important;
-  }
-
-  #why-pilates .why-headline {
-    font-size: 1.85rem !important;
-  }
-
-  #classes [data-cms-classes-grid] {
+  #about .lg\:grid-cols-2,
+  #why-pilates [data-cms-trainers-grid],
+  #classes [data-cms-classes-grid],
+  #contact .lg\:grid-cols-\[1\.05fr_1fr\],
+  #contact form .sm\:grid-cols-2 {
     grid-template-columns: 1fr !important;
   }
 
-  #contact .c-headline {
-    font-size: 1.85rem !important;
+  #about .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  #about .grid.grid-cols-2 > img,
+  #about .grid.grid-cols-2 > .col-span-2 img {
+    height: 12.5rem !important;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  #about .grid.grid-cols-2 > .glass {
+    height: auto !important;
+    min-height: 0;
+  }
+
+  #about [class*="lg:grid-cols-4"],
+  #about .sm\:grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  #why-pilates ul {
+    --gap: 0.7rem;
+  }
+
+  .why-marquee {
+    margin-top: 1.1rem;
+  }
+
+  #why-pilates ul article {
+    padding: 1rem !important;
+  }
+
+  #why-pilates ul article > div {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    border-radius: 0.9rem !important;
+  }
+
+  #why-pilates ul h3 {
+    margin-top: 0.6rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  #why-pilates ul p {
+    margin-top: 0.3rem !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] img.h-80 {
+    height: 14rem !important;
   }
 
   #cafe ul.sm\:grid-cols-2 {
@@ -299,6 +314,15 @@ svg {
     padding: 0.55rem 0.9rem !important;
   }
 
+  #faq [data-faq-item] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #faq [data-faq-q] {
+    font-size: 0.98rem !important;
+  }
+
   #gallery [data-cms-gallery-grid] {
     columns: 1 !important;
   }
@@ -313,7 +337,7 @@ svg {
     min-height: 0;
   }
 
-  #contact .c-map {
+  #contact iframe {
     height: 16rem;
     min-height: 16rem;
   }
@@ -321,6 +345,36 @@ svg {
   .fixed.bottom-5.right-5 {
     right: max(1rem, env(safe-area-inset-right));
     bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .pkg-modal {
+    padding: 0.75rem;
+    align-items: end;
+  }
+
+  .pkg-modal-panel {
+    width: 100%;
+    max-height: min(90dvh, 40rem);
+    border-radius: 1.25rem 1.25rem 0.75rem 0.75rem;
+    padding: 1.25rem 1rem 1.15rem;
+  }
+
+  .pkg-card-wrap.is-pkg-host .pkg-modal-panel {
+    max-height: none;
+    height: 100%;
+    border-radius: 1.35rem;
+  }
+
+  .pkg-option {
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+  }
+
+  .pkg-option-price {
+    grid-column: 2;
+    justify-self: start;
+    white-space: normal;
+    font-size: 1.15rem;
   }
 
   .site-footer-inner {
@@ -396,6 +450,108 @@ svg {
     margin-top: 1.1rem !important;
   }
 
+  /* Mission / Vision / Why-us: icon beside the text instead of above it */
+  #about [class*="gap-10"] {
+    gap: 1rem !important;
+  }
+
+  #about .grid.gap-4 {
+    gap: 0.6rem !important;
+  }
+
+  #about .grid.gap-4 > article.glass {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    padding: 0.9rem 1rem !important;
+  }
+
+  #about .grid.gap-4 > article.glass > div:first-child {
+    grid-row: span 2;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    border-radius: 0.9rem !important;
+  }
+
+  #about .grid.gap-4 > article.glass h3 {
+    margin-top: 0 !important;
+    font-size: 1rem !important;
+  }
+
+  #about .grid.gap-4 > article.glass p {
+    margin-top: 0.25rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  /* Class cards: photo beside the text instead of stacked above it */
+  #classes [data-cms-classes-grid] {
+    gap: 0.6rem !important;
+  }
+
+  #classes [data-cms-classes-grid] article {
+    display: grid;
+    grid-template-columns: 38% 1fr;
+  }
+
+  /* Fill the photo column without a percentage height: iOS Safari resolves
+     height:100% against an indefinite row and blows the card up. */
+  #classes [data-cms-classes-grid] article > div:first-child {
+    position: relative;
+    min-height: 9rem;
+  }
+
+  #classes [data-cms-classes-grid] img {
+    position: absolute;
+    inset: 0;
+    height: 100% !important;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  #classes [data-cms-classes-grid] .p-6 {
+    padding: 0.8rem 0.9rem !important;
+  }
+
+  #classes [data-cms-classes-grid] h3 {
+    font-size: 1rem !important;
+  }
+
+  #classes [data-cms-classes-grid] .mt-3 {
+    margin-top: 0.4rem !important;
+  }
+
+  #classes [data-cms-classes-grid] p.mt-4 {
+    margin-top: 0.4rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  #classes [data-cms-classes-grid] a.mt-6 {
+    margin-top: 0.6rem !important;
+    padding: 0.5rem 0.9rem !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.6rem !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] img.h-80 {
+    height: 9.5rem !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] .p-6 {
+    padding: 0.7rem 0.8rem !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] h3 {
+    font-size: 1rem !important;
+  }
+
+  #why-pilates [data-cms-trainers-grid] p {
+    margin-top: 0.3rem !important;
+    font-size: 0.72rem !important;
+  }
+
   #gallery [data-cms-gallery-grid] {
     columns: 2 !important;
     column-gap: 0.6rem !important;
@@ -406,14 +562,13 @@ svg {
     margin-bottom: 0.6rem !important;
   }
 
-  #contact {
-    padding-top: 2.35rem !important;
-    padding-bottom: 2.5rem !important;
+  #contact iframe {
+    height: 12rem;
+    min-height: 12rem;
   }
 
-  #contact .c-map {
-    height: 15.5rem;
-    min-height: 15.5rem;
+  #contact .glass.rounded-3xl {
+    padding: 1rem !important;
   }
 
   /* Subpages (about, classes, cafe, plans, gallery) */
@@ -519,42 +674,5 @@ svg {
     padding-top: 1.5rem;
     padding-bottom: 1rem;
     gap: 1rem;
-  }
-
-  #about .about-visual {
-    display: none;
-  }
-
-  #about .about-principle {
-    grid-template-columns: 1.7rem minmax(0, 1fr);
-    padding: 0.62rem 0;
-  }
-
-  #why-pilates .why-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.8rem;
-  }
-
-  #why-pilates .why-visual {
-    max-width: none;
-    aspect-ratio: 16 / 9;
-    border-radius: 1.25rem;
-  }
-
-  #testimonials .t-minis {
-    display: grid !important;
-    grid-template-columns: 1fr;
-    overflow: visible !important;
-    overflow-x: visible !important;
-    scroll-snap-type: none;
-  }
-
-  #testimonials .t-mini {
-    flex: none;
-    width: auto !important;
-  }
-
-  #testimonials .t-trust {
-    display: none !important;
   }
 }

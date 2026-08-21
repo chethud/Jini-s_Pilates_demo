@@ -38,9 +38,8 @@
       { name: "Zumba", blurb: "All levels — High-energy dance for cardio, coordination and fun.", image: "assets/about-group.png" },
     ],
     trainers: [
-      { name: "Jini Menon", role: "BASI Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer_1_cex1xk_w.jpg" },
-      { name: "Aditi Rao", role: "STOTT Pilates, Level 3", detail: "8 years experience · Prenatal & women's wellness", image: "assets/trainer_2_cx4_bncv.jpg" },
-      { name: "Rohan Verma", role: "Clinical Pilates, MSc Physio", detail: "10 years experience · Rehabilitation & mobility", image: "assets/trainer_3_dj_srliy.jpg" },
+      { name: "Sahana", role: "BASI Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer-sahana.jpg" },
+      { name: "Yashas", role: "Certified Instructor", detail: "", image: "assets/trainer-yashas.jpg" },
     ],
     cafeBlurb: "Nourish after class with fresh bowls, smoothies, and wellness drinks.",
     cafeImages: [
@@ -67,6 +66,7 @@
         quote:
           "I can't say enough about Jini's Pilates Studio! From the moment I walked in, I felt welcomed and motivated. The variety of classes keeps me engaged and the instructors are knowledgeable and incredibly supportive.",
         image: "assets/testimonial-ananya.png",
+        faceCrop: [50, 20, 16, 26, 220, 18, 0],
         rating: 5,
       },
       {
@@ -74,6 +74,7 @@
         quote:
           "Embarking on this fitness journey has been nothing short of transformative, and I am incredibly grateful for the guidance, expertise and support the studio has provided me.",
         image: "assets/testimonial-kavya.png",
+        faceCrop: [50, 19, 20, 28, 215, 18, 0],
         rating: 5,
       },
       {
@@ -81,6 +82,7 @@
         quote:
           "I've finally found my fitness home at Jini's Pilates Studio! The atmosphere is energizing, the trainers are top-notch and the variety of classes keeps me engaged.",
         image: "assets/testimonial-diya.png",
+        faceCrop: [50, 21, 18, 24, 195, 18, 0],
         rating: 5,
       },
       {
@@ -88,6 +90,7 @@
         quote:
           "The atmosphere is motivating, the trainers are knowledgeable and supportive, and the variety of classes keeps me engaged. Thanks to their guidance, I've achieved fitness goals I never thought possible.",
         image: "assets/testimonial-ishika.png",
+        faceCrop: [50, 19, 18, 26, 215, 18, 0],
         rating: 5,
       },
     ],
@@ -199,7 +202,17 @@
       aboutTitle,
       stats: Array.isArray(saved.stats) ? saved.stats : DEFAULT_CONTENT.stats.slice(),
       classes,
-      trainers: Array.isArray(saved.trainers) ? saved.trainers : DEFAULT_CONTENT.trainers.slice(),
+      trainers: (() => {
+        const list = Array.isArray(saved.trainers) ? saved.trainers : DEFAULT_CONTENT.trainers.slice();
+        const next = list
+          .filter((t) => !/^(Aditi Rao|Rohan Verma)$/i.test(String(t.name || "")))
+          .map((t) =>
+            /^Jini Menon$/i.test(String(t.name || "")) ? { ...DEFAULT_CONTENT.trainers[0] } : t
+          );
+        const names = next.map((t) => String(t.name || "").toLowerCase());
+        if (!names.includes("yashas") && next.length <= 1) return DEFAULT_CONTENT.trainers.slice();
+        return next.length ? next : DEFAULT_CONTENT.trainers.slice();
+      })(),
       cafeImages: Array.isArray(saved.cafeImages)
         ? saved.cafeImages
         : DEFAULT_CONTENT.cafeImages.slice(),

@@ -164,6 +164,11 @@
 
   .pkg-card-media::after {
     opacity: 1;
+    background: linear-gradient(
+      180deg,
+      transparent 40%,
+      rgba(28, 25, 23, 0.72) 100%
+    );
   }
 
   .pkg-cta-rest {
@@ -503,6 +508,45 @@ html.dark #membership {
 
   .pkg-title {
     font-size: 1.45rem;
+  }
+}
+
+/* Phone only — stacked plan cards. Tablet/desktop rules above stay untouched. */
+@media (max-width: 720px) {
+  #membership {
+    padding-top: 2.15rem !important;
+    padding-bottom: 2.25rem !important;
+  }
+
+  .pkg-choose-title {
+    font-size: clamp(1.8rem, 8vw, 2.15rem);
+  }
+
+  .pkg-choose-line {
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .pkg-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.35rem;
+  }
+
+  .pkg-card {
+    border-radius: 1.65rem;
+  }
+
+  .pkg-card-media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .pkg-card-body {
+    padding: 1.15rem 1.2rem 1.25rem;
+  }
+
+  .pkg-title {
+    font-size: 1.55rem;
   }
 }
 
