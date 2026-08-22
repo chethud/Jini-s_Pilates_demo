@@ -38,7 +38,7 @@
       { name: "Zumba", blurb: "All levels — High-energy dance for cardio, coordination and fun.", image: "assets/about-group.png" },
     ],
     trainers: [
-      { name: "Sahana", role: "BASI Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer-sahana.jpg" },
+      { name: "Sahana", role: "Certified Instructor", detail: "12 years experience · Reformer & postural correction", image: "assets/trainer-sahana.jpg" },
       { name: "Yashas", role: "Certified Instructor", detail: "Over a decade of teaching · Reformer technique & posture care", image: "assets/trainer-yashas.jpg" },
     ],
     cafeBlurb: "Nourish after class with fresh bowls, smoothies, and wellness drinks.",

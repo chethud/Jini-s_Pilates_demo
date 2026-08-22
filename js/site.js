@@ -202,23 +202,15 @@
   const renderTrainersGrid = (trainers) => {
     const grid = qs("[data-cms-trainers-grid]");
     if (!grid || !Array.isArray(trainers)) return;
-    const icon = (d) =>
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-    const pip = icon('<circle cx="12" cy="12" r="5.5"/>');
     grid.innerHTML = trainers
       .map((item) => {
         const img = asset(item.image || "assets/trainer_1_cex1xk_w.jpg");
-        const [years, specialty] = String(item.detail || "")
-          .split("·")
-          .map((s) => s.trim());
         const name = escapeHtml(item.name || "Instructor");
         return `<article class="why-coach">
           <div class="why-coach-photo"><img src="${img}" alt="${name}" width="700" height="900" loading="lazy"></div>
           <div class="why-coach-info">
             <h4>${name}</h4>
             <p class="why-coach-role">${escapeHtml(item.role || "")}</p>
-            ${years ? `<p class="why-coach-meta">${pip}<span>${escapeHtml(years)}</span></p>` : ""}
-            ${specialty ? `<p class="why-coach-meta">${pip}<span>${escapeHtml(specialty)}</span></p>` : ""}
           </div>
         </article>`;
       })

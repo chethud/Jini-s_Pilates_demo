@@ -242,14 +242,22 @@ svg {
     max-width: 100%;
     padding-top: max(5.25rem, calc(env(safe-area-inset-top) + 4.25rem));
     padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     gap: 0;
   }
 
   #hero h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin: 0;
-    max-width: 16ch;
+    margin-top: auto !important;
+    max-width: none;
+  }
+
+  #hero h1 > span {
+    display: block;
   }
 
   #hero [data-cms="heroSubtitle"] {
@@ -285,6 +293,12 @@ svg {
     background: #fff;
     color: #1a2421;
     border-color: rgba(26, 36, 33, 0.2);
+  }
+
+  html.dark #hero .hero-cta-ghost {
+    background: rgba(30, 45, 42, 0.82);
+    color: #eef3f1;
+    border-color: rgba(238, 243, 241, 0.32);
   }
 
   main > section:not(#hero) {
@@ -744,5 +758,18 @@ svg {
     padding-top: 1.5rem;
     padding-bottom: 1rem;
     gap: 1rem;
+  }
+}
+
+/* Dark mode — no white section slabs on phone */
+@media (max-width: 720px) {
+  html.dark main > section:not(#hero),
+  html.dark #testimonials,
+  html.dark #membership {
+    background: #1e2d2a !important;
+  }
+
+  html.dark .site-footer {
+    background: linear-gradient(180deg, #1c2623 0%, #243532 100%) !important;
   }
 }

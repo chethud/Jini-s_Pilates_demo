@@ -591,9 +591,15 @@ html.dark #about {
   --about-bg: #1e2d2a;
   --about-surface: #243532;
   --about-mint: rgba(37, 201, 176, 0.18);
+  --about-accent: #4dd9c5;
   --about-text: #eef3f1;
   --about-muted: #9eb5b0;
   --about-divider: rgba(37, 201, 176, 0.2);
+}
+
+html.dark #about .about-stat-icon {
+  background: rgba(37, 201, 176, 0.22);
+  color: var(--about-accent);
 }
 
 html.dark #about .about-stats {
@@ -607,9 +613,15 @@ html.dark #about .about-stats {
     box-shadow: none;
   }
 
+  html.dark main > section#about.about-editorial,
+  html.dark #about {
+    background: var(--about-bg) !important;
+  }
+
   html.dark #about .about-principle,
   html.dark #about .about-stat {
     background: var(--about-surface);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
 }
 
