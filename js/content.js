@@ -2,15 +2,15 @@
   const STORAGE_KEY = "jinis_site_content_v4";
 
   const DEFAULT_GALLERY = [
-    { id: "g1", src: "assets/gallery_studio_bptwifhk.jpg", alt: "Studio reception with wooden bench", category: "studio" },
-    { id: "g2", src: "assets/class-reformer.png", alt: "Reformer Pilates session", category: "classes" },
-    { id: "g3", src: "assets/gallery_equipment_be6bqby0.jpg", alt: "Reformer straps close up", category: "equipment" },
-    { id: "g4", src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter", category: "cafe" },
-    { id: "g5", src: "assets/gallery_members_cyis7hte.jpg", alt: "Members chatting after class", category: "members" },
-    { id: "g6", src: "assets/about-group.png", alt: "Group class event", category: "events" },
-    { id: "g7", src: "assets/class-strength.png", alt: "Mat Pilates stretch", category: "classes" },
-    { id: "g8", src: "assets/food_1_bce_p0_t.jpg", alt: "Smoothie and protein bowl", category: "cafe" },
-    { id: "g9", src: "assets/food_3_cmezi_2r.jpg", alt: "Salad bowl and coffee", category: "cafe" },
+    { id: "g1", src: "assets/gallery/gallery-01.jpg", alt: "Pilates studio with reformers and backlit mirrors", category: "studio" },
+    { id: "g2", src: "assets/gallery/gallery-02.jpg", alt: "Jini's Pilates Studio entrance with lush greenery", category: "studio" },
+    { id: "g3", src: "assets/gallery/gallery-03.jpg", alt: "Spacious reformer studio with natural light", category: "classes" },
+    { id: "g4", src: "assets/gallery/gallery-04.jpg", alt: "Balanced Body reformers ready for class", category: "equipment" },
+    { id: "g5", src: "assets/gallery/gallery-05.jpg", alt: "Jini's Wellness Cafe wall and plants", category: "cafe" },
+    { id: "g6", src: "assets/gallery/gallery-06.jpg", alt: "Members relaxing in the outdoor courtyard", category: "cafe" },
+    { id: "g7", src: "assets/gallery/gallery-07.jpg", alt: "Studio entrance decorated for a special event", category: "studio" },
+    { id: "g8", src: "assets/gallery/gallery-08.jpg", alt: "Reformer Pilates floor with studio branding", category: "classes" },
+    { id: "g9", src: "assets/gallery/gallery-09.jpg", alt: "Outdoor wellness cafe seating area", category: "cafe" },
   ];
 
   const DEFAULT_CONTENT = {
@@ -134,8 +134,6 @@
     { id: "classes", label: "Classes", href: "classes.html" },
     { id: "equipment", label: "Equipment", href: "equipment.html" },
     { id: "cafe", label: "Cafe", href: "cafe.html" },
-    { id: "members", label: "Members", href: "members.html" },
-    { id: "events", label: "Events", href: "events.html" },
   ];
 
   const readStore = () => {
@@ -246,20 +244,16 @@
         });
         return next;
       })(),
-      gallery: (Array.isArray(saved.gallery) ? saved.gallery : DEFAULT_CONTENT.gallery.slice()).map((item) => {
-        const custom = String(item.src || "").startsWith("data:");
-        if (custom) return item;
-        if (/class_group_sremfjhc/i.test(String(item.src || "")) || item.id === "g6") {
-          return { ...item, src: "assets/about-group.png" };
+      gallery: (() => {
+        const savedGallery = Array.isArray(saved.gallery) ? saved.gallery : null;
+        const isLegacy = (src) =>
+          /gallery_|class-reformer|class-strength|about-group|cafe_b_|food_/i.test(String(src || ""));
+        const isManaged = (src) => /^assets\/gallery\/gallery-\d{2}\.jpg$/i.test(String(src || ""));
+        if (!savedGallery || savedGallery.some((item) => isLegacy(item.src) || isManaged(item.src))) {
+          return DEFAULT_CONTENT.gallery.slice();
         }
-        if (/class_reformer_cbidz7_n/i.test(String(item.src || "")) || item.id === "g2") {
-          return { ...item, src: "assets/class-reformer.png" };
-        }
-        if (/class_mat_dkcnn3u_/i.test(String(item.src || "")) || item.id === "g7") {
-          return { ...item, src: "assets/class-strength.png" };
-        }
-        return item;
-      }),
+        return savedGallery;
+      })(),
       faqs: Array.isArray(saved.faqs) ? saved.faqs : DEFAULT_CONTENT.faqs.slice(),
       testimonials: (Array.isArray(saved.testimonials)
         ? saved.testimonials

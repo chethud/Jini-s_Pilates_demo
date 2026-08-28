@@ -273,7 +273,7 @@
           <label>Alt<input data-gallery="alt" type="text" value="${escapeAttr(item.alt || "")}"></label>
           <label>Category
             <select data-gallery="category">
-              ${["studio", "classes", "equipment", "cafe", "members", "events"]
+              ${["studio", "classes", "equipment", "cafe"]
                 .map(
                   (c) =>
                     `<option value="${c}" ${item.category === c ? "selected" : ""}>${c}</option>`

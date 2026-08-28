@@ -1,13 +1,11 @@
 (() => {
-  const CATS = ["studio", "classes", "equipment", "cafe", "members", "events"];
+  const CATS = ["studio", "classes", "equipment", "cafe"];
   const labels = {
     all: "All",
     studio: "Studio",
     classes: "Classes",
     equipment: "Equipment",
     cafe: "Cafe",
-    members: "Members",
-    events: "Events",
   };
   const params = new URLSearchParams(location.search);
   const seg = params.get("cat") || location.pathname.replace(/\/+$/, "").split("/").pop();
