@@ -31,10 +31,10 @@
     const photos = Array.isArray(c.cafeImages) && c.cafeImages.length
       ? c.cafeImages
       : [
-          { src: 'assets/food_1_bce_p0_t.jpg', alt: 'Cafe' },
-          { src: 'assets/food_2_bb_dr2jh.jpg', alt: 'Cafe' },
-          { src: 'assets/food_3_cmezi_2r.jpg', alt: 'Cafe' },
-          { src: 'assets/cafe_b_nzqt9u.jpg', alt: 'Cafe' },
+          { src: 'assets/cafe/cafe-01.jpg', alt: 'Dragon fruit smoothie bowl' },
+          { src: 'assets/cafe/cafe-02.jpg', alt: 'Spaghetti bolognese with parmesan' },
+          { src: 'assets/cafe/cafe-03.jpg', alt: 'Pasta Frescol with fresh greens and olives' },
+          { src: 'assets/cafe/cafe-04.jpg', alt: 'Berry smoothie bowl' },
         ];
     root.innerHTML = `<div class="cafe-layout">
       <div>

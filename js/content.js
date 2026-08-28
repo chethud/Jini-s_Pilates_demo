@@ -43,10 +43,10 @@
     ],
     cafeBlurb: "Nourish after class with fresh bowls, smoothies, and wellness drinks.",
     cafeImages: [
-      { src: "assets/food_1_bce_p0_t.jpg", alt: "Green smoothie and berry protein bowl" },
-      { src: "assets/food_2_bb_dr2jh.jpg", alt: "Fresh cold pressed juices with fruit" },
-      { src: "assets/food_3_cmezi_2r.jpg", alt: "Salad bowl and coffee" },
-      { src: "assets/cafe_b_nzqt9u.jpg", alt: "Wellness cafe counter" },
+      { src: "assets/cafe/cafe-01.jpg", alt: "Dragon fruit smoothie bowl with banana and seeds" },
+      { src: "assets/cafe/cafe-02.jpg", alt: "Spaghetti bolognese with parmesan" },
+      { src: "assets/cafe/cafe-03.jpg", alt: "Pasta Frescol with fresh greens and olives" },
+      { src: "assets/cafe/cafe-04.jpg", alt: "Berry smoothie bowl with almonds and chia seeds" },
     ],
     plans: [
       { tab: "Reformer Pilates", period: "Reformer Pilates", name: "1 Month", price: "₹7,899", sessions: "12 sessions", validity: "Within 45 days" },
@@ -211,9 +211,14 @@
         if (!names.includes("yashas") && next.length <= 1) return DEFAULT_CONTENT.trainers.slice();
         return next.length ? next : DEFAULT_CONTENT.trainers.slice();
       })(),
-      cafeImages: Array.isArray(saved.cafeImages)
-        ? saved.cafeImages
-        : DEFAULT_CONTENT.cafeImages.slice(),
+      cafeImages: (() => {
+        const savedCafe = Array.isArray(saved.cafeImages) ? saved.cafeImages : null;
+        const isLegacyCafe = (src) => /food_|cafe_b_/i.test(String(src || ""));
+        if (!savedCafe || savedCafe.some((item) => isLegacyCafe(item.src))) {
+          return DEFAULT_CONTENT.cafeImages.slice();
+        }
+        return savedCafe;
+      })(),
       plans: (() => {
         const list = Array.isArray(saved.plans) ? saved.plans.slice() : DEFAULT_CONTENT.plans.slice();
         const tabKey = (p) => {
