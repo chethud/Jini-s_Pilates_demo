@@ -218,7 +218,42 @@ svg {
   }
 }
 
+.hero-gallery-jump {
+  display: none;
+}
+
 @media (max-width: 720px) {
+  .hero-gallery-jump {
+    display: flex;
+    gap: 0.65rem;
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0.85rem auto 0.35rem;
+    padding-inline: max(0px, env(safe-area-inset-left));
+  }
+
+  .hero-gallery-jump a {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    background: linear-gradient(135deg, #5ecfb5 0%, #2f9d8a 52%, #1a7a6a 100%);
+    box-shadow: 0 8px 20px rgba(36, 51, 50, 0.14);
+  }
+
+  html.dark .hero-gallery-jump a {
+    background: linear-gradient(135deg, #7dcebf 0%, #3db89f 48%, #2f9d8a 100%);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  }
+
   /* Soften photo under copy so type stays readable */
   #hero .bg-gradient-to-b {
     background-image: linear-gradient(
