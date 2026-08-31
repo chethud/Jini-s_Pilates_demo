@@ -25,6 +25,14 @@
     aboutTitle: "About Jini's Pilates Studio",
     aboutBody:
       "A calm space to build strength, mobility and confidence — one intentional movement at a time.",
+    whyEyebrow: "Why Pilates",
+    whyHeadline: "Why Pilates?",
+    whyLede:
+      "Pilates works quietly and precisely — small, controlled movements that reshape how you stand, breathe and feel.",
+    whyVisual: "assets/class-reformer.png",
+    whyVisualAlt: "Woman stretching on a reformer in a bright Pilates studio",
+    whyTrainersEyebrow: "Instructors",
+    whyTrainersTitle: "Guided by certified specialists",
     stats: [
       { value: "1000+", label: "Happy Members" },
       { value: "10+", label: "Years of Care" },
@@ -253,8 +261,7 @@
         const savedGallery = Array.isArray(saved.gallery) ? saved.gallery : null;
         const isLegacy = (src) =>
           /gallery_|class-reformer|class-strength|about-group|cafe_b_|food_/i.test(String(src || ""));
-        const isManaged = (src) => /^assets\/gallery\/gallery-\d{2}\.jpg$/i.test(String(src || ""));
-        if (!savedGallery || savedGallery.some((item) => isLegacy(item.src) || isManaged(item.src))) {
+        if (!savedGallery || savedGallery.some((item) => isLegacy(item.src))) {
           return DEFAULT_CONTENT.gallery.slice();
         }
         return savedGallery;
@@ -283,10 +290,9 @@
   };
 
   const saveContent = (data) => {
-    const next = getContent();
-    const merged = { ...next, ...data };
-    const ok = writeStore(merged);
-    return ok ? merged : null;
+    const saved = readStore() || {};
+    const ok = writeStore({ ...saved, ...data });
+    return ok ? getContent() : null;
   };
 
   const resetContent = () => {

@@ -373,6 +373,15 @@
     qsa("[data-cms='heroBody']").forEach((el) => setText(el, data.heroBody));
     qsa("[data-cms='aboutTitle']").forEach((el) => setText(el, data.aboutTitle));
     qsa("[data-cms='aboutBody']").forEach((el) => setText(el, data.aboutBody));
+    qsa("[data-cms='whyEyebrow']").forEach((el) => setText(el, data.whyEyebrow));
+    qsa("[data-cms='whyHeadline']").forEach((el) => setText(el, data.whyHeadline));
+    qsa("[data-cms='whyLede']").forEach((el) => setText(el, data.whyLede));
+    qsa("[data-cms='whyTrainersEyebrow']").forEach((el) => setText(el, data.whyTrainersEyebrow));
+    qsa("[data-cms='whyTrainersTitle']").forEach((el) => setText(el, data.whyTrainersTitle));
+    qsa("[data-cms='whyVisual']").forEach((el) => {
+      if (data.whyVisual) el.src = asset(data.whyVisual);
+      if (data.whyVisualAlt) el.alt = data.whyVisualAlt;
+    });
     qsa("[data-cms='cafeBlurb']").forEach((el) => setText(el, data.cafeBlurb));
     qsa("[data-cms='phone']").forEach((el) => {
       setText(el, data.phone);
@@ -386,6 +395,17 @@
     });
     qsa("[data-cms='address']").forEach((el) => setText(el, data.address));
     qsa("[data-cms='hours']").forEach((el) => setText(el, data.hours));
+
+    if (Array.isArray(data.stats)) {
+      qsa(".about-stat").forEach((el, i) => {
+        const stat = data.stats[i];
+        if (!stat) return;
+        const valueEl = el.querySelector(".about-stat-value");
+        const labelEl = el.querySelector(".about-stat-label");
+        if (valueEl) setText(valueEl, stat.value);
+        if (labelEl) setText(labelEl, stat.label);
+      });
+    }
 
     const heroImg = qs("#hero img");
     if (heroImg && data.heroImage) {

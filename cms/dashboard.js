@@ -58,6 +58,11 @@
   const heroPreview = document.getElementById("hero-image-preview");
   const heroHidden = document.querySelector('input[name="heroImage"]');
 
+  const whyVisualFileInput = document.getElementById("why-visual-file");
+  const whyVisualClearBtn = document.getElementById("why-visual-clear");
+  const whyVisualPreview = document.getElementById("why-visual-preview");
+  const whyVisualHidden = document.querySelector('input[name="whyVisual"]');
+
   const updateHeroPreview = (value) => {
     if (!heroPreview) return;
     heroPreview.src = resolveSrc(value || "assets/hero-home.jpg");
@@ -65,12 +70,21 @@
     if (heroHidden) heroHidden.value = value || "assets/hero-home.jpg";
   };
 
+  const updateWhyVisualPreview = (value) => {
+    if (!whyVisualPreview) return;
+    whyVisualPreview.src = resolveSrc(value || "assets/class-reformer.png");
+    whyVisualPreview.classList.add("is-visible");
+    if (whyVisualHidden) whyVisualHidden.value = value || "assets/class-reformer.png";
+  };
+
   const fillSimpleFields = () => {
     document.querySelectorAll("input[name], textarea[name]").forEach((el) => {
       if (typeof draft[el.name] === "string") el.value = draft[el.name];
     });
     updateHeroPreview(draft.heroImage);
+    updateWhyVisualPreview(draft.whyVisual);
     if (heroFileInput) heroFileInput.value = "";
+    if (whyVisualFileInput) whyVisualFileInput.value = "";
   };
 
   const renderStats = () => {
@@ -373,6 +387,7 @@
       .slice(0, MAX_GALLERY);
 
     if (draft.heroImage) next.heroImage = draft.heroImage;
+    if (draft.whyVisual) next.whyVisual = draft.whyVisual;
     draft = next;
     return next;
   };
@@ -592,6 +607,29 @@
       draft.heroImage = "assets/hero-home.jpg";
       updateHeroPreview(draft.heroImage);
       setStatus("Default hero selected — Save changes");
+    });
+  }
+
+  if (whyVisualFileInput) {
+    whyVisualFileInput.addEventListener("change", async () => {
+      const file = whyVisualFileInput.files && whyVisualFileInput.files[0];
+      if (!file) return;
+      try {
+        setStatus("Processing Why Pilates image…");
+        draft.whyVisual = await compressImage(file, 1400, 0.82);
+        updateWhyVisualPreview(draft.whyVisual);
+        setStatus("Why Pilates image ready — Save changes");
+      } catch {
+        setStatus("Why Pilates image upload failed");
+      }
+    });
+  }
+
+  if (whyVisualClearBtn) {
+    whyVisualClearBtn.addEventListener("click", () => {
+      draft.whyVisual = "assets/class-reformer.png";
+      updateWhyVisualPreview(draft.whyVisual);
+      setStatus("Default Why Pilates image selected — Save changes");
     });
   }
 

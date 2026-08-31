@@ -336,6 +336,12 @@
     margin-inline: auto;
   }
 
+  #why-pilates .why-coaches:has(.why-coach:nth-child(3)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: none;
+    width: 100%;
+  }
+
   #why-pilates .why-coach {
     display: flex;
     flex-direction: column;
