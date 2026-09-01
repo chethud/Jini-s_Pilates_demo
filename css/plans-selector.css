@@ -286,20 +286,67 @@
   color: #243332;
 }
 
+.pkg-class-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 1.15rem;
+  align-items: center;
+  margin-top: 1.75rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(59, 184, 164, 0.18);
+  border-radius: 1.25rem;
+  background: #fbfcfb;
+}
+
+.pkg-class-intro-media {
+  overflow: hidden;
+  border-radius: 1rem;
+  aspect-ratio: 4 / 3;
+}
+
+.pkg-class-intro-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pkg-class-intro-title {
+  margin: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #243332;
+}
+
+.pkg-class-intro-desc {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #667572;
+}
+
 .pkg-plan-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   gap: 1.1rem;
-  margin-top: 2.25rem;
+  margin-top: 1.5rem;
   text-align: left;
+  align-items: stretch;
+}
+
+.pkg-plan-grid:has(.pkg-plan:only-child) {
+  grid-template-columns: minmax(0, 17.5rem);
 }
 
 .pkg-plan {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
-  padding: 1.7rem 1.4rem 1.35rem;
+  align-items: stretch;
+  min-height: 13.35rem;
+  padding: 1.35rem 1.25rem 1.55rem;
   border: 1px solid rgba(59, 184, 164, 0.22);
   border-radius: 1.5rem;
   background: #fbfcfb;
@@ -333,14 +380,19 @@
 
 .pkg-plan-name {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin: 0;
-  padding-right: 4.5rem;
+  padding-right: 0;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #243332;
+}
+
+.pkg-plan:has(.pkg-plan-kind) .pkg-plan-name,
+.pkg-plan:has(.pkg-plan-badge) .pkg-plan-name {
+  padding-right: 4.5rem;
 }
 
 .pkg-plan-check {
@@ -365,7 +417,7 @@
 }
 
 .pkg-plan-price {
-  margin: 1.15rem 0 0;
+  margin: 0.85rem 0 0;
   font-family: "Playfair Display", Georgia, serif;
   font-size: clamp(2.1rem, 3vw, 2.55rem);
   font-weight: 500;
@@ -387,13 +439,20 @@
   margin-top: 0.35rem;
 }
 
+.pkg-plan-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .pkg-plan-book {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
   width: fit-content;
-  margin-top: auto;
+  margin-top: 1.15rem;
+  flex-shrink: 0;
   padding: 0.58rem 1.05rem;
   border: 1px solid transparent;
   border-radius: 999px;
@@ -465,6 +524,19 @@ html.dark .pkg-tab.is-active {
   background: #2a3c38;
 }
 
+html.dark .pkg-class-intro {
+  background: #243532;
+  border-color: rgba(59, 184, 164, 0.22);
+}
+
+html.dark .pkg-class-intro-title {
+  color: #eef3f1;
+}
+
+html.dark .pkg-class-intro-desc {
+  color: #9eb5b0;
+}
+
 html.dark .pkg-plan-kind {
   color: #9eb5b0;
 }
@@ -490,13 +562,21 @@ html.dark #membership {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .pkg-plan-grid {
+  .pkg-plan-grid:not(:has(.pkg-plan:only-child)) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 800px) {
-  .pkg-plan-grid {
+  .pkg-class-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .pkg-class-intro-media {
+    max-width: 14rem;
+  }
+
+  .pkg-plan-grid:not(:has(.pkg-plan:only-child)) {
     grid-template-columns: 1fr;
   }
 }

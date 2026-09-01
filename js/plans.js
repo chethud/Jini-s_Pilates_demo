@@ -13,6 +13,7 @@
     const line = (split ? split[2] : blurb).trim();
     return {
       title: match?.name || tab,
+      blurb: blurb || (line ? `${level} — ${line}` : level),
       level,
       line,
       image:
@@ -152,12 +153,28 @@
     const benefit = benefitCopy(plan);
     return `<article class="pkg-plan${featured ? " is-featured" : ""}" role="listitem" tabindex="0" data-pkg-index="${i}">
       ${featured ? `<p class="pkg-plan-badge">Yearly</p>` : kind ? `<p class="pkg-plan-kind">${escapeHtml(kind)}</p>` : ""}
-      <h3 class="pkg-plan-name"><span class="pkg-plan-check" aria-hidden="true"></span>${escapeHtml(plan.name || "")}</h3>
-      <p class="pkg-plan-price">${escapeHtml(plan.price || "")}</p>
-      ${sessions ? `<p class="pkg-plan-sessions">${escapeHtml(sessions)}</p>` : ""}
-      ${valid ? `<p class="pkg-plan-meta">${escapeHtml(valid)}</p>` : ""}
-      ${benefit ? `<p class="pkg-plan-benefit">${escapeHtml(benefit)}</p>` : ""}
+      <div class="pkg-plan-body">
+        <h3 class="pkg-plan-name"><span class="pkg-plan-check" aria-hidden="true"></span>${escapeHtml(plan.name || "")}</h3>
+        <p class="pkg-plan-price">${escapeHtml(plan.price || "")}</p>
+        ${sessions ? `<p class="pkg-plan-sessions">${escapeHtml(sessions)}</p>` : ""}
+        ${valid ? `<p class="pkg-plan-meta">${escapeHtml(valid)}</p>` : ""}
+        ${benefit ? `<p class="pkg-plan-benefit">${escapeHtml(benefit)}</p>` : ""}
+      </div>
       <button type="button" class="pkg-plan-book" data-pkg-book="${i}">${idleCta(plan)} <span aria-hidden="true">→</span></button>
+    </article>`;
+  };
+
+  const classIntroMarkup = (tab, opts) => {
+    const meta = classMeta(tab, opts.classes);
+    const img = classImage(tab, opts.classes, opts.resolveSrc);
+    return `<article class="pkg-class-intro">
+      <div class="pkg-class-intro-media">
+        <img src="${escapeHtml(img)}" alt="${escapeHtml(meta.title)}" width="480" height="360" loading="lazy">
+      </div>
+      <div class="pkg-class-intro-body">
+        <h3 class="pkg-class-intro-title">${escapeHtml(meta.title)}</h3>
+        ${meta.blurb ? `<p class="pkg-class-intro-desc">${escapeHtml(meta.blurb)}</p>` : ""}
+      </div>
     </article>`;
   };
 
@@ -224,6 +241,7 @@
               .join("")}</div>`
           : ""
       }
+      ${classIntroMarkup(tab, opts)}
       <div class="pkg-plan-grid" role="list">
         ${packages.map((plan, i) => planCard(plan, i)).join("")}
       </div>
