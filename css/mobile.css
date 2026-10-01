@@ -216,6 +216,18 @@ svg {
     object-fit: cover;
     object-position: 72% 28%;
   }
+
+  /* faces are on the left of this shot — must beat #hero .absolute.inset-0 img */
+  #hero .absolute.inset-0 img.hero-slide--2,
+  #hero img.hero-slide--2 {
+    object-position: 22% 58% !important;
+  }
+
+  /* fourth slide — shift framing so faces stay in the mobile crop */
+  #hero .absolute.inset-0 img.hero-slide:nth-child(4),
+  #hero img.hero-slide:nth-child(4) {
+    object-position: 38% 30% !important;
+  }
 }
 
 .hero-gallery-jump {

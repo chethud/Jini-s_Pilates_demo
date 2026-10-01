@@ -30,6 +30,41 @@
     });
   };
 
+  const bindWhyGridNext = () => {
+    const grid = qs("#why-pilates .why-grid");
+    if (!grid || grid.dataset.nextBound === "1") return;
+    grid.dataset.nextBound = "1";
+    const wrap = document.createElement("div");
+    wrap.className = "why-grid-wrap";
+    grid.parentNode.insertBefore(wrap, grid);
+    wrap.appendChild(grid);
+    const arrow = (dir) =>
+      dir < 0
+        ? '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>'
+        : '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>';
+    const mk = (dir, label, cls) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `why-grid-nav ${cls}`;
+      btn.setAttribute("aria-label", label);
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${arrow(dir)}</svg>`;
+      btn.addEventListener("click", () => {
+        const card = qs(".why-card:not(.why-card-clone)", grid);
+        if (!card) return;
+        const gap = parseFloat(getComputedStyle(grid).gap) || 0;
+        const step = card.getBoundingClientRect().width + gap;
+        const max = grid.scrollWidth - grid.clientWidth;
+        let next = grid.scrollLeft + dir * step;
+        if (dir > 0 && grid.scrollLeft >= max - 4) next = 0;
+        if (dir < 0 && grid.scrollLeft <= 4) next = max;
+        grid.scrollTo({ left: next, behavior: "smooth" });
+      });
+      return btn;
+    };
+    wrap.append(mk(-1, "Previous benefit", "why-grid-nav--prev"), mk(1, "Next benefit", "why-grid-nav--next"));
+    wrap.insertBefore(grid, wrap.lastChild);
+  };
+
   const clampPct = (n) => Math.min(100, Math.max(0, n));
 
   const parseFaceCrop = (item, img) => {
@@ -152,18 +187,41 @@
     if (!track) return;
     qsa("[data-marquee-clone]", track).forEach((el) => el.remove());
     delete track.dataset.marquee;
-    if (!phoneMarquee.matches) return;
-    track.dataset.marquee = "1";
-    const slides = [
-      track.querySelector(":scope > .t-hero"),
-      ...track.querySelectorAll(":scope > .t-minis > .t-mini"),
-    ].filter(Boolean);
-    slides.forEach((slide) => {
-      const clone = slide.cloneNode(true);
-      clone.setAttribute("aria-hidden", "true");
-      clone.dataset.marqueeClone = "1";
-      track.appendChild(clone);
-    });
+  };
+
+  const bindTestimonialsNext = () => {
+    const grid = qs("[data-cms-testimonials-grid]");
+    if (!grid || grid.dataset.nextBound === "1") return;
+    grid.dataset.nextBound = "1";
+    const wrap = document.createElement("div");
+    wrap.className = "t-grid-wrap";
+    grid.parentNode.insertBefore(wrap, grid);
+    wrap.appendChild(grid);
+    const arrow = (dir) =>
+      dir < 0
+        ? '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>'
+        : '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>';
+    const mk = (dir, label, cls) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `t-grid-nav ${cls}`;
+      btn.setAttribute("aria-label", label);
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${arrow(dir)}</svg>`;
+      btn.addEventListener("click", () => {
+        const card = qs(":scope > .t-hero, :scope > .t-minis > .t-mini", grid);
+        if (!card) return;
+        const gap = parseFloat(getComputedStyle(grid).gap) || 0;
+        const step = card.getBoundingClientRect().width + gap;
+        const max = grid.scrollWidth - grid.clientWidth;
+        let next = grid.scrollLeft + dir * step;
+        if (dir > 0 && grid.scrollLeft >= max - 4) next = 0;
+        if (dir < 0 && grid.scrollLeft <= 4) next = max;
+        grid.scrollTo({ left: next, behavior: "smooth" });
+      });
+      return btn;
+    };
+    wrap.append(mk(-1, "Previous review", "t-grid-nav--prev"), mk(1, "Next review", "t-grid-nav--next"));
+    wrap.insertBefore(grid, wrap.lastChild);
   };
 
   const classIcon = (name) => {
@@ -308,6 +366,7 @@
     alignTestimonialFaces(grid, testimonialOrder);
     syncTestimonialMarquee(grid);
     wireTestimonialPromote(grid);
+    bindTestimonialsNext();
   };
 
   window.JinisPromoteTestimonial = promoteTestimonial;
@@ -407,7 +466,7 @@
       });
     }
 
-    const heroImg = qs("#hero img");
+    const heroImg = qs("#hero .hero-slide") || qs("#hero img");
     if (heroImg && data.heroImage) {
       heroImg.src = data.heroImage;
       heroImg.alt = data.heroEyebrow || heroImg.alt;
@@ -425,9 +484,11 @@
     renderContactClasses(data.classes);
     applyPendingPackage();
     cloneWhyMarquee();
+    bindWhyGridNext();
   };
 
   cloneWhyMarquee();
+  bindWhyGridNext();
 
   const applyPendingPackage = () => {
     try {
@@ -719,4 +780,16 @@
   if (why && testimonials) why.insertAdjacentElement("afterend", testimonials);
   phoneMarquee.addEventListener("change", () => syncTestimonialMarquee());
   applyContent(content);
+
+  /* hero photo rotates every 3s — add more .hero-slide imgs in index.html as photos arrive */
+  (() => {
+    const slides = qsa("#hero .hero-slide");
+    if (slides.length < 2) return;
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove("is-active");
+      i = (i + 1) % slides.length;
+      slides[i].classList.add("is-active");
+    }, 3000);
+  })();
 })();

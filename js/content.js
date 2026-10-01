@@ -35,7 +35,7 @@
     whyTrainersTitle: "Guided by certified specialists",
     stats: [
       { value: "1000+", label: "Happy Members" },
-      { value: "10+", label: "Years of Care" },
+      { value: "3+", label: "Years of Care" },
       { value: "12", label: "Certified Team" },
       { value: "100%", label: "Personal Guidance" },
     ],
@@ -206,7 +206,14 @@
       ...DEFAULT_CONTENT,
       ...saved,
       aboutTitle,
-      stats: Array.isArray(saved.stats) ? saved.stats : DEFAULT_CONTENT.stats.slice(),
+      stats: (() => {
+        const list = Array.isArray(saved.stats) ? saved.stats.slice() : DEFAULT_CONTENT.stats.slice();
+        return list.map((s) =>
+          /years of care/i.test(String(s.label || "")) && /^10\+?$/i.test(String(s.value || "").trim())
+            ? { ...s, value: "3+" }
+            : s
+        );
+      })(),
       classes,
       trainers: (() => {
         const list = Array.isArray(saved.trainers) ? saved.trainers : DEFAULT_CONTENT.trainers.slice();

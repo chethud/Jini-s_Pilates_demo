@@ -316,6 +316,22 @@ html.dark #hero.min-h-dvh {
   background-color: transparent;
 }
 
+#hero [data-hero-slides] .hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  pointer-events: none;
+}
+
+#hero [data-hero-slides] .hero-slide.is-active {
+  opacity: 1;
+}
+
+#hero [data-hero-slides] > .bg-gradient-to-b {
+  z-index: 1;
+}
+
 html.dark .text-foreground,
 html.dark h1,
 html.dark h2,

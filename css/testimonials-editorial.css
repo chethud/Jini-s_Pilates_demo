@@ -30,6 +30,11 @@
   display: contents;
 }
 
+#testimonials .t-grid-next,
+#testimonials .t-grid-nav {
+  display: none;
+}
+
 /* ── Intro column ── */
 #testimonials .t-intro {
   display: flex;
@@ -448,9 +453,22 @@
     flex-direction: row;
     align-items: stretch;
     gap: 0.9rem;
-    width: max-content;
-    padding-bottom: 0.5rem;
-    animation: t-marquee 40s linear infinite;
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    max-width: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 0 0.5rem;
+    animation: none;
+  }
+
+  #testimonials .t-grid::-webkit-scrollbar {
+    display: none;
   }
 
   #testimonials .t-minis {
@@ -467,6 +485,7 @@
     padding: 0.9rem 0.95rem 1.05rem 0.85rem;
     border-radius: var(--t-radius-mini);
     column-gap: 0.75rem;
+    scroll-snap-align: start;
   }
 
   #testimonials .t-hero .t-name {
@@ -507,20 +526,49 @@
     width: 16.5rem;
     min-height: 15rem;
     padding: 0.9rem 0.95rem 1.05rem 0.85rem;
+    scroll-snap-align: start;
+  }
+
+  #testimonials .t-grid-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+  }
+
+  #testimonials .t-grid-nav {
+    position: static;
+    top: auto;
+    z-index: 1;
+    flex: 0 0 2.35rem;
+    display: grid;
+    place-items: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1f8f7a 0%, #3db89f 45%, #9de8d8 100%);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(47, 157, 138, 0.28);
+    transform: none;
+  }
+
+  #testimonials .t-grid-nav--prev,
+  #testimonials .t-grid-nav--next {
+    left: auto;
+    right: auto;
+  }
+
+  #testimonials .t-grid-nav svg {
+    width: 1.05rem;
+    height: 1.05rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
     #testimonials .t-grid {
-      animation: none;
-      overflow-x: auto;
-      width: auto;
-      max-width: 100%;
-      scroll-snap-type: x mandatory;
-    }
-
-    #testimonials .t-hero,
-    #testimonials .t-mini {
-      scroll-snap-align: start;
+      scroll-behavior: auto;
     }
   }
 }

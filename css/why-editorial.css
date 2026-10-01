@@ -112,6 +112,10 @@
   gap: 0.85rem;
 }
 
+#why-pilates .why-grid-nav {
+  display: none;
+}
+
 #why-pilates .why-card {
   display: flex;
   flex-direction: column;
@@ -465,24 +469,76 @@
     display: flex;
     grid-template-columns: none;
     gap: var(--gap);
-    width: max-content;
-    overflow: visible;
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    max-width: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     padding: 0.15rem 0 0.4rem;
-    animation: why-marquee 22s linear infinite;
+    animation: none;
+  }
+
+  #why-pilates .why-grid::-webkit-scrollbar {
+    display: none;
   }
 
   #why-pilates .why-card-clone {
-    display: flex;
+    display: none;
   }
 
   #why-pilates .why-card {
-    flex: 0 0 15rem;
+    flex: 0 0 100%;
+    width: 100%;
     height: auto;
     padding: 1rem;
     border: 0;
     border-radius: 1.5rem;
     background: #f4faf8;
     box-shadow: 0 10px 24px rgba(36, 51, 50, 0.05);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  #why-pilates .why-grid-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+  }
+
+  #why-pilates .why-grid-nav {
+    position: static;
+    top: auto;
+    z-index: 1;
+    flex: 0 0 2.35rem;
+    display: grid;
+    place-items: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1f8f7a 0%, #3db89f 45%, #9de8d8 100%);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(47, 157, 138, 0.28);
+    transform: none;
+  }
+
+  #why-pilates .why-grid-nav--prev,
+  #why-pilates .why-grid-nav--next {
+    left: auto;
+    right: auto;
+  }
+
+  #why-pilates .why-grid-nav svg {
+    width: 1.05rem;
+    height: 1.05rem;
   }
 
   #why-pilates .why-card-icon {
