@@ -30,6 +30,11 @@
   display: contents;
 }
 
+/* desktop: unwrap so hero/minis still slot into .t-layout; mobile overrides below */
+#testimonials .t-grid-wrap {
+  display: contents;
+}
+
 #testimonials .t-grid-next,
 #testimonials .t-grid-nav {
   display: none;
